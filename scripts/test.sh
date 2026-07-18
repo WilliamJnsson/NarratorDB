@@ -8,10 +8,10 @@ echo "[NarratorDB] package and syntax"
 python3 -m compileall -q narratordb tests
 python3 -m ruff check narratordb tests scripts
 python3 -m build
-python3 scripts/wheel_boundary.py dist/narratordb_memory-2.2.0-py3-none-any.whl
+python3 scripts/wheel_boundary.py dist/narratordb_memory-2.2.1-py3-none-any.whl
 rm -rf /tmp/narratordb-wheel-smoke /tmp/narratordb-wheel-smoke.db*
 python3 -m pip install --quiet --no-deps --target /tmp/narratordb-wheel-smoke \
-  dist/narratordb_memory-2.2.0-py3-none-any.whl
+  dist/narratordb_memory-2.2.1-py3-none-any.whl
 (
   cd /tmp
   PYTHONPATH=/tmp/narratordb-wheel-smoke \

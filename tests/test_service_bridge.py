@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
+from contextlib import redirect_stderr, redirect_stdout
+import io
 import json
 import os
 from pathlib import Path
@@ -9,7 +12,7 @@ import stat
 import subprocess
 import tempfile
 import unittest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from narratordb import ConfigurationError
 from narratordb.mcp_install import (
@@ -18,7 +21,12 @@ from narratordb.mcp_install import (
     install_service_bridge,
 )
 from narratordb.service_bridge import (
+    BOOTSTRAP_TIMEOUT_SECONDS,
+    BOOTSTRAP_TOKEN_BUDGET,
+    MAX_BOOTSTRAP_CONTEXT_BYTES,
+    SERVICE_CALL_TIMEOUT_SECONDS,
     ServiceBridgeRuntime,
+    main as service_bridge_main,
     read_service_credentials,
     write_service_credentials,
 )
@@ -65,7 +73,9 @@ class ServiceBridgeTests(unittest.TestCase):
         with self.assertRaisesRegex(ConfigurationError, "HTTPS"):
             read_service_credentials(self.credentials)
 
-    def test_remote_credentials_reject_unsafe_url_and_are_written_privately(self) -> None:
+    def test_remote_credentials_reject_unsafe_url_and_are_written_privately(
+        self,
+    ) -> None:
         target = self.root / "remote.env"
         with self.assertRaisesRegex(ConfigurationError, "without embedded credentials"):
             write_service_credentials(
@@ -140,15 +150,122 @@ class ServiceBridgeTests(unittest.TestCase):
         )
         self.assertNotIn(self.token, repr(call.call_args))
 
-    def test_bridge_runs_remote_coroutine_from_an_active_event_loop(self) -> None:
-        import asyncio
+    def test_bootstrap_preloads_one_project_resume(self) -> None:
+        runtime = ServiceBridgeRuntime(self.credentials)
+        with patch.object(
+            runtime,
+            "_call",
+            return_value={"context": "Use the agreed deployment sequence."},
+        ) as call:
+            first = runtime.bootstrap_context()
+            second = runtime.bootstrap_context()
 
+        self.assertEqual(first, "Use the agreed deployment sequence.")
+        self.assertEqual(second, first)
+        call.assert_called_once_with(
+            "resume",
+            {
+                "topic": "",
+                "include_global": False,
+                "token_budget": BOOTSTRAP_TOKEN_BUDGET,
+            },
+            timeout_seconds=BOOTSTRAP_TIMEOUT_SECONDS,
+            hard_timeout=True,
+        )
+
+    def test_bootstrap_context_enforces_its_own_response_bound(self) -> None:
+        runtime = ServiceBridgeRuntime(self.credentials)
+        oversized = "\N{SNOWMAN}" * (MAX_BOOTSTRAP_CONTEXT_BYTES + 1)
+        with patch.object(
+            runtime,
+            "_call",
+            return_value={"context": oversized},
+        ):
+            context = runtime.bootstrap_context()
+
+        self.assertTrue(context)
+        self.assertLessEqual(len(context.encode("utf-8")), MAX_BOOTSTRAP_CONTEXT_BYTES)
+
+    def test_bootstrap_empty_and_non_structured_results_fail_open(self) -> None:
+        for result in ({}, {"context": ""}, {"context": 123}, [], "not-json", None):
+            with self.subTest(result=repr(result)):
+                runtime = ServiceBridgeRuntime(self.credentials)
+                with patch.object(runtime, "_call", return_value=result):
+                    self.assertEqual(runtime.bootstrap_context(), "")
+
+    def test_bootstrap_errors_and_timeouts_are_silent_and_not_retried(self) -> None:
+        failures = (
+            RuntimeError(f"remote failure included {self.token}"),
+            TimeoutError(f"cold start exposed {self.token}"),
+        )
+        for failure in failures:
+            with self.subTest(failure=type(failure).__name__):
+                runtime = ServiceBridgeRuntime(self.credentials)
+                output = io.StringIO()
+                errors = io.StringIO()
+                with (
+                    patch.object(runtime, "_call", side_effect=failure) as call,
+                    redirect_stdout(output),
+                    redirect_stderr(errors),
+                ):
+                    self.assertEqual(runtime.bootstrap_context(), "")
+                    self.assertEqual(runtime.bootstrap_context(), "")
+
+                call.assert_called_once()
+                emitted = output.getvalue() + errors.getvalue()
+                self.assertEqual(emitted, "")
+                self.assertNotIn(self.token, emitted)
+
+    def test_bootstrap_enforces_a_hard_wall_clock_timeout(self) -> None:
+        runtime = ServiceBridgeRuntime(self.credentials)
+
+        async def delayed_call(*args, **kwargs):
+            await asyncio.sleep(0.05)
+            return {"context": "too late"}
+
+        with (
+            patch.object(runtime, "_call_async", side_effect=delayed_call),
+            patch(
+                "narratordb.service_bridge.BOOTSTRAP_TIMEOUT_SECONDS",
+                0.001,
+            ),
+        ):
+            self.assertEqual(runtime.bootstrap_context(), "")
+
+    def test_ordinary_tool_calls_keep_the_sixty_second_timeout(self) -> None:
+        runtime = ServiceBridgeRuntime(self.credentials)
+        remote = AsyncMock(return_value={"ready": True})
+        with patch.object(runtime, "_call_async", new=remote):
+            result = runtime._call("status", {"scope": "project"})
+
+        self.assertTrue(result["ready"])
+        remote.assert_awaited_once_with(
+            "status",
+            {"scope": "project"},
+            timeout_seconds=SERVICE_CALL_TIMEOUT_SECONDS,
+        )
+
+    def test_bridge_main_enables_startup_bootstrap(self) -> None:
+        server = MagicMock()
+        with patch(
+            "narratordb.service_bridge.create_server", return_value=server
+        ) as create:
+            result = service_bridge_main(["--credentials-file", str(self.credentials)])
+
+        self.assertEqual(result, 0)
+        runtime = create.call_args.args[0]
+        self.assertIsInstance(runtime, ServiceBridgeRuntime)
+        self.assertTrue(create.call_args.kwargs["include_bootstrap"])
+        server.run.assert_called_once_with(transport="stdio")
+
+    def test_bridge_runs_remote_coroutine_from_an_active_event_loop(self) -> None:
         runtime = ServiceBridgeRuntime(self.credentials)
         with patch.object(
             runtime,
             "_call_async",
             new=AsyncMock(return_value={"ok": True}),
         ):
+
             async def invoke() -> dict:
                 return runtime._call("status", {"scope": "project"})
 

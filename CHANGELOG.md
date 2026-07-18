@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.2.1 - 2026-07-18
+
+- Fixed hosted memory startup: the credential-file MCP bridge now performs one
+  bounded, project-only resume during initialization, fails open after a
+  five-second deadline, and keeps ordinary tools on their existing 60-second
+  timeout. Hosted lifecycle capture remains limited to `PreCompact` and `Stop`;
+  no `UserPromptSubmit` hook is installed.
+
 ## 2.2.0 - 2026-07-18
 
 - Established the Community/Cloud package boundary: the MIT wheel contains no

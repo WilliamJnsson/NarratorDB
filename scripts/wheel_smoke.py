@@ -7,7 +7,7 @@ from narratordb import Engine, NarratorDB, __version__
 from narratordb.benchmarks.splits import DEFAULT_OUTPUT_DIR, verify_split
 
 
-assert __version__ == "2.2.0"
+assert __version__ == "2.2.1"
 assert importlib.util.find_spec("narratordb.cloud") is None
 assert NarratorDB.__name__ == "NarratorDB"
 with Engine(user_id="wheel", semantic_dedup=False) as engine:

@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import re
 import stat
+from threading import Lock
 from typing import Any, Sequence
 from urllib.parse import urlparse
 import uuid
@@ -27,6 +28,24 @@ REQUIRED_CREDENTIALS = frozenset(
 )
 _TOKEN_RE = re.compile(r"ndb_[A-Za-z0-9_-]{32,128}")
 MAX_CREDENTIAL_BYTES = 16_384
+SERVICE_CALL_TIMEOUT_SECONDS = 60.0
+BOOTSTRAP_TIMEOUT_SECONDS = 5.0
+BOOTSTRAP_TOKEN_BUDGET = 900
+# The local token estimator uses 3.6 UTF-8 bytes per token. Enforce the same
+# bound independently because a remote service response is untrusted input.
+MAX_BOOTSTRAP_CONTEXT_BYTES = int(BOOTSTRAP_TOKEN_BUDGET * 3.6)
+
+
+def _bounded_bootstrap_context(value: Any) -> str:
+    if not isinstance(value, str):
+        return ""
+    normalized = value.replace("\r\n", "\n").replace("\r", "\n").strip()
+    encoded = normalized.encode("utf-8")
+    if len(encoded) <= MAX_BOOTSTRAP_CONTEXT_BYTES:
+        return normalized
+    return (
+        encoded[:MAX_BOOTSTRAP_CONTEXT_BYTES].decode("utf-8", errors="ignore").rstrip()
+    )
 
 
 def _normalize_service_values(
@@ -121,7 +140,9 @@ def read_service_credentials(path: str | os.PathLike[str]) -> dict[str, str]:
             with handle:
                 content = handle.read(MAX_CREDENTIAL_BYTES + 1)
         except (OSError, UnicodeError) as error:
-            raise ConfigurationError("service credentials file is unreadable") from error
+            raise ConfigurationError(
+                "service credentials file is unreadable"
+            ) from error
     finally:
         if descriptor >= 0:
             os.close(descriptor)
@@ -151,11 +172,43 @@ class ServiceBridgeRuntime:
 
     def __init__(self, credentials_file: str | os.PathLike[str]):
         self.credentials_file = str(Path(credentials_file).expanduser().resolve())
+        self._bootstrap_lock = Lock()
+        self._bootstrap_attempted = False
+        self._bootstrap_context = ""
 
     def bootstrap_context(self) -> str:
-        return ""
+        """Load one bounded project resume without blocking MCP availability."""
 
-    async def _call_async(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+        with self._bootstrap_lock:
+            if self._bootstrap_attempted:
+                return self._bootstrap_context
+            self._bootstrap_attempted = True
+            try:
+                result = self._call(
+                    "resume",
+                    {
+                        "topic": "",
+                        "include_global": False,
+                        "token_budget": BOOTSTRAP_TOKEN_BUDGET,
+                    },
+                    timeout_seconds=BOOTSTRAP_TIMEOUT_SECONDS,
+                    hard_timeout=True,
+                )
+                context = result.get("context") if isinstance(result, dict) else None
+                self._bootstrap_context = _bounded_bootstrap_context(context)
+            except Exception:
+                # Startup recall is an optimization, not an availability gate.
+                # Keep failures silent so remote errors cannot disclose secrets.
+                self._bootstrap_context = ""
+            return self._bootstrap_context
+
+    async def _call_async(
+        self,
+        name: str,
+        arguments: dict[str, Any],
+        *,
+        timeout_seconds: float = SERVICE_CALL_TIMEOUT_SECONDS,
+    ) -> dict[str, Any]:
         try:
             import httpx
             from mcp import ClientSession
@@ -168,11 +221,11 @@ class ServiceBridgeRuntime:
 
         credentials = read_service_credentials(self.credentials_file)
         headers = {
-            "Authorization": (
-                f"Bearer {credentials['NARRATORDB_SERVICE_TOKEN']}"
-            )
+            "Authorization": (f"Bearer {credentials['NARRATORDB_SERVICE_TOKEN']}")
         }
-        async with httpx.AsyncClient(headers=headers, timeout=60) as client:
+        async with httpx.AsyncClient(
+            headers=headers, timeout=timeout_seconds
+        ) as client:
             async with streamable_http_client(
                 credentials["NARRATORDB_SERVICE_URL"],
                 http_client=client,
@@ -189,9 +242,26 @@ class ServiceBridgeRuntime:
             )
         return result.structuredContent
 
-    def _call(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+    def _call(
+        self,
+        name: str,
+        arguments: dict[str, Any],
+        *,
+        timeout_seconds: float = SERVICE_CALL_TIMEOUT_SECONDS,
+        hard_timeout: bool = False,
+    ) -> dict[str, Any]:
         def execute() -> dict[str, Any]:
-            return asyncio.run(self._call_async(name, arguments))
+            async def invoke() -> dict[str, Any]:
+                call = self._call_async(
+                    name,
+                    arguments,
+                    timeout_seconds=timeout_seconds,
+                )
+                if hard_timeout:
+                    return await asyncio.wait_for(call, timeout=timeout_seconds)
+                return await call
+
+            return asyncio.run(invoke())
 
         try:
             asyncio.get_running_loop()
@@ -240,7 +310,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         runtime = ServiceBridgeRuntime(args.credentials_file)
         read_service_credentials(args.credentials_file)
-        server = create_server(runtime, include_bootstrap=False)
+        server = create_server(runtime, include_bootstrap=True)
         server.run(transport="stdio")
     except ConfigurationError as error:
         print(f"narratordb: {error}", file=os.sys.stderr)

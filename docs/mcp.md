@@ -52,9 +52,14 @@ The service plugin deliberately has no `UserPromptSubmit` hook. Under the
 Sessions policy, its bounded, fail-open `PreCompact` and `Stop` hooks redact and
 send recent user/final-assistant conversation to the authenticated service
 project used by MCP recall. Manual and Preferences policies do not capture a
-session transcript. Existing service databases retain their persisted policy;
-use the setup skill or authenticated `configure(capture_policy="sessions")`
-once when upgrading an older manual-policy alpha.
+session transcript. Separately, the credential-file MCP bridge performs one
+project-only `resume` read during initialization and injects at most 900 tokens
+through private server instructions. It silently starts without preloaded
+context if the response is empty, malformed, unavailable, or takes more than
+five seconds; normal tools retain their 60-second timeout. Existing service
+databases retain their persisted policy; use the setup skill or authenticated
+`configure(capture_policy="sessions")` once when upgrading an older
+manual-policy alpha.
 
 NarratorDB exposes durable memory to coding agents through a local stdio MCP
 server. Codex users can choose a full plugin with lifecycle hooks or a direct
@@ -125,7 +130,7 @@ Code. A dedicated virtual environment keeps the registered interpreter stable:
 ```bash
 python3 -m venv ~/.local/share/narratordb/venv
 ~/.local/share/narratordb/venv/bin/python -m pip install \
-  "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.0"
+  "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.1"
 ```
 
 The installer validates the database and optional MCP dependency, asks the
@@ -149,12 +154,12 @@ The equivalent manual `uvx` registrations are:
 ```bash
 codex mcp add narratordb -- \
   uvx --from \
-  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.0' \
+  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.1' \
   narratordb-mcp --init-mode private
 
 claude mcp add --scope user narratordb -- \
   uvx --from \
-  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.0' \
+  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.1' \
   narratordb-mcp --init-mode private
 ```
 

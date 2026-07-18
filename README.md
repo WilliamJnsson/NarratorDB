@@ -120,9 +120,14 @@ service plugin has no `UserPromptSubmit` hook: it sends only bounded, redacted
 conversation windows at `PreCompact` and `Stop` to the same authenticated
 project used by recall. The token is never placed in shell startup files,
 process arguments, the plugin, or Codex configuration. Restart Codex or open a
-new session after the first run. If another NarratorDB integration is already
-registered or the local-database plugin is installed, review it and rerun with
-`--replace-codex` to replace it explicitly.
+new session after the first run. At MCP initialization, the credential-file
+bridge also makes one project-only, bounded `resume` read and supplies the
+result through private server instructions. That startup read fails open after
+five seconds if the remote service is cold or unavailable; ordinary MCP tool
+calls retain their 60-second timeout. No prompt-submit hook is installed. If
+another NarratorDB integration is already registered or the local-database
+plugin is installed, review it and rerun with `--replace-codex` to replace it
+explicitly.
 
 Advanced operators can still initialize and serve explicitly:
 
@@ -245,7 +250,7 @@ registration command:
 ```bash
 python3 -m venv ~/.local/share/narratordb/venv
 ~/.local/share/narratordb/venv/bin/python -m pip install \
-  "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.0"
+  "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.1"
 
 # Inspect first, then install for exactly one client.
 ~/.local/share/narratordb/venv/bin/narratordb mcp install codex \
