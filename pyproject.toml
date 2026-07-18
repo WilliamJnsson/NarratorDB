@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "narratordb-memory"
+version = "2.2.0"
+description = "Independent local-first long-term memory database for AI systems"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "NarratorDB contributors" }]
+keywords = ["memory", "database", "sqlite", "fts5", "ai"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Database",
+]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/WilliamJnsson/NarratorDB"
+
+[project.optional-dependencies]
+semantic = [
+  "numpy>=1.24,<3",
+  "sentence-transformers>=2.7,<6",
+]
+mcp = ["mcp>=1.0,<2"]
+benchmarks = ["datasets>=4,<5"]
+dev = [
+  "build>=1.2,<2",
+  "mcp>=1.0,<2",
+  "numpy>=1.24,<3",
+  "ruff>=0.12,<1",
+]
+all = [
+  "numpy>=1.24,<3",
+  "sentence-transformers>=2.7,<6",
+  "mcp>=1.0,<2",
+  "datasets>=4,<5",
+]
+
+[project.scripts]
+narratordb = "narratordb.cli:main"
+narratordb-store = "narratordb.store_message:main"
+narratordb-benchmark-server = "narratordb.benchmark_server:main"
+narratordb-benchmark-history = "narratordb.benchmarks.history:main"
+narratordb-benchmark-budget-audit = "narratordb.benchmarks.budget_audit:main"
+narratordb-benchmark-arm-gate = "narratordb.benchmarks.arm_gate:main"
+narratordb-benchmark-evaluation-audit = "narratordb.benchmarks.evaluation_audit:main"
+narratordb-benchmark-prediction-audit = "narratordb.benchmarks.prediction_audit:main"
+narratordb-benchmark-replay = "narratordb.benchmarks.replay:main"
+narratordb-benchmark-reproduction = "narratordb.benchmarks.reproduction_manifest:main"
+narratordb-intelligence-canary = "narratordb.benchmarks.intelligence_canary:main"
+narratordb-openrouter-proxy = "narratordb.benchmarks.openrouter_proxy:main"
+narratordb-mcp = "narratordb.mcp_server:main"
+narratordb-hook = "narratordb.hooks:main"
+narratordb-service-hook = "narratordb.service_hook:main"
+
+[tool.setuptools.packages.find]
+include = ["narratordb*"]
+
+[tool.setuptools.package-data]
+narratordb = [
+    "benchmarks/requirements.txt",
+    "benchmarks/data/splits/*.json",
+]

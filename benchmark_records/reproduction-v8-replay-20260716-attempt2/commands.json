@@ -1,0 +1,378 @@
+[
+  {
+    "step": "create_fresh_run_directories",
+    "argv": [
+      "mkdir",
+      "-p",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/runtime-source",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/harness-source",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v8-replay-v7gpt54mini"
+    ]
+  },
+  {
+    "step": "verify_replay_control",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "--expected-sha256",
+      "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/replay-control-verification.json"
+    ]
+  },
+  {
+    "step": "verify_v7_inputs",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-manifest",
+      "--root",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716",
+      "--manifest",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/V7_INPUT_SHA256SUMS",
+      "--expected-manifest-sha256",
+      "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/v7-input-verification.json"
+    ]
+  },
+  {
+    "step": "verify_v7_source",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/intelligence-v7-source-20260716T201147Z/narratordb-v7-source.tar.gz",
+      "--expected-sha256",
+      "181df314f0b68ac1bbd3eb3b6363dd2a6b195f7c9beb5fd0d8deec043034c85d",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/v7-source-verification.json"
+    ]
+  },
+  {
+    "step": "verify_v8_source",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/intelligence-v8-source-20260715T221149Z/narratordb-v8-source.tar.gz",
+      "--expected-sha256",
+      "f9366828f65ad7e7026fef8e0e151c9ff753b66bf36d2eaad4afc2ed673ee041",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/v8-source-verification.json"
+    ]
+  },
+  {
+    "step": "extract_v8_source",
+    "argv": [
+      "tar",
+      "-xzf",
+      "reports/intelligence-v8-source-20260715T221149Z/narratordb-v8-source.tar.gz",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/runtime-source"
+    ]
+  },
+  {
+    "step": "freeze_harness_archive",
+    "argv": [
+      "git",
+      "-C",
+      "vendor/memory-benchmarks",
+      "archive",
+      "--format=tar",
+      "--output",
+      "../../reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/harness-source.tar",
+      "4b61c5d31b9c668a12b4f5e78064248a02c82d2b"
+    ]
+  },
+  {
+    "step": "extract_harness",
+    "argv": [
+      "tar",
+      "-xf",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/harness-source.tar",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/harness-source"
+    ]
+  },
+  {
+    "step": "clone_v7_database",
+    "argv": [
+      "sqlite3",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/intelligence.db",
+      ".backup 'reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/intelligence.db'"
+    ]
+  },
+  {
+    "step": "copy_ingestion_checkpoints",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "copy-checkpoints",
+      "--source",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini",
+      "--destination",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v8-replay-v7gpt54mini",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/checkpoint-copy-audit.json"
+    ]
+  },
+  {
+    "step": "validate_copied_checkpoints",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "validate-checkpoints",
+      "--directory",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v8-replay-v7gpt54mini",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--run-id",
+      "v7m42a1",
+      "--expected-questions",
+      "42",
+      "--expected-chunk-size",
+      "2",
+      "--require-zero-predictions",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/checkpoint-validation.json"
+    ]
+  },
+  {
+    "step": "start_migration_backend",
+    "argv": [
+      "env",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/runtime-source",
+      "-u",
+      "OPENROUTER_API_KEY",
+      "-u",
+      "OPENAI_API_KEY",
+      "-u",
+      "AZURE_OPENAI_API_KEY",
+      "-u",
+      "ANTHROPIC_API_KEY",
+      "../../../.venv/bin/python",
+      "-m",
+      "narratordb.benchmark_server",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "8889",
+      "--database",
+      "../intelligence.db",
+      "--mode",
+      "intelligence",
+      "--existing-derived-replay-fingerprint",
+      "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+      "--merge-adjacent",
+      "--merge-gap",
+      "1",
+      "--coalesce-timestamp-sessions",
+      "--context-token-budget",
+      "6000",
+      "--merge-max-chars",
+      "1200"
+    ]
+  },
+  {
+    "step": "probe_migration_readiness",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "probe-diagnostics",
+      "--base-url",
+      "http://127.0.0.1:8889",
+      "--directory",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v8-replay-v7gpt54mini",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--expected-questions",
+      "42",
+      "--fingerprint",
+      "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/migration-diagnostics.json"
+    ]
+  },
+  {
+    "step": "stop_migration_backend",
+    "argv": [
+      "kill",
+      "-INT",
+      "${MIGRATION_BACKEND_PID}"
+    ]
+  },
+  {
+    "step": "checkpoint_migrated_database",
+    "argv": [
+      "sqlite3",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/intelligence.db",
+      "PRAGMA wal_checkpoint(TRUNCATE); PRAGMA quick_check;"
+    ]
+  },
+  {
+    "step": "capture_post_migration_counts",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "capture-db-counts",
+      "--database",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/intelligence.db",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/post-migration-counts.json"
+    ]
+  },
+  {
+    "step": "start_prediction_backend",
+    "argv": [
+      "env",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/runtime-source",
+      "-u",
+      "OPENROUTER_API_KEY",
+      "-u",
+      "OPENAI_API_KEY",
+      "-u",
+      "AZURE_OPENAI_API_KEY",
+      "-u",
+      "ANTHROPIC_API_KEY",
+      "../../../.venv/bin/python",
+      "-m",
+      "narratordb.benchmark_server",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "8889",
+      "--database",
+      "../intelligence.db",
+      "--mode",
+      "intelligence",
+      "--existing-derived-replay-fingerprint",
+      "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+      "--merge-adjacent",
+      "--merge-gap",
+      "1",
+      "--coalesce-timestamp-sessions",
+      "--context-token-budget",
+      "6000",
+      "--merge-max-chars",
+      "1200"
+    ]
+  },
+  {
+    "step": "run_predict_only_replay",
+    "argv": [
+      "env",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/harness-source",
+      "HTTP_PROXY=http://127.0.0.1:9",
+      "HTTPS_PROXY=http://127.0.0.1:9",
+      "ALL_PROXY=http://127.0.0.1:9",
+      "NO_PROXY=127.0.0.1,localhost",
+      "../../../vendor/memory-benchmarks/.venv/bin/python",
+      "-m",
+      "benchmarks.longmemeval.run",
+      "--project-name",
+      "narratordb-intelligence-dev42-v8-replay-v7gpt54mini",
+      "--run-id",
+      "v7m42a1",
+      "--dataset-path",
+      "../../longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "--all-questions",
+      "--predict-only",
+      "--backend",
+      "oss",
+      "--mem0-host",
+      "http://127.0.0.1:8889",
+      "--mode",
+      "answerer",
+      "--top-k",
+      "200",
+      "--top-k-cutoffs",
+      "20,50",
+      "--max-workers",
+      "10",
+      "--rpm",
+      "60",
+      "--seed",
+      "42",
+      "--answerer-model",
+      "no-call",
+      "--judge-model",
+      "no-call",
+      "--provider",
+      "openai",
+      "--output-dir",
+      "../official-harness"
+    ]
+  },
+  {
+    "step": "stop_prediction_backend",
+    "argv": [
+      "kill",
+      "-INT",
+      "${PREDICTION_BACKEND_PID}"
+    ]
+  },
+  {
+    "step": "checkpoint_final_database",
+    "argv": [
+      "sqlite3",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/intelligence.db",
+      "PRAGMA wal_checkpoint(TRUNCATE); PRAGMA quick_check;"
+    ]
+  },
+  {
+    "step": "capture_post_prediction_counts",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "capture-db-counts",
+      "--database",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/intelligence.db",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/post-prediction-counts.json"
+    ]
+  },
+  {
+    "step": "compare_database_counts",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "compare-db-counts",
+      "--before",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/post-migration-counts.json",
+      "--after",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/post-prediction-counts.json",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/database-count-comparison.json"
+    ]
+  },
+  {
+    "step": "audit_predictions",
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "narratordb.benchmarks.prediction_audit",
+      "--prediction-dir",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v8-replay-v7gpt54mini",
+      "--dataset",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--cutoffs",
+      "20,50",
+      "--require-all",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/prediction-audit.json"
+    ]
+  }
+]

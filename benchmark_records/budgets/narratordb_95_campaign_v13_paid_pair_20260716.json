@@ -1,0 +1,62 @@
+{
+  "schema": "narratordb.campaign-budget-declaration.v2",
+  "campaign_id": "narratordb-95-dev-20260715-v13-paid-pair",
+  "provider_cap_usd": "250",
+  "governance_ceiling_eur": "300",
+  "prior_immutable_costs": [
+    {
+      "source_id": "through-v11-summary-bound-baseline-no-double-count",
+      "record_path": "narratordb_95_campaign_20260716.audit.json",
+      "record_sha256": "04ecff276d87f5a6963d42833061dfec90eef66c47ded348c335610f8359d759",
+      "cost_usd": "108.31010877191"
+    }
+  ],
+  "active_usage_ledgers": [
+    {
+      "source_id": "v13-paid-pair-v7-control-evaluator",
+      "kind": "evaluator",
+      "path": "../../reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl",
+      "identity_policy": {
+        "request_models": [
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "response_models": [
+          "deepseek/deepseek-v4-flash",
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "providers": [
+          "AtlasCloud",
+          "Baidu",
+          "DeepInfra",
+          "GMICloud",
+          "StreamLake"
+        ]
+      }
+    },
+    {
+      "source_id": "v13-paid-pair-v13-first-evaluator",
+      "kind": "evaluator",
+      "path": "../../reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl",
+      "identity_policy": {
+        "request_models": [
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "response_models": [
+          "deepseek/deepseek-v4-flash",
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "providers": [
+          "AtlasCloud",
+          "Baidu",
+          "DeepInfra",
+          "GMICloud",
+          "StreamLake"
+        ]
+      }
+    }
+  ]
+}

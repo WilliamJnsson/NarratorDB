@@ -1,0 +1,43 @@
+{
+  "classification": "score-exposed post-hoc consumed-development history; not a paired score",
+  "cumulative_campaign_conservative_exposure_usd_after_r2": "2.878283432",
+  "new_r2_local_conservative_ledger_exposure_usd": "0.96367775",
+  "primary": {
+    "evaluation_audit_sha256": "7a18cc12ac8e8a1cc0fb74968ee2ef65d8d642ebb49816e86c5ce90bdf54ad9b",
+    "official_result_sha256": "2f5a978c6f075e9b9f615a7324dcea70a6546518e88e112510a224f4da210bed",
+    "score_complete": true,
+    "top_20": "38/42 (90.47619047619048%)",
+    "top_50": "41/42 (97.61904761904762%)",
+    "transport_audit_authorized": true,
+    "transport_audit_sha256": "26ebbdcdb7d5490b0c4a8fc7ca7ceedb32db40fe75f8bd6c97399c17159ccd2e",
+    "usage_cost_usd": "0.71529255",
+    "usage_ledger_sha256": "80e495a10da1402e50c65517219f0f571021e43bd73eb94de852727380879248"
+  },
+  "provider_billing_reconciled": false,
+  "replication": {
+    "displayed_post_fuse_score_valid": false,
+    "failure_decision_used_score_values": false,
+    "hidden_sdk_retries": 0,
+    "terminal_event": {
+      "attempt_number": 1,
+      "completion_tokens": 315,
+      "discarded_reason": "non_stop_finish",
+      "event_line": 82,
+      "http_status": 200,
+      "provider": "OpenAI",
+      "question_id_from_offline_payload_forensics": "50635ada",
+      "reasoning_tokens": 315,
+      "request_payload_sha256": "bd967d6475da89a58c80d0d7ef14db97d9dd2731bef3c6f6eac0edbc9d91b0a2",
+      "response_forwarded": false,
+      "role": "top_50 answerer",
+      "route_origin_attribution": "indeterminate between model serving and OpenRouter normalization"
+    },
+    "transport_score_complete": false,
+    "usage_cost_usd": "0.24809795",
+    "usage_ledger_sha256": "aab3e60032ec9e5b715a23be4cb22fa948375799f5860f25b283abe9510b5053"
+  },
+  "r2_report_root": "reports/longmemeval-intelligence-dev42-v18-gpt54mini-openai-high-selfjudge-paid-pair-r2-20260717",
+  "schema_version": "narratordb.v18-r2-terminal-disclosure.v1",
+  "status": "TERMINAL_INCOMPLETE",
+  "terminal_execution_status_sha256": "808d84f547fbd42587a2c1ac17e8b3fd8bf3853ec34221344bc58e94c0a14b9d"
+}

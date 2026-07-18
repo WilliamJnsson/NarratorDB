@@ -1,0 +1,37 @@
+{
+  "candidate_status": "UNSEALED_CANDIDATE_DO_NOT_EXECUTE",
+  "commands": [
+    {
+      "command": "cd benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716 && shasum -a 256 -c SHA256SUMS",
+      "id": "verify-recovery-seal",
+      "requires_sealed_candidate": true
+    },
+    {
+      "command": "shasum -a 256 -c benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716/BOUND_INPUTS_SHA256SUMS",
+      "id": "verify-recovery-bound-inputs",
+      "requires_sealed_candidate": true
+    },
+    {
+      "command": "NARRATORDB_R5_RECOVERY_PRECOMMIT_SHA256='<EXTERNALLY_PUBLISHED_RECOVERY_SEAL>' benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716/run_offline_recovery.sh stage-a",
+      "id": "offline-historical-finalization-stage-a",
+      "requires_credential": false,
+      "requires_network": false,
+      "stdout_bytes": 0
+    },
+    {
+      "command": "after Stage A, Goodall and Mendel create their exact immutable no-score-read reviews at the predeclared paths; only then create aggregate immutable RECOVERY_GO binding both review hashes, recovery seal, Stage-A envelope hash, terminal hash, and source fingerprint",
+      "id": "two-independent-go-reviews",
+      "requires_stage_a": true
+    },
+    {
+      "command": "NARRATORDB_R5_RECOVERY_PRECOMMIT_SHA256='<EXTERNALLY_PUBLISHED_RECOVERY_SEAL>' benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716/run_offline_recovery.sh stage-b",
+      "id": "offline-recovered-result-stage-b",
+      "requires_credential": false,
+      "requires_network": false,
+      "requires_two_review_go": true,
+      "stdout_bytes": 0
+    }
+  ],
+  "failure_policy": "Any precommit nonzero destroys unread private scratch, preserves pre-existing and published evidence, writes a generic immutable terminal status when possible, closes r1, and forbids retry; one exclusive atomic release-directory rename is the irrevocable commit.",
+  "schema_version": "narratordb.v13-paid-r5-offline-recovery-command-manifest.v1"
+}

@@ -1,0 +1,27 @@
+{
+  "name": "narratordb-service",
+  "version": "0.1.0",
+  "description": "Bounded lifecycle capture for an authenticated NarratorDB service",
+  "author": {
+    "name": "NarratorDB contributors",
+    "url": "https://github.com/WilliamJnsson/NarratorDB"
+  },
+  "homepage": "https://github.com/WilliamJnsson/NarratorDB",
+  "repository": "https://github.com/WilliamJnsson/NarratorDB",
+  "license": "MIT",
+  "keywords": ["memory", "service", "mcp", "codex"],
+  "interface": {
+    "displayName": "NarratorDB Service",
+    "shortDescription": "Capture durable session details without prompt hooks.",
+    "longDescription": "Sends bounded, redacted PreCompact and Stop transcript windows to the authenticated NarratorDB service configured on this device.",
+    "developerName": "NarratorDB contributors",
+    "category": "Productivity",
+    "capabilities": ["Write"],
+    "defaultPrompt": [
+      "Check my NarratorDB service health.",
+      "Remember this project decision.",
+      "Resume this project from memory."
+    ],
+    "brandColor": "#6750A4"
+  }
+}

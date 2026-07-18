@@ -1,0 +1,71 @@
+{
+  "schema_version": "narratordb.compiler-route-canary-precommit.v1",
+  "created_at_utc": "2026-07-15T23:13:34Z",
+  "status": "precommitted-before-first-atlascloud-canary-request",
+  "classification": "transport and compiler-integrity development canary; no benchmark question content or score",
+  "purpose": "Run the entire synthetic canary from fresh state on one currently healthy ZDR route after preserving DeepInfra's terminal HTTP 429 attempt.",
+  "frozen_source": {
+    "archive": "reports/intelligence-v9-source-20260715T230938Z/narratordb-v9-source.tar.gz",
+    "archive_sha256": "6bfe0b9e4d7d67a092fadbb72be35816cadb2f99fe2cb3d9d9d7124895c5e3a8",
+    "source_metadata_sha256": "25a03c50aa0ee480af1aef4f3ff4d76009f2da7efe491451e8a4cfca17468e08",
+    "status_at_freeze": "unscored V9"
+  },
+  "preserved_predecessor": {
+    "provider": "DeepInfra",
+    "report": "reports/intelligence-glm52-canaries-20260716/v9-glm52-deepinfra-max-tokens-canary.json",
+    "report_sha256": "211210a92571554cef492a6e20faf7df7195003ebbba5607a59146bc91b29c60",
+    "status": "failed",
+    "terminal_error": "http_429",
+    "complete_jobs": 2,
+    "failed_jobs": 1,
+    "cost_usd": 0.00812595,
+    "resume_or_missing-session_retry": false
+  },
+  "route_evidence": {
+    "source": "https://openrouter.ai/api/v1/endpoints/zdr",
+    "observed_at_utc": "2026-07-15T23:13:00Z",
+    "model_id": "z-ai/glm-5.2",
+    "provider_name": "AtlasCloud",
+    "provider_tag": "atlas-cloud/fp8",
+    "endpoint_status": 0,
+    "uptime_last_30m_percent": 99.7560975609756,
+    "zdr_listed": true,
+    "advertised_required_parameters": [
+      "reasoning",
+      "max_tokens",
+      "seed",
+      "response_format"
+    ],
+    "selection_rule": "Choose an active ZDR endpoint that advertises every emitted parameter, has greater than 99.7 percent recent uptime, and uses FP8 rather than the failed FP4 route. No answer or score influenced this choice."
+  },
+  "canary": {
+    "model": "z-ai/glm-5.2",
+    "provider_only": "AtlasCloud",
+    "allow_fallbacks": false,
+    "reasoning_effort": "high",
+    "max_output_tokens": 8192,
+    "output_token_parameter": "max_tokens",
+    "seed": 0,
+    "zero_data_retention": true,
+    "data_collection": "deny",
+    "require_parameters": true,
+    "max_cost_usd": 1.0,
+    "fresh_database_cache_and_usage_ledger": true,
+    "synthetic_sessions": 3,
+    "all_synthetic_checks_required": true,
+    "exact_route_observation_required": true
+  },
+  "execution_policy": {
+    "full_fresh_canary_only": true,
+    "no_resume": true,
+    "no_selective_retry": true,
+    "failed_attempt_is_preserved": true,
+    "no_prompt_or_schema_change_since_deepinfra_attempt": true,
+    "development_scores_cannot_support_the_final_95_percent_claim": true
+  },
+  "budget_governance": {
+    "provider_account_cap_usd": 250.0,
+    "overall_experiment_ceiling_eur": 300.0,
+    "all_attempts_count_toward_campaign_spend": true
+  }
+}

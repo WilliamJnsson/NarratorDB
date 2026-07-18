@@ -1,0 +1,53 @@
+{
+  "record": "narratordb-longmemeval-public-2026-07-15",
+  "status": "final-frozen",
+  "verified": "2026-07-15",
+  "product_context": "Historical NarratorDB 1.3 research record published by NarratorDB Cloud",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "questions": 500,
+    "all_questions_retained": true,
+    "declared_cutoffs": [20, 50]
+  },
+  "models": {
+    "answerer": "z-ai/glm-5.2",
+    "judge": "deepseek/deepseek-v4-flash-20260423"
+  },
+  "scores": {
+    "top_20_accuracy_percent": 81.6,
+    "top_50_accuracy_percent": 82.8,
+    "top_50_evidence_coverage_percent": 97.4,
+    "top_50_by_question_type_percent": {
+      "knowledge_update": 91.0,
+      "multi_session": 65.4,
+      "single_session_assistant": 96.4,
+      "single_session_preference": 83.3,
+      "single_session_user": 97.1,
+      "temporal_reasoning": 82.0
+    }
+  },
+  "ingestion": {
+    "pairs_processed": 124345,
+    "pairs_failed": 0,
+    "messages": 245780,
+    "scopes": 500
+  },
+  "search_latency_ms": {
+    "scope": "historical local HTTP benchmark deployment",
+    "samples": 500,
+    "median": 19.05,
+    "mean": 30.5712,
+    "p95": 86.1
+  },
+  "evaluation": {
+    "total_cost_usd": 9.9845,
+    "llm_calls": 2084
+  },
+  "comparability": {
+    "controlled_vendor_head_to_head": false,
+    "note": "Models, cutoffs, prompts, infrastructure, result shaping, and evaluation policies differ across published provider results. This record is first-party evidence, not a controlled superiority claim."
+  },
+  "source_integrity": {
+    "private_frozen_record_sha256": "df24667f4a5bf6ee0fde9c97a23040f4503a563be9a16d48bd36cd5cc6387962"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "schema_version": "narratordb.benchmark-record.v1",
+  "run_id": "narratordb-intelligence-dev42-v18-gpt54mini-official-r3-20260717",
+  "recorded_at": "2026-07-17",
+  "status": "development",
+  "system": "NarratorDB Intelligence V18",
+  "benchmark": "LongMemEval_S dev42",
+  "classification": "score-exposed post-hoc consumed development-set diagnostic; same-model self-judge; not blind, not an untouched holdout, not an independent-judge score, not a headline benchmark, and not a Mem0 head-to-head",
+  "result": {
+    "status": "complete-target-passed",
+    "target_cutoff": 50,
+    "target_minimum_correct_per_arm": 40,
+    "target_total_questions_per_arm": 42,
+    "target_passed": true,
+    "primary": {
+      "top_20": {
+        "correct": 39,
+        "total": 42,
+        "accuracy_percent": "92.85714285714285714285714286"
+      },
+      "top_50": {
+        "correct": 42,
+        "total": 42,
+        "accuracy_percent": "100"
+      }
+    },
+    "replication": {
+      "top_20": {
+        "correct": 38,
+        "total": 42,
+        "accuracy_percent": "90.47619047619047619047619048"
+      },
+      "top_50": {
+        "correct": 41,
+        "total": 42,
+        "accuracy_percent": "97.61904761904761904761904762"
+      }
+    },
+    "paired_floor_top_50": {
+      "correct": 41,
+      "total": 42,
+      "accuracy_percent": "97.61904761904761904761904762"
+    },
+    "stability": {
+      "top_20_absolute_difference_percentage_points": "2.380952380952380952380952381",
+      "top_20_verdict_agreement": "39/42 (92.85714285714285714285714286%)",
+      "top_50_absolute_difference_percentage_points": "2.380952380952380952380952381",
+      "top_50_verdict_agreement": "41/42 (97.61904761904761904761904762%)"
+    }
+  },
+  "configuration": {
+    "official_harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "endpoint": "https://api.openai.com/v1/chat/completions",
+    "answerer_model": "gpt-5.4-mini-2026-03-17",
+    "judge_model": "gpt-5.4-mini-2026-03-17",
+    "same_model_self_judge": true,
+    "reasoning_effort": "high",
+    "service_tier": "default",
+    "temperature_omitted": true,
+    "store": false,
+    "fallbacks_allowed": false,
+    "cutoffs": [20, 50],
+    "top_k": 200,
+    "seed": 42
+  },
+  "transport": {
+    "strict_canary_role_calls": 2,
+    "successful_scored_role_calls_primary": 168,
+    "successful_scored_role_calls_replication": 168,
+    "successful_scored_role_calls_total": 336,
+    "discarded_transients": 0,
+    "terminal_rejections": 0,
+    "hidden_sdk_retry_rejections": 0,
+    "maximum_physical_attempts_observed": 1,
+    "all_successes_exact_official_endpoint_model_and_stop_identity": true
+  },
+  "cost": {
+    "accounting": "local conservative official-response token ledger; provider billing not reconciled",
+    "provider_account_telemetry_performed": false,
+    "canary_usd": "0.000237750",
+    "primary_usd": "0.691709250",
+    "replication_usd": "0.428239500",
+    "new_r3_usd": "1.120186500",
+    "prior_r1_r2_conservative_exposure_usd": "2.878283432",
+    "cumulative_r1_r2_r3_conservative_exposure_usd": "3.998469932"
+  },
+  "fairness": {
+    "r3_precommitted_before_r3_provider_calls": true,
+    "r3_score_fields_present_in_precommit": false,
+    "historical_r1_r2_scores_known_before_r3": true,
+    "same_frozen_prediction_bytes_for_both_arms": true,
+    "replication_unconditional_after_score_blind_primary_transport_gate": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "score_driven_prompt_or_route_changes": false,
+    "score_driven_execution_or_publication_branching": false,
+    "blind_or_untouched_holdout": false,
+    "independent_judge": false,
+    "headline_benchmark_claim": false,
+    "mem0_head_to_head_claim": false
+  },
+  "historical_context": {
+    "r1": "primary scored 40/42 at top 20 and 41/42 at top 50, but the transport publication gate failed and replication did not execute",
+    "r2": "primary scored 38/42 at top 20 and 41/42 at top 50, but replication terminated on an unforwarded response and no paired score completed",
+    "r3": "first complete V18 paired score"
+  },
+  "provenance": {
+    "raw_report_root": "reports/longmemeval-intelligence-dev42-v18-gpt54mini-official-openai-high-selfjudge-paid-pair-r3-20260717",
+    "history_artifact_root": "reports/longmemeval-intelligence-dev42-v18-official-r3-history-20260717",
+    "precommit_sha256": "6e6abdc38508842174f8dad879a28936f4d1a656138db5628a5626553db38da5",
+    "sealed_files_manifest_sha256": "cc23634f4f949074327ab3426ec98fd5b9a425db1b256cf978be5d83bc7076b1",
+    "bound_inputs_manifest_sha256": "35fb0a112ae4900a6b0830c5a964620ee24161061189dcfc131dd6f24bdce7f5",
+    "paired_score_audit_sha256": "4f7460c801f94ff00d536d3dedaef41e831e893e53837b6c89382b2ec96640be",
+    "paired_score_source_manifest_sha256": "773a0e14e31e51a207db9494907ddd19822b5bf8859d890d234783898f0dd167",
+    "primary_evaluation_audit_sha256": "bdcedef99e388bb3fd55331d72e046f41f386c388da5e6025f9a18dd03b19f64",
+    "primary_transport_audit_sha256": "e27f5d4ca4b3d6bcbda33b4a136e6db89c97799bf3e5633ec4508ac0c531121b",
+    "replication_evaluation_audit_sha256": "22cfb106e43b9da9d467221e6b01b23cc8f6e1384a35bf50ecae40caabef5610",
+    "replication_transport_audit_sha256": "28ccd10a49870e1e5002930a4013cc55f4b5d53e797bd6977410cee074ee6ee6"
+  }
+}

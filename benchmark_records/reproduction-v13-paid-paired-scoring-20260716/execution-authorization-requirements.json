@@ -1,0 +1,65 @@
+{
+  "schema_version": "narratordb.v13-paid-paired-execution-authorization-requirements.v1",
+  "status": "requirements frozen before any paid or remote evaluator call",
+  "authorization_output": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/precall/execution-authorization.json",
+  "must_exist_before_first_model_call": true,
+  "must_not_exist_at_precommit": true,
+  "required_bindings": [
+    "externally published SHA-256 of the final paid-paired precommit SHA256SUMS file",
+    "SHA-256 of both sealed staged-copy manifests",
+    "SHA-256 of both fresh attempt1 working-copy manifests",
+    "SHA-256 of the recomputed campaign audit",
+    "SHA-256 of fresh content-free provider telemetry",
+    "SHA-256 of a trusted USD-to-EUR observation",
+    "all fixed models, routes, cutoffs, denominator, order, and per-variant fuses"
+  ],
+  "campaign_gate": {
+    "declaration": "benchmark_records/budgets/narratordb_95_campaign_20260716.json",
+    "provider_cap_usd": "250",
+    "planned_unspent_fuses_before_first_variant_usd": "2.50",
+    "audit_complete": true,
+    "invalid_completion_identities": 0,
+    "unknown_cost_attempts": 0,
+    "projected_observed_plus_unspent_fuses_must_not_exceed_provider_cap": true
+  },
+  "provider_gate": {
+    "endpoint": "https://openrouter.ai/api/v1/key",
+    "capture_policy": "authenticated content-free telemetry only; discard key, label, account, and identifiers",
+    "currency": "USD",
+    "provider_cap_usd": "250",
+    "maximum_age_minutes": 15,
+    "before_v7_remaining_must_be_at_least_usd": "2.50",
+    "between_variants_remaining_must_be_at_least_usd": "1.25",
+    "unknown_or_missing_limit_or_usage_fails_closed": true
+  },
+  "eur_gate": {
+    "governance_ceiling_eur": "300",
+    "trusted_source_and_observed_at_required": true,
+    "maximum_age_hours": 24,
+    "rate_definition": "EUR per 1 USD",
+    "formula": "(fresh campaign observed USD + 2.50 USD) * USD-to-EUR rate",
+    "projected_eur_must_be_at_most": "300",
+    "missing_stale_or_nonpositive_rate_fails_closed": true
+  },
+  "working_copy_gate": {
+    "attempt_root_must_start_absent": true,
+    "both_copies_prepared_before_first_model_call": true,
+    "copy_source_is_sealed_staged_prediction_directory": true,
+    "question_count_per_variant": 42,
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "copy_byte_identical": true,
+    "source_stable_during_copy": true
+  },
+  "credential_policy": {
+    "openrouter_key_source": "runtime environment only",
+    "key_or_bearer_value_in_authorization": false,
+    "provider_key_label_or_account_identifier_in_authorization": false,
+    "prompt_or_completion_content_in_authorization": false
+  },
+  "admission": {
+    "all_gates_must_pass": true,
+    "authorized_boolean_must_be_true": true,
+    "independent_read_only_review_required": true,
+    "failure_is_terminal_for_attempt1": true
+  }
+}

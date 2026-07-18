@@ -1,0 +1,79 @@
+{
+  "failure": {
+    "classification": "launcher-preflight-missing-absolute-executable",
+    "command": "run_offline_recovery.sh stage-a",
+    "exit_status": 67,
+    "failed_before_candidate_seal_reverification": true,
+    "failed_launcher_line": 39,
+    "missing_path": "/usr/bin/realpath",
+    "missing_path_absent_at_terminalization": true,
+    "observed_stderr_summary": "the sealed launcher attempted /usr/bin/realpath at line 39 and the shell reported that the executable did not exist",
+    "stderr_payload_recorded": false
+  },
+  "host_binding": {
+    "architecture": "arm64",
+    "available_replacement": {
+      "apple_codesign_verified": true,
+      "codesign_identifier": "com.apple.realpath",
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/bin/realpath",
+      "sha256": "22cd7804166170874dddd490e146936b6957dbbbb93d14eacd86b8d0de3e3989",
+      "type": "regular executable"
+    },
+    "macos_build": "25F84",
+    "macos_product_version": "26.5.2"
+  },
+  "publication_state": {
+    "absent_paths": [
+      "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716",
+      "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716.review-1.json",
+      "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716.review-2.json",
+      "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716.RECOVERY_GO.json"
+    ],
+    "aggregate_go_created": false,
+    "evaluation_audit_created": false,
+    "recovered_result_created": false,
+    "recovery_output_root_created": false,
+    "review_created": false,
+    "score_bearing_content_read_or_published": false,
+    "stage_a_envelope_created": false
+  },
+  "r1_precommit": {
+    "bundle_root": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716",
+    "closed_world_member_count": 10,
+    "launcher_sha256": "582bddb61e570705f0d008b253ffae3330b43c5aedf796619dca9f59247342f0",
+    "physical_file_count_including_seal": 11,
+    "protocol_sha256": "4f6c1fff9932d08c47eefb84097e4101a8bbbd692e6897c486f4f827ef944d91",
+    "seal_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716/SHA256SUMS",
+    "seal_manifest_sha256": "43edeb0561dd45586771af764d77d97c539df7b124f91938dfa552af2a3349a1",
+    "seal_manifest_size_bytes": 889,
+    "worker_sha256": "0aba4f56eaf8e40353588e819610775a721f8a420689b098ac02329057d60d8d"
+  },
+  "recorded_at_utc": "2026-07-16T16:11:46Z",
+  "recovery_policy": {
+    "r1_is_terminal": true,
+    "r1_overwrite_delete_resume_or_retry_allowed": false,
+    "r2_may_use_preserved_r5_evidence": true,
+    "r2_requires_distinct_bundle_output_review_go_and_seal_paths": true,
+    "r2_requires_fresh_independent_preseal_review": true
+  },
+  "schema_version": "narratordb.v13-paid-r5-finalization-recovery-r1-terminal.v1",
+  "source_attempt_preservation": {
+    "r5_attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1",
+    "r5_attempt_tree_fingerprint_sha256": "db0f54b46b3c24c6fac212e59a472365451dd88638f2b8274bf94538b804f804",
+    "r5_terminal_failure_record_sha256": "5b2f8963ec0e8fa7fbbfb8df99692e49407d535ea80761952afc5c303c44e869"
+  },
+  "status": "terminal-launcher-preflight-failure-no-worker-no-output",
+  "zero_activity": {
+    "additional_spend_usd": "0",
+    "credential_calls": 0,
+    "fx_calls": 0,
+    "judge_calls": 0,
+    "model_calls": 0,
+    "network_calls": 0,
+    "provider_calls": 0,
+    "sandbox_process_started": false,
+    "worker_process_started": false
+  }
+}

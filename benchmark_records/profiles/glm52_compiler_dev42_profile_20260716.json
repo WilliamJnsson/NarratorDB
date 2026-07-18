@@ -1,0 +1,70 @@
+{
+  "schema_version": "narratordb.compiler-profile-precommit.v1",
+  "created_at_utc": "2026-07-15T21:44:48Z",
+  "status": "precommitted-before-first-compiler-call",
+  "classification": "inspected development benchmark; not an untouched or publishable final score",
+  "purpose": "Establish a fixed GLM-5.2 write-time compiler profile for architecture development before cross-model confirmation.",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "scope": "dev42",
+    "questions": 42,
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "previously_scored": true
+  },
+  "compiler": {
+    "transport": "OpenRouter",
+    "model": "z-ai/glm-5.2",
+    "provider_only": "DeepInfra",
+    "allow_fallbacks": false,
+    "reasoning_effort": "high",
+    "max_output_tokens": 8192,
+    "seed": 0,
+    "context_token_budget": 6000,
+    "zero_data_retention": true,
+    "data_collection": "deny",
+    "synthetic_canary_max_cost_usd": 1.0,
+    "full_run_soft_fuse_usd": 120.0
+  },
+  "memory_runtime": {
+    "mode": "intelligence",
+    "merge_adjacent": true,
+    "merge_gap": 1,
+    "merge_max_chars": 1200,
+    "coalesce_timestamp_sessions": true,
+    "query_time_hosted_model": false
+  },
+  "retrieval": {
+    "top_k": 200,
+    "cutoffs": [20, 50]
+  },
+  "evaluation": {
+    "answerer_model": "z-ai/glm-5.2",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "reasoning_effort": "high",
+    "max_workers": 10,
+    "rpm": 60,
+    "answerer_is_stateless_and_separate_from_compiler": true
+  },
+  "promotion_gates": {
+    "synthetic_canary_all_checks": true,
+    "exact_model_and_provider_route": true,
+    "fresh_database_cache_and_usage_ledger": true,
+    "complete_denominator": true,
+    "frozen_source_and_prediction_manifests": true,
+    "accuracy_threshold_for_starting_run": null
+  },
+  "budget_governance": {
+    "provider_account_cap_usd": 250.0,
+    "overall_experiment_ceiling_eur": 300.0,
+    "profile_does_not_convert_currency": true,
+    "all_attempts_count_toward_campaign_spend": true
+  },
+  "fairness": {
+    "no_saved_answers": true,
+    "no_resume_after_inspection": true,
+    "no_question_specific_rules": true,
+    "all_results_and_failures_preserved": true,
+    "development_score_is_not_the_final_95_percent_claim": true
+  }
+}

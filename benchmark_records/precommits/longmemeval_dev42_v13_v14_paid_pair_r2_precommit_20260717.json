@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T19:10:47Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "complete paired transport-reliability rerun of the unchanged frozen V13 and V14 arms",
+  "inherits_frozen_arms_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v13_v14_paid_pair_precommit_20260717.json",
+    "sha256": "16019db3eb7bef0fadb1027af6f9e6fc3698e428a06f7b848f676d6cfb665cb5"
+  },
+  "r1_transport_evidence": {
+    "v13_evaluation_audit_sha256": "386547b9d12262ad9cdddde39e39723754e6c3475b965a6499e090dc6cb0ee3c",
+    "v14_evaluation_audit_sha256": "bababc678507943abf672a7544fcb449acc4df2250ea1981b67fd7ce818b307b",
+    "v13_empty_answer_count": 1,
+    "v14_empty_answer_count": 3,
+    "v14_empty_top50_answer_count": 2,
+    "reason_for_complete_rerun": "provider returned empty HTTP-200 completions through all five frozen harness attempts; both complete arms are rerun because selective question retries are prohibited"
+  },
+  "evaluation_order": [
+    "v13-control",
+    "v14-treatment"
+  ],
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "z-ai/glm-5.2",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "provider_only": "AtlasCloud",
+    "reasoning_effort": "high",
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 2,
+    "rpm": 30,
+    "seed": 42,
+    "rejudge": true,
+    "wrapper_path": "scripts/run_paired_evaluation_variant.sh",
+    "wrapper_sha256": "8ff3f388bc741392f528e3df9765105f9bc48a5145fc5b14497d83635229e713"
+  },
+  "budget": {
+    "pair_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "prediction_payloads_unchanged_from_r1": true,
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "score_fields_present_in_precommit": false
+  }
+}

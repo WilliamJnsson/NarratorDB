@@ -1,0 +1,12 @@
+{
+  "schema_version": "narratordb.failed-reproduction-preflight.v1",
+  "attempted_at_utc": "2026-07-16T02:09:08Z",
+  "status": "failed before preflight output or run-root creation",
+  "failure_type": "ValueError",
+  "failure_code": "sensitive_config_field_name_rejected",
+  "failure_location": "config.credential_policy",
+  "disposition": "preserved; no replay database, prediction, benchmark question, model call, or cost was created",
+  "repair": "rename the content-free metadata field and keep any sensitive environment assignment outside the secret-safe command manifest",
+  "run_root_absent_after_failure": true,
+  "preflight_output_absent_after_failure": true
+}

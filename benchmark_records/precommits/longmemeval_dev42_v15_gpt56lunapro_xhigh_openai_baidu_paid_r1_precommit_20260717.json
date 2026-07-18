@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T21:02:58Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "full-42 frozen V15 score with GPT-5.6 Luna Pro xhigh reasoning on OpenAI and fixed DeepSeek/Baidu judging",
+  "inherits_base_luna_condition_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v15_gpt56lunapro_openai_baidu_paid_r1_precommit_20260717.json",
+    "sha256": "57f1473f88051cc51955f23374b66c91048c1229f19c290dc86eb587b49d899b",
+    "completed_audit_sha256": "21d6b726f96fd85eb996ccbace34c2f0439b2e7f14569e39619f2cea45967afa"
+  },
+  "model_condition_change": {
+    "change": "add exact-model reasoning.effort=xhigh for openai/gpt-5.6-luna-pro",
+    "prediction_payloads_changed": false,
+    "judge_model_or_prompt_changed": false,
+    "benchmark_prompt_changed": false,
+    "output_token_limit_changed": false,
+    "reporting_rule": "report as a distinct GPT-5.6-Luna-Pro-xhigh model-condition score"
+  },
+  "frozen_input": {
+    "prediction_directory": "reports/longmemeval-intelligence-dev42-v15-replay-v7gpt54mini-repeat2-20260717/official-harness/predicted_narratordb-intelligence-dev42-v15-replay-v7gpt54mini-repeat2",
+    "prediction_manifest_sha256": "2b405ddebfba6eeff41e0e10302c3b22519ad5456de834387fadda8837cd095f",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "expected_questions": 42
+  },
+  "route_canary": {
+    "usage_log_path": "reports/gpt56lunapro-openai-xhigh-baidu-route-canary-r1-20260717.jsonl",
+    "usage_log_sha256": "9c338e8abb3e3e19724540030ec2d437d3833b89073d4efb61df63b45b5a01af",
+    "luna_pro_provider": "OpenAI",
+    "luna_pro_reasoning_effort": "xhigh",
+    "luna_pro_nonempty": true,
+    "luna_pro_reasoning_tokens_positive": true,
+    "judge_provider": "Baidu",
+    "judge_nonempty": true,
+    "completion_calls": 2,
+    "unknown_cost_attempts": 0,
+    "malformed_responses": 0,
+    "incomplete_responses": 0,
+    "cost_usd": 0.0022775654
+  },
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "openai/gpt-5.6-luna-pro",
+    "answerer_provider_only": "OpenAI",
+    "answerer_output_token_parameter": "max_tokens",
+    "answerer_temperature_omitted": true,
+    "answerer_reasoning_effort": "xhigh",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_only": "Baidu",
+    "judge_reasoning_parameter_injected": false,
+    "provider_policy": "public-benchmark",
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 2,
+    "rpm": 30,
+    "seed": 42,
+    "rejudge": true,
+    "proxy_path": "narratordb/benchmarks/openrouter_proxy.py",
+    "proxy_sha256": "7ce24f80cb48843c8956e24eba62c215fabac3d97e673dd355ab7051cbc64948",
+    "wrapper_path": "scripts/run_paired_evaluation_variant.sh",
+    "wrapper_sha256": "5feeb1eee34818b880c4bf141a716e0356cebd4694944360582387a134506f7e"
+  },
+  "budget": {
+    "arm_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "full_question_scope": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "prompt_or_judge_rule_changes": false,
+    "score_fields_present_in_precommit": false,
+    "gateway_is_openrouter_not_direct_openai_api": true
+  }
+}

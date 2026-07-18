@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T23:29:25Z",
+  "benchmark": "LongMemEval-S dev42",
+  "classification": "post-hoc consumed development set; not an untouched holdout, headline benchmark, or Mem0 head-to-head",
+  "purpose": "final pre-score route probe with fixed five-second inter-provider pacing",
+  "score_fields_present": false,
+  "inherits": {
+    "joint_scoring_precommit_path": "benchmark_records/precommits/longmemeval_dev42_v17_gpt54mini_openai_high_baidu_paid_pair_r1_precommit_20260717.json",
+    "joint_scoring_precommit_sha256": "ebb6e345610281bfafc9583bf93ff5b31e8c3066205bff02b4a264b32301e647",
+    "canary_r2_precommit_path": "benchmark_records/precommits/longmemeval_dev42_v17_gpt54mini_openai_high_baidu_paid_pair_r2_precommit_20260717.json",
+    "canary_r2_precommit_sha256": "330c091e2327e3196853abe766041859574a80f3d2a642e6ac407e59f0d1b8f4"
+  },
+  "preserved_r2_failure": {
+    "benchmark_answer_or_judge_calls_made": false,
+    "benchmark_score_observed": false,
+    "answerer": "OpenAI completed with positive reasoning tokens",
+    "judge": "Baidu returned HTTP 429 after a 0.22-second inter-provider interval",
+    "cumulative_ledger_sha256": "1b86ceedbe6ed11fd25a9c824a8a3e21d55c7d3390735389809a6b6ac620bea2",
+    "proxy_log_sha256": "aecfeb9c7c14efbf8aaf674cf06f87fd8e9c57d71d8cabcad168d3807bad1354",
+    "health_sha256": "0fd237434bc6c168a92b9e4f53b29d8f733654e17c61a880b6cd09ce6d32f0ff",
+    "conservative_cumulative_canary_cost_usd": 0.010195932,
+    "unknown_cost_reservations": 1,
+    "failure_preserved": true
+  },
+  "r3_change_only": {
+    "inter_provider_delay_seconds": 5,
+    "answerer_max_output_tokens": 128,
+    "judge_max_output_tokens": 1024,
+    "answerer_model_changed": false,
+    "answerer_provider_changed": false,
+    "answerer_reasoning_effort_changed": false,
+    "judge_model_changed": false,
+    "judge_provider_changed": false,
+    "judge_temperature_changed": false,
+    "scoring_prompt_changed": false,
+    "frozen_prediction_bytes_changed": false,
+    "scoring_arm_fuses_changed": false
+  },
+  "sealed_r3": {
+    "directory": "benchmark_records/reproduction-v17-gpt54mini-openai-high-baidu-paid-pair-r3-20260717",
+    "sealed_files_manifest_sha256": "fdffb90a5322eece08ba8442ba76a95050db10885313ba6c8337ebbcb1f26b05",
+    "bound_inputs_manifest_sha256": "d43d00933acad176687a2dab1cd9ee9225e3dd1bbfb14d5cf2d1bf1075432993"
+  },
+  "cumulative_budget": {
+    "prior_canary_cost_or_reservation_usd": 0.010195932,
+    "r3_canary_hard_fuse_usd": 0.089804068,
+    "cumulative_canary_ceiling_usd": 0.10,
+    "primary_hard_fuse_usd": 2.45,
+    "replication_hard_fuse_usd": 2.45,
+    "strict_global_new_work_allocation_usd": 5.00,
+    "provider_account_cap_usd": 250.00,
+    "user_governance_cap_eur": 300.00
+  },
+  "unchanged_scoring_arms": {
+    "source_prediction_manifest_sha256": "ebf154a1d679259219b47a802b210809f184f10ba0fcff2f90e01d477babb29d",
+    "primary_frozen_copy_manifest_sha256": "9555ecddfad70b0b07714d13ecbbef6f168ed4c115f7578ab24e6690f8a0fcd4",
+    "replication_frozen_copy_manifest_sha256": "a3635dbc866293934a7de7d77c64bff42b01f8063f96823685981a76c9b3cf21",
+    "execution": "full42, GPT-5.4-mini high/OpenAI answerer, DeepSeek-v4-flash/Baidu judge, top_k=200, cutoffs=20,50, workers=2, rpm=30, seed=42, rejudge; primary then unconditional replication"
+  },
+  "terminal_canary_rule": "if R3 fails, stop canaries and request review; do not create R4",
+  "fairness": {
+    "selective_benchmark_question_retries": false,
+    "benchmark_answer_hardcoding": false,
+    "benchmark_score_observed_before_r3": false,
+    "reporting_rule": "V17 post-hoc dev42 development score only; fresh holdout and third-party reproduction remain required"
+  }
+}

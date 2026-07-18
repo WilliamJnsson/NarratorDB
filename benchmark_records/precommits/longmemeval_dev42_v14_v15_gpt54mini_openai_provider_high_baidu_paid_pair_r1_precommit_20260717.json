@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T20:26:28Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "fixed-provider V14/V15 pair with GPT-5.4-Mini high reasoning on OpenAI and DeepSeek judging on Baidu",
+  "inherits_frozen_arms_and_model_configuration_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v14_v15_gpt54mini_openai_provider_high_paid_pair_r1_precommit_20260717.json",
+    "sha256": "17a4bbdd5aeb65d4a516e67773713aeaac0afda06c87d051652e1392e88fa9e8"
+  },
+  "superseded_prelaunch": {
+    "benchmark_model_calls_made": false,
+    "change": "replace the floating judge allowlist with canary-verified Baidu and lower concurrency before scoring",
+    "prediction_payloads_changed": false,
+    "answerer_model_or_prompt_changed": false,
+    "judge_model_or_prompt_changed": false
+  },
+  "fixed_routes": {
+    "gateway": "OpenRouter",
+    "answerer_model": "openai/gpt-5.4-mini",
+    "answerer_inference_provider": "OpenAI",
+    "answerer_reasoning_effort": "high",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_inference_provider": "Baidu"
+  },
+  "route_canary": {
+    "usage_log_path": "reports/gpt54mini-openai-high-baidu-judge-safe-rate-canary-r1-20260717.jsonl",
+    "usage_log_sha256": "057c5099a07620bfa9f75df550ff65fbba4733abc41c51d334e9f95e9ef51030",
+    "gpt_completion_calls": 1,
+    "gpt_provider": "OpenAI",
+    "gpt_reasoning_tokens_positive": true,
+    "judge_completion_calls": 8,
+    "judge_provider": "Baidu",
+    "completion_calls": 9,
+    "unknown_cost_attempts": 0,
+    "malformed_responses": 0,
+    "incomplete_responses": 0,
+    "cost_usd": 0.0009964154
+  },
+  "evaluation_order": [
+    "v14-control",
+    "v15-treatment"
+  ],
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "openai/gpt-5.4-mini",
+    "answerer_provider_only": "OpenAI",
+    "answerer_output_token_parameter": "max_tokens",
+    "answerer_temperature_omitted": true,
+    "answerer_reasoning_effort": "high",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_only": "Baidu",
+    "judge_reasoning_parameter_injected": false,
+    "provider_policy": "public-benchmark",
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 2,
+    "rpm": 30,
+    "seed": 42,
+    "rejudge": true,
+    "proxy_path": "narratordb/benchmarks/openrouter_proxy.py",
+    "proxy_sha256": "7ce24f80cb48843c8956e24eba62c215fabac3d97e673dd355ab7051cbc64948",
+    "wrapper_path": "scripts/run_paired_evaluation_variant.sh",
+    "wrapper_sha256": "6b067e81995f4c77dd73b766e27cbd7dcd45cb4f38904d1eb2dac46f858a785a"
+  },
+  "frozen_arms": {
+    "v14_prediction_manifest_sha256": "4cbd288f1f0d2e4c4504445344d7a08c9ae006785c9dd5d234709e2dde2db4b6",
+    "v15_prediction_manifest_sha256": "2b405ddebfba6eeff41e0e10302c3b22519ad5456de834387fadda8837cd095f",
+    "v15_repeat_identity": "42/42 at top20, top50, and full",
+    "v14_v15_identity": "41/42 at top20, top50, and full",
+    "sole_changed_question_id": "88432d0a"
+  },
+  "budget": {
+    "pair_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "prompt_or_judge_rule_changes": false,
+    "score_fields_present_in_precommit": false,
+    "reporting_rule": "label as GPT-5.4-Mini high-reasoning development score with fixed OpenAI/Baidu inference routes"
+  }
+}

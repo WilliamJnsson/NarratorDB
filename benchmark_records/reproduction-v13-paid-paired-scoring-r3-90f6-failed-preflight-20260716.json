@@ -1,0 +1,78 @@
+{
+  "schema_version": "narratordb.v13-paid-precommit-failed-preflight.v1",
+  "recorded_at_utc": "2026-07-16T11:03:32Z",
+  "status": "terminal failed pre-network credential injection; superseded; never execute",
+  "failed_precommit": {
+    "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r3-20260716",
+    "seal_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r3-20260716/SHA256SUMS",
+    "seal_sha256": "90f66a881b8bb17079ed39f9bd4cd843e118b2a4febba290f5d0815c11a5e364",
+    "bound_inputs_manifest_sha256": "6b7161170f3feebdcb054e91d2e882f3a0aa3a266259f629b9a2272a0066b0dc",
+    "sealed_members_still_verify": true,
+    "bound_inputs_still_verify": true,
+    "sealed_members_modified_after_failure": false
+  },
+  "terminal_findings": [
+    {
+      "code": "operator-pty-credential-sequencing-failure",
+      "finding": "Frozen command 15 invoked the sealed launcher without an exported OPENROUTER_API_KEY. The interactive read consumed a literal export command as a nonexported dummy variable; the launcher failed immediately with runtime OpenRouter environment is missing."
+    }
+  ],
+  "credential_injection_evidence": {
+    "command_15_invoked": true,
+    "launcher_action": "telemetry-before-v7",
+    "launcher_reached_missing_environment_guard": true,
+    "launcher_reached_seal_verification": false,
+    "launcher_reached_credential_export": false,
+    "launcher_reached_exec": false,
+    "actual_user_key_sent_to_process": false,
+    "actual_user_key_injected_into_environment": false,
+    "actual_user_key_exposed_or_recorded": false,
+    "credential_shaped_material_count_in_attempt": 0
+  },
+  "offline_attempt_evidence": {
+    "attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r3-20260716/attempt1",
+    "attempt1_present": true,
+    "last_completed_frozen_command_one_based": 14,
+    "attempted_failed_command_one_based": 15,
+    "first_network_request_dispatched": false,
+    "regular_file_count": 5151,
+    "non_tool_regular_file_count": 173,
+    "total_regular_file_bytes": 65411455,
+    "v7_working_copy_manifest_sha256": "b0bb667cd7e38c153a56eb6f5aa86cb53354e6feb8d68fd4eea3fd3fdec6a101",
+    "v13_working_copy_manifest_sha256": "92410e37c5ab59404d17ad185299c337d6f3606b4cf87fd508d1105b0ba6b7bb",
+    "v7_initial_ledger_bytes": 1,
+    "v7_initial_ledger_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "v13_initial_ledger_bytes": 2,
+    "v13_initial_ledger_sha256": "75a11da44c802486bc6f65640aa48a730f0f684c5c07a42ba3cd1735eb3fb070",
+    "campaign_audit_before_v7_sha256": "5fb3ee6c4c531a84c5e8fa45ea73e943b0e0132f26ef561c3f50daf8180bfdd8",
+    "campaign_audit_complete": true,
+    "provider_telemetry_present": false,
+    "ecb_capture_present": false,
+    "execution_authorization_present": false,
+    "proxy_or_health_artifact_present": false,
+    "evaluator_or_attempt_status_present": false,
+    "evaluation_audit_or_score_present": false,
+    "proxy_port_8890_listening": false
+  },
+  "call_and_cost_state": {
+    "compiler_calls": 0,
+    "answerer_calls": 0,
+    "judge_calls": 0,
+    "scoring_calls": 0,
+    "provider_telemetry_calls": 0,
+    "ecb_fx_calls": 0,
+    "external_model_network_calls": 0,
+    "paid_cost_usd": "0"
+  },
+  "disposition": {
+    "execute_failed_precommit": false,
+    "execute_offline_prepared_attempt": false,
+    "repair_in_place": false,
+    "delete_or_resume_attempt1": false,
+    "preserve_as_evidence": true,
+    "replacement_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716",
+    "replacement_attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1",
+    "replacement_must_receive_new_seal_and_independent_audit": true
+  },
+  "credential_material_recorded": false
+}

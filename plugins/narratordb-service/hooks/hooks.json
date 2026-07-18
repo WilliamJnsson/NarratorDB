@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh \"${PLUGIN_ROOT}/scripts/run-hook.sh\" PreCompact",
+            "timeout": 10,
+            "statusMessage": "NarratorDB · preserving session details…"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh \"${PLUGIN_ROOT}/scripts/run-hook.sh\" Stop",
+            "timeout": 10,
+            "statusMessage": "NarratorDB · saving session details…"
+          }
+        ]
+      }
+    ]
+  }
+}

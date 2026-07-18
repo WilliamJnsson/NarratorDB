@@ -1,0 +1,130 @@
+{
+  "schema_version": "narratordb.v13-paid-paired-command-manifest.v1",
+  "created_at_utc": "2026-07-16T06:00:55Z",
+  "working_directory": "/Users/william/Desktop/narratorDB",
+  "status": "commands frozen but no paid or remote command executed",
+  "environment_policy": {
+    "credential_name": "OPENROUTER_API_KEY",
+    "credential_value_recorded": false,
+    "credential_source": "runtime environment only",
+    "harness_real_provider_credential_inherited": false,
+    "harness_openai_key": "fixed non-sensitive local-transport dummy",
+    "dotenv_loading_disabled_for_harness": true
+  },
+  "local_precommit_verification": [
+    {
+      "id": "verify-precommit-members",
+      "command": "cd benchmark_records/reproduction-v13-paid-paired-scoring-20260716 && shasum -a 256 -c SHA256SUMS"
+    },
+    {
+      "id": "verify-all-bound-inputs",
+      "command": "shasum -a 256 -c benchmark_records/reproduction-v13-paid-paired-scoring-20260716/BOUND_INPUTS_SHA256SUMS"
+    },
+    {
+      "id": "verify-v7-input",
+      "command": "cd reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716 && shasum -a 256 -c V7_INPUT_SHA256SUMS"
+    },
+    {
+      "id": "verify-v13-first-freeze",
+      "command": "cd reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716 && shasum -a 256 -c PREDICTION_FREEZE_SHA256SUMS"
+    },
+    {
+      "id": "verify-v13-repeat-success",
+      "command": "cd reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716 && shasum -a 256 -c REPEAT1_SUCCESS_SHA256SUMS"
+    },
+    {
+      "id": "verify-v11-fair-baseline",
+      "command": "cd reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716 && shasum -a 256 -c PAIRED_RESULT_SHA256SUMS"
+    },
+    {
+      "id": "verify-staged-v7",
+      "command": ".venv/bin/python benchmark_records/reproduction-v13-paid-paired-scoring-20260716/verify_staged_copy.py --manifest reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/frozen-copy-manifest.json --expected-manifest-sha256 fbb21b8a00502b762874c0a2a24aa6db5a6c9a0185d0b36189b62f958cc123d6 --require-read-only"
+    },
+    {
+      "id": "verify-staged-v13",
+      "command": ".venv/bin/python benchmark_records/reproduction-v13-paid-paired-scoring-20260716/verify_staged_copy.py --manifest reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/frozen-copy-manifest.json --expected-manifest-sha256 0ec08135fa114b4903eaa0a7d004d5ec82d22a2c55d313ef270d87d2595d71fa --require-read-only"
+    },
+    {
+      "id": "verify-current-campaign-audit",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source .venv/bin/python -m narratordb.benchmarks.budget_audit --declaration benchmark_records/budgets/narratordb_95_campaign_20260716.json --provider-cap-usd 250 | diff - benchmark_records/budgets/narratordb_95_campaign_20260716.audit.json"
+    },
+    {
+      "id": "verify-harness-commit-clean",
+      "command": "test \"$(git -C vendor/memory-benchmarks rev-parse HEAD)\" = 4b61c5d31b9c668a12b4f5e78064248a02c82d2b && test -z \"$(git -C vendor/memory-benchmarks status --porcelain --untracked-files=all)\""
+    },
+    {
+      "id": "verify-harness-defaults",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/harness-source vendor/memory-benchmarks/.venv/bin/python -c 'import inspect; from benchmarks.common.llm_client import LLMClient; c=inspect.signature(LLMClient.__init__).parameters; g=inspect.signature(LLMClient.generate).parameters; s=inspect.signature(LLMClient.generate_structured).parameters; assert c[\"max_retries\"].default==5 and c[\"timeout\"].default==120.0 and g[\"temperature\"].default==0 and g[\"max_tokens\"].default==4096 and s[\"temperature\"].default==0 and s[\"max_tokens\"].default==4096'"
+    },
+    {
+      "id": "verify-fresh-attempt-state",
+      "command": "test ! -e reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1 && ! lsof -nP -iTCP:8890 -sTCP:LISTEN >/dev/null 2>&1"
+    }
+  ],
+  "attempt_preparation_before_any_remote_call": [
+    {
+      "id": "extract-frozen-tools",
+      "command": "mkdir -p reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/tools/v11-source reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/tools/harness-source && tar -xzf reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz -C reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/tools/v11-source && tar -xf reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/harness-source.tar -C reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/tools/harness-source"
+    },
+    {
+      "id": "prepare-v7-working-copy",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/tools/v11-source .venv/bin/python -m narratordb.benchmarks.paired_evaluation prepare --frozen-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini --evaluation-output-root reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/official-harness --project-name narratordb-intelligence-dev42-v7-gpt54mini --question-id-file reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json --expected-questions 42 --expected-question-ids-sha256 60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff"
+    },
+    {
+      "id": "prepare-v13-working-copy",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/tools/v11-source .venv/bin/python -m narratordb.benchmarks.paired_evaluation prepare --frozen-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini --evaluation-output-root reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/official-harness --project-name narratordb-intelligence-dev42-v13-replay-v7gpt54mini --question-id-file reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json --expected-questions 42 --expected-question-ids-sha256 60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff"
+    },
+    {
+      "id": "make-only-working-predictions-writable",
+      "command": "find reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini -type f -exec chmod u+w {} +"
+    },
+    {
+      "id": "freeze-and-independently-audit-execution-authorization",
+      "command": "test -f reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/precall/execution-authorization.json && jq -e '.authorized == true and .independent_audit_passed == true' reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/precall/execution-authorization.json >/dev/null",
+      "blocked_until": "fresh campaign audit, fresh provider telemetry, trusted USD-to-EUR snapshot, and both working-copy manifests are frozen and independently audited"
+    }
+  ],
+  "paid_remote_execution_not_run": [
+    {
+      "id": "execute-v7-control-once",
+      "command": "benchmark_records/reproduction-v13-paid-paired-scoring-20260716/run_paid_variant_hardened.sh reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control narratordb-intelligence-dev42-v7-gpt54mini reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "runtime_secret": "OPENROUTER_API_KEY environment only",
+      "executed": false
+    },
+    {
+      "id": "between-variant-provider-gate",
+      "command": "test -f reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/precall/provider-telemetry-between-variants.json && jq -e '.provider_remaining_usd >= 1.25 and .age_minutes <= 15 and .credential_recorded == false' reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/precall/provider-telemetry-between-variants.json >/dev/null",
+      "executed": false
+    },
+    {
+      "id": "execute-v13-first-once",
+      "command": "benchmark_records/reproduction-v13-paid-paired-scoring-20260716/run_paid_variant_hardened.sh reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first narratordb-intelligence-dev42-v13-replay-v7gpt54mini reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "runtime_secret": "OPENROUTER_API_KEY environment only",
+      "executed": false
+    }
+  ],
+  "postrun_audit_required_before_score_comparison": [
+    {
+      "id": "audit-v7-complete",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/tools/v11-source .venv/bin/python -m narratordb.benchmarks.evaluation_audit --evaluated-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini --frozen-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini --usage-log reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl --evaluator-log reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/evaluate.log --expected-questions 42 --cutoffs 20,50 --question-id-file reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation-audit.json --require-complete --require-official-score-complete"
+    },
+    {
+      "id": "assert-v7-success-counters",
+      "command": "jq -e '.complete == true and .official_harness_score_complete == true and .evaluated_questions == 42 and .frozen_questions == 42 and .cutoffs == [\"top_20\",\"top_50\"] and .metrics.top_20.total == 42 and .metrics.top_50.total == 42 and (.validation.empty_answers|length) == 0 and (.validation.empty_judges|length) == 0 and (.validation.frozen_payload_mismatches|length) == 0 and (.validation.missing_evaluated_ids|length) == 0 and (.validation.extra_evaluated_ids|length) == 0 and (.validation.missing_cutoffs|length) == 0 and (.validation.invalid_scores|length) == 0 and (.validation.inconsistent_verdicts|length) == 0 and .usage.unknown_cost_attempts == 0 and .usage.invalid_completion_identities == 0 and .usage.publication_ready == true' reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation-audit.json >/dev/null"
+    },
+    {
+      "id": "audit-v13-complete",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/tools/v11-source .venv/bin/python -m narratordb.benchmarks.evaluation_audit --evaluated-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini --frozen-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini --usage-log reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl --evaluator-log reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/evaluate.log --expected-questions 42 --cutoffs 20,50 --question-id-file reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation-audit.json --require-complete --require-official-score-complete"
+    },
+    {
+      "id": "assert-v13-success-counters",
+      "command": "jq -e '.complete == true and .official_harness_score_complete == true and .evaluated_questions == 42 and .frozen_questions == 42 and .cutoffs == [\"top_20\",\"top_50\"] and .metrics.top_20.total == 42 and .metrics.top_50.total == 42 and (.validation.empty_answers|length) == 0 and (.validation.empty_judges|length) == 0 and (.validation.frozen_payload_mismatches|length) == 0 and (.validation.missing_evaluated_ids|length) == 0 and (.validation.extra_evaluated_ids|length) == 0 and (.validation.missing_cutoffs|length) == 0 and (.validation.invalid_scores|length) == 0 and (.validation.inconsistent_verdicts|length) == 0 and .usage.unknown_cost_attempts == 0 and .usage.invalid_completion_identities == 0 and .usage.publication_ready == true' reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation-audit.json >/dev/null"
+    },
+    {
+      "id": "verify-staged-inputs-after-run",
+      "command": ".venv/bin/python benchmark_records/reproduction-v13-paid-paired-scoring-20260716/verify_staged_copy.py --manifest reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/frozen-copy-manifest.json --expected-manifest-sha256 fbb21b8a00502b762874c0a2a24aa6db5a6c9a0185d0b36189b62f958cc123d6 --require-read-only && .venv/bin/python benchmark_records/reproduction-v13-paid-paired-scoring-20260716/verify_staged_copy.py --manifest reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/frozen-copy-manifest.json --expected-manifest-sha256 0ec08135fa114b4903eaa0a7d004d5ec82d22a2c55d313ef270d87d2595d71fa --require-read-only"
+    }
+  ],
+  "score_comparison_gate": "No paired score, delta, promotion, or score-dependent action is permitted until every postrun audit and explicit zero-counter assertion passes for both variants.",
+  "failure_policy": "Any nonzero command, missing dynamic authorization, incomplete variant, or failed assertion terminates attempt1. Preserve every artifact and do not rerun, resume, overwrite, delete, or selectively repair it."
+}

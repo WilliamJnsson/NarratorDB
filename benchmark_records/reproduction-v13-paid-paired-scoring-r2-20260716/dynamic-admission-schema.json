@@ -1,0 +1,208 @@
+{
+  "schema_version": "narratordb.v13-paid-dynamic-admission-schema-bundle.v1",
+  "enforcement": "verify_dynamic_admission.py is normative; every listed object is closed-world and rejects duplicate keys, non-finite values, JSON decimal numbers, secrets, model content, missing fields, and extra fields",
+  "decimal_encoding": "finite nonnegative canonical decimal string; monetary arithmetic uses Python Decimal",
+  "timestamp_encoding": "second-precision UTC YYYY-MM-DDTHH:MM:SSZ",
+  "provider_telemetry_v2": {
+    "schema_version": "narratordb.provider-key-telemetry.v2",
+    "exact_fields": [
+      "account_identifier_recorded",
+      "capture_tool_sha256",
+      "credential_recorded",
+      "currency",
+      "http_status",
+      "key_label_recorded",
+      "model_content_recorded",
+      "observed_at_utc",
+      "provider_limit_usd",
+      "provider_remaining_usd",
+      "provider_usage_usd",
+      "request_class",
+      "schema_version",
+      "source_endpoint"
+    ],
+    "fixed_values": {
+      "source_endpoint": "https://openrouter.ai/api/v1/key",
+      "request_class": "authenticated content-free account telemetry",
+      "http_status": 200,
+      "currency": "USD",
+      "provider_limit_usd": "250",
+      "credential_recorded": false,
+      "key_label_recorded": false,
+      "account_identifier_recorded": false,
+      "model_content_recorded": false
+    },
+    "checks": [
+      "capture_tool_sha256 equals the sealed capture tool",
+      "0 <= authorization_time - observed_at_utc <= 900 seconds",
+      "abs(limit - usage - remaining) <= 0.000000001 USD",
+      "remaining covers every unspent fuse",
+      "usage plus every unspent fuse is no more than USD 250",
+      "before V7 usage is no lower than frozen historical usage USD 121.362526048",
+      "before V13 usage and timestamp are monotonic and provider delta equals exact V7 ledger cost"
+    ]
+  },
+  "ecb_fx_v1": {
+    "schema_version": "narratordb.ecb-usd-eur-observation.v1",
+    "exact_fields": [
+      "base_currency",
+      "credential_recorded",
+      "http_status",
+      "model_content_recorded",
+      "parser_sha256",
+      "publisher",
+      "quote_currency",
+      "raw_xml_bytes",
+      "raw_xml_path",
+      "raw_xml_sha256",
+      "reference_date",
+      "retrieved_at_utc",
+      "schema_version",
+      "source_url",
+      "usd_per_eur"
+    ],
+    "fixed_values": {
+      "publisher": "European Central Bank",
+      "source_url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml",
+      "http_status": 200,
+      "base_currency": "EUR",
+      "quote_currency": "USD",
+      "credential_recorded": false,
+      "model_content_recorded": false
+    },
+    "checks": [
+      "raw byte length and SHA-256 match the sealed XML file",
+      "parser_sha256 equals the sealed dynamic admission verifier",
+      "XML has no DTD or entity declarations",
+      "XML has exactly one dated Cube and exactly one USD quote within it",
+      "reference date is Monday-Friday, nonfuture, and 0-7 UTC calendar days old",
+      "capture is no more than 900 seconds old and not future-dated",
+      "USD-per-EUR is a finite positive decimal"
+    ]
+  },
+  "campaign_gate": {
+    "declaration_schema": "narratordb.campaign-budget-declaration.v2",
+    "audit_schema": "narratordb.campaign-budget-audit.v1",
+    "builder_command": "python -I -S -B verify_dynamic_admission.py build-campaign-audit --repository-root ROOT --requirements REQUIREMENTS --output DECLARED_OUTPUT",
+    "checks": [
+      "campaign declaration, frozen auditor, and its sole benchmark-history support module hashes match the replacement precommit",
+      "the sole campaign-audit builder permits only the three distinct precommitted output paths and refuses overwrite",
+      "the builder loads the exact hash-bound history and auditor source files as synthetic package modules under isolated Python -I -S -B with no bytecode writes, user site, startup hooks, or inherited PYTHONPATH",
+      "fresh auditor stdout parses as canonical content-free JSON before immutable creation",
+      "phase-specific stored audit is byte-identical to a current frozen-auditor recomputation",
+      "complete is true and unknown cost and invalid completion identity counts are zero",
+      "V7 and V13 ledger paths are exactly the two declaration entries",
+      "before V7 both ledgers have their distinct exact blank hashes and zero events",
+      "before V13 the V7 ledger and its direct identity audit hashes match while V13 remains exact blank",
+      "baseline plus actual admitted ledgers plus every unspent fuse is no more than USD 250"
+    ]
+  },
+  "staged_source_gate": {
+    "manifest_schema": "narratordb.paired-evaluation-copy.v1",
+    "variant_bindings": [
+      "staged_copy_manifest_path",
+      "staged_copy_manifest_sha256",
+      "staged_prediction_directory",
+      "working_copy_manifest_path"
+    ],
+    "checks": [
+      "each predecessor staged manifest path is exactly beside its declared staged prediction directory and its bytes match the sealed SHA-256",
+      "each staged manifest is closed-schema canonical input with the exact project, 42-question scope, question-ID hash, checks, ordered file paths, byte counts, and file hashes",
+      "the staged manifest recorded evaluated-directory suffix identifies the exact portable repository-relative staged source path",
+      "both actual staged source trees exactly match their manifests before every authorization, with no missing files, extra files, extra directories, symlinks, hardlinks, or other nonregular entries",
+      "each fresh working-copy manifest has an exactly equal files list to its sealed staged manifest and names the exact staged and working directories",
+      "the current working source tree is re-read against that list immediately before authorization"
+    ]
+  },
+  "runtime_source_gate": {
+    "archive_policy": "exact hash-bound tar/tar.gz inputs; at most 1000 members, 64 MiB expanded, 16 MiB per member",
+    "checks": [
+      "both archives reject absolute paths, parent traversal, noncanonical or duplicate member names, symlinks, hardlinks, sparse files, devices, FIFOs, and every type except regular file or directory",
+      "the exact extracted v11-source and harness-source roots contain the same files and directories as their archives with byte-identical size and SHA-256",
+      "extracted roots reject missing, extra, symlinked, hardlinked, and nonregular entries and are recursively read-only before authorization",
+      "vendor Python is an exact sealed symlink whose textual target, canonical resolved path, executable bytes, pyvenv.cfg, prefix/base-prefix, version, and cache tag all match the precommit",
+      "the exact base stdlib and vendor site-packages trees are sealed by canonical directory and file records, counts, total bytes, and aggregate SHA-256; the attempt-local site-packages copy is recursively read-only",
+      "the wrapper launches the harness through the sealed guard under -I -S -B; site-packages is inserted manually so executable .pth files and sitecustomize never run",
+      "the guard disables both dotenv.load_dotenv entry points before evaluator import, asserts exact harness module provenance/signatures, and fixes the only route to http://127.0.0.1:8890/v1",
+      "the proxy and harness run under explicit clean environments; proxy bypass is NO_PROXY=* and harness localhost bypass is NO_PROXY=127.0.0.1,localhost"
+    ],
+    "portability_note": "the vendor environment aggregate is an exact platform-specific execution binding; independent reproduction must recreate the sealed CPython/site-packages inventory or publish a separately audited equivalent environment"
+  },
+  "authorization_v2": {
+    "schema_version": "narratordb.v13-paid-execution-authorization.v2",
+    "exact_top_level_fields": [
+      "artifact_hashes",
+      "authorized",
+      "campaign_gate",
+      "created_at_utc",
+      "credential_recorded",
+      "eur_gate",
+      "expires_at_utc",
+      "fixed_argument_tuple",
+      "ledger_gate",
+      "model_content_recorded",
+      "phase",
+      "predecessor_precommit_sha256",
+      "provider_gate",
+      "requirements_sha256",
+      "revision_precommit_sha256",
+      "runtime_source_gate",
+      "schema_version",
+      "variant_label",
+      "verifier_sha256",
+      "working_copy_gate"
+    ],
+    "checks": [
+      "the whole document equals a fresh closed-world recomputation",
+      "the published replacement-precommit SHA equals SHA256(replacement SHA256SUMS)",
+      "both sealed staged manifests, staged source trees, fresh working-copy manifests, runtime archives/extractions, and vendor environment are hash-bound; the current variant is pristine",
+      "the exact phase-to-run-root/project/dataset argument tuple matches",
+      "authorized is true only when every campaign, provider, EUR, ledger, and working-copy check passes"
+    ]
+  },
+  "independent_audit_v1": {
+    "schema_version": "narratordb.v13-paid-execution-authorization-audit.v1",
+    "binding": "SHA-256 of the exact authorization bytes, requirements, replacement precommit, verifier, every dynamic artifact, runtime archive/environment identities, both staged/working manifests, and both ledgers",
+    "checks": "a separate build-audit invocation recomputes every gate; the wrapper recomputes both documents again immediately before the proxy"
+  },
+  "final_spend_authorization_v1": {
+    "schema_version": "narratordb.v13-paid-final-spend-authorization.v1",
+    "required_before_score_release": true,
+    "checks": [
+      "both complete pre-call authorizations are exactly reconstructed at their recorded timestamps and argument tuples from their phase-time ledger bytes and mirrored frozen campaign-auditor replay; both independent audits must equal exact closed documents around those authorizations",
+      "every immutable artifact named by both phase authorizations is reopened and recomputed before score release, including phase campaign/provider/FX evidence, runtime/environment evidence, and both staged/working manifests",
+      "the before-V7 provider telemetry bytes still match both phase authorizations",
+      "both complete evaluator ledgers pass the sealed direct identity verifier",
+      "the immutable final campaign audit is byte-identical to a current frozen-auditor recomputation",
+      "final campaign spend equals frozen baseline plus the exact two evaluator ledgers",
+      "post-pair provider usage delta from the authorization-bound before-V7 telemetry equals the exact sum of both ledgers",
+      "provider usage and campaign spend remain within USD 250",
+      "fresh ECB evidence, 1000-basis-point buffer, max campaign/provider USD basis, and upward-cent rounding remain within EUR 300",
+      "an immutable independent final-spend audit binds every source hash"
+    ],
+    "verifier_command": "verify-finalization",
+    "score_release_authorized_only_on_pass": true
+  },
+  "paired_result_v2": {
+    "schema_version": "narratordb.v13-paid-paired-result.v2",
+    "builder_command": "build-paired-result",
+    "checks": [
+      "the builder permits only the exact precommitted paired-result path, creates a new 0444 file, and refuses overwrite",
+      "the same invocation freshly reruns final spend authorization/audit verification against all current preserved evidence",
+      "both immutable evaluation audits must be byte-identical to isolated recomputation by attempt1/tools/v11-source/narratordb/benchmarks/evaluation_audit.py from the exact immutable scored tree, sealed frozen tree, question scope, evaluator log, and identity-audited usage ledger",
+      "each exact completed attempt-status document, scored-tree inventory, evaluator log, usage ledger, evaluation auditor, and evaluation audit is SHA-256 bound to its own variant so audits cannot be fabricated or swapped",
+      "all validation arrays, terminal failure maps, upstream error counts, unknown-cost counts, and invalid-identity counts are zero",
+      "overall and by-question-type correct/total/accuracy arithmetic reconciles exactly to denominator 42",
+      "the result embeds both exact evaluation-audit and per-variant evidence SHA-256 maps, the canonical fresh final-verification SHA-256, final-spend authorization SHA-256, and replacement precommit SHA-256"
+    ],
+    "publication_is_atomic": true
+  },
+  "eur_formula": {
+    "governance_basis_usd": "max(fresh campaign observed USD + unspent fuses, fresh provider usage USD + unspent fuses)",
+    "unbuffered_eur": "governance_basis_usd / ECB USD-per-EUR",
+    "buffer_basis_points": 1000,
+    "buffer_multiplier": "1.10",
+    "rounding": "Decimal ROUND_CEILING to EUR 0.01",
+    "admit": "ceil_cent(unbuffered_eur * 1.10) <= EUR 300.00"
+  }
+}

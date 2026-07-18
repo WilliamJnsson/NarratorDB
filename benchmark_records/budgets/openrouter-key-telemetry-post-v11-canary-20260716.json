@@ -1,0 +1,19 @@
+{
+  "schema_version": "narratordb.provider-key-telemetry.v1",
+  "observed_at_utc": "2026-07-16T02:01:45Z",
+  "source_endpoint": "https://openrouter.ai/api/v1/key",
+  "request_class": "authenticated content-free account telemetry; no model request",
+  "currency": "USD",
+  "provider_limit_usd": 250.0,
+  "provider_usage_usd": 120.009856334,
+  "provider_remaining_usd": 129.990143666,
+  "provider_usage_daily_usd": 0.03645512,
+  "provider_usage_weekly_usd": 120.009856334,
+  "provider_usage_monthly_usd": 120.009856334,
+  "is_free_tier": false,
+  "provider_usage_delta_since_v10_postcanary_usd": 0.01658584,
+  "v11_canary_reported_cost_usd": 0.01658584,
+  "delta_matches_canary_report": true,
+  "v11_canary_status": "passed all 16 checks; all three synthetic jobs completed on the exact requested model and an allowlisted final provider; optional attempt metadata was unavailable and disclosed",
+  "credential_policy": "Runtime authorization only; no key, label, account identifier, prompt, or model content is recorded."
+}

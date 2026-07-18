@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T23:50:05Z",
+  "benchmark": "LongMemEval-S dev42",
+  "classification": "metadata-parser-only correction before any model, canary, benchmark, judge, or scoring call",
+  "purpose": "accept the endpoint API's verified dated-slug to canonical-id response while preserving the sealed R1 scoring experiment unchanged",
+  "score_fields_present": false,
+  "inherits_scoring_precommit": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v17_gpt54mini_openai_high_deepseek_paid_pair_r1_precommit_20260717.json",
+    "sha256": "f3d1d69070c72f66f7eb067236ccadd41d9121de56510b0c640e09ec118e77c9",
+    "sidecar_sha256": "732652722e89f2184703ccddcd29d96e7691da4c636853529d1be285457832b3"
+  },
+  "r1_parser_stop": {
+    "path": "reports/longmemeval-intelligence-dev42-v17-gpt54mini-openai-high-deepseek-paid-pair-r1-20260717/preflight/endpoint-metadata-r1-parser-stop.json",
+    "sha256": "e93fab307c307c0c9c47632f6aa91650b23e5bdd1b63dc7750ac349603d3568f",
+    "model_calls_before_stop": 0,
+    "canary_calls_before_stop": 0,
+    "benchmark_calls_before_stop": 0,
+    "scores_observed_before_stop": false
+  },
+  "sealed_metadata_protocol": {
+    "directory": "benchmark_records/reproduction-v17-gpt54mini-openai-high-deepseek-paid-pair-r2-20260717",
+    "sealed_files_manifest_sha256": "d1dac56ba4a863dc46092768a72455c49d1efa4aa57619483713ec7ab2e88ab3",
+    "bound_inputs_manifest_sha256": "9d607153dddc99a5a95b71a6bb66b606bec885af672d0f2fa386488f2ade4f19"
+  },
+  "single_correction": {
+    "scope": "endpoint metadata parser only",
+    "requested_model_id": "deepseek/deepseek-v4-flash-20260423",
+    "accepted_returned_model_id": "deepseek/deepseek-v4-flash",
+    "accepted_alias_rule": "remove exactly one terminal hyphen plus eight decimal date digits from the requested model id",
+    "source_url": "https://openrouter.ai/api/v1/models/deepseek/deepseek-v4-flash-20260423/endpoints",
+    "required_provider_name": "DeepSeek",
+    "required_endpoint_model_id": "deepseek/deepseek-v4-flash",
+    "required_supported_parameters": [
+      "max_tokens",
+      "temperature"
+    ],
+    "reject_other_aliases": true,
+    "reject_provider_mismatch": true,
+    "reject_endpoint_model_mismatch": true
+  },
+  "unchanged_from_r1": {
+    "frozen_prediction_bytes": true,
+    "answerer_route_and_settings": true,
+    "judge_route_and_settings": true,
+    "official_harness_and_prompts": true,
+    "primary_and_replication_order": true,
+    "budget_fuses_and_global_campaign_ceiling": true,
+    "fairness_and_reporting_rules": true
+  },
+  "execution_boundary": "one R2 metadata capture; if it passes, run the already-sealed R1 canary immediately; if the canary passes, run primary immediately; no R3 metadata or canary correction"
+}

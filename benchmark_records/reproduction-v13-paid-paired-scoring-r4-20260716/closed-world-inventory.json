@@ -1,0 +1,37 @@
+{
+  "schema_version": "narratordb.v13-paid-r4-closed-world-inventory.v1",
+  "created_at_utc": "2026-07-16T11:05:00Z",
+  "directory": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716",
+  "policy": {
+    "flat_tree_only": true,
+    "regular_files_only": true,
+    "hard_links_forbidden": true,
+    "symbolic_links_forbidden": true,
+    "special_files_forbidden": true,
+    "python_bytecode_and_startup_hooks_forbidden": true,
+    "finder_metadata_forbidden": true,
+    "every_member_except_sha256sums_hash_bound_by_sha256sums": true,
+    "undeclared_members_forbidden": true
+  },
+  "declared_members_hashed_by_seal": [
+    "BOUND_INPUTS_SHA256SUMS",
+    "capture_ecb_fx.py",
+    "capture_provider_telemetry.py",
+    "closed-world-inventory.json",
+    "commands-r4.json",
+    "dynamic-admission-schema.json",
+    "execution-authorization-requirements.json",
+    "input-bindings-r4.json",
+    "launch_with_openrouter_key.sh",
+    "paid-paired-scoring-protocol-r4.json",
+    "preflight-r4.json",
+    "run_harness_guarded.py",
+    "run_paid_variant_hardened.sh",
+    "test_verify_evaluator_ledger.py",
+    "verify_dynamic_admission.py",
+    "verify_evaluator_ledger.py"
+  ],
+  "seal_manifest": "SHA256SUMS",
+  "declared_hashed_member_count": 16,
+  "declared_total_regular_file_count": 17
+}

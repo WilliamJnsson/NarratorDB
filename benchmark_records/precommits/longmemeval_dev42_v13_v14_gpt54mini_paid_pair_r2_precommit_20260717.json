@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T19:45:25Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "replacement launch precommit for the unchanged GPT-5.4-Mini V13/V14 pair",
+  "inherits_protocol_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v13_v14_gpt54mini_paid_pair_precommit_20260717.json",
+    "sha256": "8da9b76c894f4df881c2dcb957590eeae3b21887e27a1df5302de1985824922a"
+  },
+  "superseded_launch": {
+    "status": "failed_before_proxy_or_model_call",
+    "reason": "macOS Bash 3.2 treats expansion of an empty array as unbound under set -u",
+    "prediction_or_evaluation_files_created": false,
+    "provider_cost_usd": 0.0
+  },
+  "replacement_wrapper": {
+    "path": "scripts/run_paired_evaluation_variant.sh",
+    "sha256": "e0bda4a1c25efc00f173097d65bb4afb9bef15f7f96eb252112204358524fb1f",
+    "change": "construct one nonempty proxy argument array and append optional settings conditionally",
+    "evaluation_semantics_changed": false
+  },
+  "proxy": {
+    "path": "narratordb/benchmarks/openrouter_proxy.py",
+    "sha256": "affa65f0e00829abc7fbe4da8f54808294485b41b9e01409c96930006be75726"
+  },
+  "evaluation_order": [
+    "v13-control",
+    "v14-treatment"
+  ],
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "frozen_predictions_unchanged": true,
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "score_fields_present_in_precommit": false
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "schema_version": "narratordb.v13-dual-zero-model-replay-protocol.v1",
+  "protocol_id": "narratordb-v13-dual-existing-derived-dev42-replay-20260716",
+  "frozen_at_utc": "2026-07-16T04:43:27Z",
+  "status": "frozen after a successful first-run preflight and before either V13 replay output root, database, cache, ledger, or prediction existed",
+  "classification": "dual zero-model local retrieval/render replay over reused V7 compiler artifacts on consumed LongMemEval-S dev42; not fresh end-to-end, untouched, heldout, third-party, scored, or publishable",
+  "purpose": "require two independently cloned all-42 prediction runs to reproduce byte-canonical top-20, top-50, and full payloads before any paid evaluation is considered",
+  "content_review_policy": {
+    "dev42_consumed_before_v13": true,
+    "prior_v6_through_v12_results_known": true,
+    "v13_change_derived_from_v12_repeat_failure": true,
+    "automated_tools_may_process_content": true,
+    "human_tuning_from_failures": "allowed only as explicitly labeled consumed-development analysis and must remain generic",
+    "publishable_95_percent_claim_permitted": false
+  },
+  "fixed_bindings": {
+    "v13_source_archive": "reports/intelligence-v13-source-20260716T043211Z/narratordb-v13-source.tar.gz",
+    "v13_source_archive_sha256": "115fee74ca4c2561397cec337b31fedd21a5b48b04333a9ec923cc66d6922486",
+    "v13_source_metadata": "reports/intelligence-v13-source-20260716T043211Z/source-metadata.json",
+    "v13_source_metadata_sha256": "c9368173c9fe728b00325dd61c4a9b63326c0112809f5f881a3cef000c6b49d8",
+    "v13_source_sha256s": "reports/intelligence-v13-source-20260716T043211Z/SHA256SUMS",
+    "v13_source_sha256s_sha256": "127a03eddc8982cde33faf8ee260047c2ae33640e9b52b1e48aa7fdbb02bdbe9",
+    "v13_source_entries": 84,
+    "v13_source_member_list_sha256": "d90f675b655727a763854d61e5309f216923c57e70741ab927b5e616ab28a9cf",
+    "v13_source_content_manifest_sha256": "8bdda80edbfb2d6ff876563712efaf8634a43b7905d30e31302319e5bb976d39",
+    "v13_extracted_release_suite_log_sha256": "76e6e966ba5ef1f990d8d58347e14639124a78c2e7f6843e4ca78187c85e5e7b",
+    "predecessor_v12_source_archive_sha256": "23eb843761bcb50aa4e36c0c517ebd2b26d9244cc63f368101a512e84977564e",
+    "predecessor_v12_first_prediction_freeze_manifest_sha256": "9180689c5516880c0b7aea797bb6183027a2f2e5fbfbb3c6085cd5926d9ccb41",
+    "predecessor_v12_repeat_failure_metadata_sha256": "2381460a8bc3c21f66c7384813adc90095237a6c33c821e7e2cbd9a732b6aca0",
+    "predecessor_v12_repeat_comparison_sha256": "9d1626d199929e8a7688125e392b6252c922b2a524ac48bff1a78e78eea4e608",
+    "v7_source_archive": "reports/intelligence-v7-source-20260716T201147Z/narratordb-v7-source.tar.gz",
+    "v7_source_archive_sha256": "181df314f0b68ac1bbd3eb3b6363dd2a6b195f7c9beb5fd0d8deec043034c85d",
+    "v7_input_manifest": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/V7_INPUT_SHA256SUMS",
+    "v7_input_manifest_sha256": "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+    "v7_database_sha256_before_copy": "b7c56832ef37ab98b4778403cf329e9338194dd581e6bdcdb7fee43b08960c6c",
+    "v7_prediction_manifest_sha256": "e0f54d6879f46d76a51c2b785b67b5ae45c790a591263bab4d73a0b7211b8cac",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "question_membership_sha256": "bf32b519cfe22e0b029171de48a455ca24c86f92b7b655a78b2f6b9ae7e2d65f",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "replay_control": "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+    "replay_control_sha256": "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d",
+    "offline_comparator": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/compare_predictions.py",
+    "offline_comparator_sha256": "9c9cef64d916e77e9916528cec3bc4b73881e0ee7f35fd91f7031daa233e7543",
+    "offline_comparator_tests_sha256": "b22a5c50a0e867d12230f4877ca1dc763a9f9f4f745128e503ed01bfa011602f",
+    "offline_comparator_readme_sha256": "edf02a8a478c7417207bea49037082e2dc7af540e9d4e2681ab888750d9c5f28",
+    "run_id": "v7m42a1",
+    "v7_compiler_fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+    "producer_terminal_jobs": {
+      "complete": 1976,
+      "partial": 3,
+      "nonterminal": 0,
+      "partial_reason": "provider_content_filter with canonical raw-source fallback"
+    }
+  },
+  "first_run_precommit": {
+    "directory": "benchmark_records/reproduction-v13-replay-20260716",
+    "sha256s": "benchmark_records/reproduction-v13-replay-20260716/SHA256SUMS",
+    "sha256s_sha256": "4ed0f7ea28fd70bdb3fc458b6a63f02e016b50fc6cbc65b60af538809ff510f4",
+    "run_config_sha256": "bb44e435a42c11ed6dd9bf3fdf37c26014ae5b4242b5f64ee3f41aaf5e13677f",
+    "commands_sha256": "38fef83aadb8b325dfd91f1844644a1aad0d0f8adea209e751c3693884f793a6",
+    "preflight_sha256": "c31fcaf7976509af38785bda3e0aedf1e7d0ac079351af11a4b6128b5f13cfb5",
+    "preflight_document_sha256": "fecbe64dcb994c8fd1e2e4d701b7f9601e576ae5b47c8075ade1bf129bf504ac",
+    "fresh_state_verified": true,
+    "secret_scan_passed": true
+  },
+  "namespaces": {
+    "first": {
+      "project_name": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+      "output_root": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716",
+      "backend_port": 8893
+    },
+    "repeat1": {
+      "project_name": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1",
+      "output_root": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716",
+      "backend_port": 8894
+    },
+    "database_scope_rule": "Both runs retain exact V7 run ID v7m42a1 because database users are longmemeval_<question_id>_v7m42a1. Project names isolate prediction files; independent SQLite backups isolate database state.",
+    "freshness_at_protocol_freeze": {
+      "first_root_absent": true,
+      "repeat1_root_absent": true,
+      "port_8893_listener_absent": true,
+      "port_8894_listener_absent": true
+    }
+  },
+  "fixed_retrieval_and_harness": {
+    "dataset": "hash-pinned local dev42 materialization; no download",
+    "questions": 42,
+    "all_questions": true,
+    "predict_only": true,
+    "backend": "oss",
+    "mode": "answerer",
+    "top_k": 200,
+    "top_k_cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "context_token_budget": 6000,
+    "merge_adjacent": true,
+    "merge_gap": 1,
+    "merge_max_chars": 1200,
+    "coalesce_timestamp_sessions": true,
+    "claim_render_format": 3,
+    "memory_key_format": 2,
+    "aggregation_evidence_pack_format": 2,
+    "query_time_hosted_model": false
+  },
+  "zero_model_guards": {
+    "backend_flag": "--existing-derived-replay-fingerprint",
+    "compiler_constructed": false,
+    "compiler_cache_constructed": false,
+    "hosted_credentials_available_to_backend": false,
+    "mutations": "add, finalize, and delete rejected; no update or backfill route exists",
+    "search_precondition": "every registered current source in the requested scope has a complete or disclosed partial job under the exact V7 fingerprint",
+    "empty_or_nonterminal_scope": "rejected",
+    "predict_only_external_network": "closed proxy on port 9 with localhost exempted",
+    "compiler_calls": 0,
+    "answerer_calls": 0,
+    "judge_calls": 0,
+    "paid_scoring_calls": 0,
+    "credential_policy": "no credential is required, recorded, or permitted"
+  },
+  "execution_state_machine": [
+    {
+      "phase": 1,
+      "name": "first_preflight_and_frozen_inputs",
+      "rule": "verify the first-run SHA256SUMS, verify-preflight with fresh_state_verified=true, all V13/V7/harness/helper hashes, source secret scan, and both absent roots before creating first-run state"
+    },
+    {
+      "phase": 2,
+      "name": "first_all42_replay",
+      "rule": "clone V7 with SQLite backup, copy exactly 42 ingestion checkpoints and zero predictions, run the credential-free readiness migration, probe all 42 scopes, run one all-42 predict-only replay with no selective retry, prove database counts and checkpointed hash unchanged during prediction, audit all cutoffs, and freeze exactly 84 JSON files"
+    },
+    {
+      "phase": 3,
+      "name": "first_freeze_and_self_canonicalization",
+      "rule": "seal the first prediction manifest, audit, freeze metadata, database invariants, and zero-sidecar assertions; verify the pinned comparator and its tests; then compare two differently labeled references to the same frozen first prediction directory with 42/42 expectations at top20, top50, and full to derive immutable first-run canonical aggregate hashes"
+    },
+    {
+      "phase": 4,
+      "name": "repeat_specific_precommit",
+      "rule": "while the repeat1 root and all repeat1 sidecars are still absent, create and verify benchmark_records/reproduction-v13-replay-repeat1-20260716 with exact hashes for the frozen first artifacts and first self-comparison, plus a fresh repeat1 run config, command manifest, and successful reproduction preflight"
+    },
+    {
+      "phase": 5,
+      "name": "repeat1_all42_replay",
+      "rule": "use a new SQLite backup, repeat1 project name, output root, and port 8894; otherwise execute the same fixed source, harness, helper, dataset, split, V7 run ID, parameters, all-42 scope, audit, and no-retry rules"
+    },
+    {
+      "phase": 6,
+      "name": "cross_run_comparison",
+      "rule": "using the pinned comparator, require exactly 42/42 identical questions at top20, top50, and full; require both variant aggregate hashes at every cutoff to equal the first-run hashes bound in the repeat-specific precommit"
+    },
+    {
+      "phase": 7,
+      "name": "disposition",
+      "rule": "on success preserve both freezes and the comparison as zero-model consumed-development reproducibility evidence; on any failure preserve all artifacts, mark V13 blocked, and perform no scoring or selective retry"
+    }
+  ],
+  "first_self_comparison_derivation": {
+    "output": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/offline-comparison/v13-first-self-comparison.json",
+    "variants": {
+      "v13-first-a": "the frozen first prediction directory",
+      "v13-first-b": "the same frozen first prediction directory"
+    },
+    "expectations": [
+      "v13-first-a:v13-first-b:top20:42",
+      "v13-first-a:v13-first-b:top50:42",
+      "v13-first-a:v13-first-b:full:42"
+    ],
+    "canonicalization": "remove only retrieval.search_latency_ms; slice only retrieval.search_results for top20/top50; preserve every other field for full; UTF-8 sorted compact JSON with allow_nan=false",
+    "required_derived_bindings": [
+      "SHA-256 of the first PREDICTION_SHA256SUMS file",
+      "SHA-256 of first prediction-audit.json",
+      "SHA-256 of first prediction-freeze-metadata.json and its freeze manifest",
+      "SHA-256 and internal final_report_sha256 of v13-first-self-comparison.json",
+      "v13-first-a aggregate_sha256 for top20, top50, and full",
+      "first database post-migration and post-prediction hashes and count-comparison SHA-256",
+      "proof that compiler cache and compiler usage sidecars are absent"
+    ]
+  },
+  "repeat_specific_precommit_rule": {
+    "status_at_this_freeze": "intentionally not created because the first prediction artifacts do not yet exist",
+    "fairness_reason": "creating a repeat binding before actual first artifacts exist would require placeholders; creating it after repeat state exists would permit post-hoc substitution",
+    "creation_window": "after the complete first freeze and self-comparison, but before creation of the repeat1 output root, database, cache, ledger, or prediction directory",
+    "required_directory": "benchmark_records/reproduction-v13-replay-repeat1-20260716",
+    "required_files": [
+      "run-config.json",
+      "commands.json",
+      "preflight.json",
+      "first-run-bindings.json",
+      "SHA256SUMS"
+    ],
+    "repeat_command_derivation": "start from the hash-verified first commands.json; replace the complete first output-root string with the complete repeat1 output-root string, then replace the first project-name string with the repeat1 project-name string, then replace backend port 8893 with 8894; prepend verification of this protocol, the first freeze manifest, prediction audit, prediction freeze metadata, comparator files, self-comparison, and first-run-bindings; no other command or parameter change is permitted",
+    "preflight_requirement": "the same reproduction_manifest preflight must pass with repeat1 database/cache/ledger/root paths absent and the exact V13 source, harness commit, dataset, question IDs, repeat run config, and repeat command manifest bound",
+    "no_unknown_hash_placeholders_permitted": true
+  },
+  "success_gate": {
+    "first_prediction_files": 42,
+    "first_ingestion_checkpoints": 42,
+    "repeat1_prediction_files": 42,
+    "repeat1_ingestion_checkpoints": 42,
+    "first_audit_all_gates": true,
+    "repeat1_audit_all_gates": true,
+    "top20_identical": "42/42",
+    "top50_identical": "42/42",
+    "full_identical": "42/42",
+    "canonical_aggregate_hashes_equal": true,
+    "database_invariants_unchanged": true,
+    "compiler_cache_sidecars": 0,
+    "compiler_usage_sidecars": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0
+  },
+  "promotion_rule": {
+    "permitted_label_after_success": "V13 zero-model deterministic replay over reused V7 compiler artifacts on consumed LongMemEval-S dev42",
+    "paid_evaluation": "blocked until every success gate passes and a separate immutable paid-evaluation protocol is frozen",
+    "cannot_establish": [
+      "fresh compiler quality",
+      "untouched or heldout generalization",
+      "independent third-party reproduction",
+      "a publishable 95 percent claim"
+    ]
+  },
+  "failure_rule": "Any missing file, hash mismatch, dirty harness, occupied namespace, incomplete scope, sidecar creation, network/model call, selective retry, audit failure, database mutation, or canonical mismatch preserves the attempt as a failure and blocks scoring. V12 artifacts are read-only and must never be overwritten."
+}

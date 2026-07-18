@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T19:19:26Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "complete paired evaluation of unchanged frozen V13 and V14 predictions on a canary-verified public-benchmark route",
+  "inherits_frozen_arms_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v13_v14_paid_pair_precommit_20260717.json",
+    "sha256": "16019db3eb7bef0fadb1027af6f9e6fc3698e428a06f7b848f676d6cfb665cb5"
+  },
+  "transport_correction": {
+    "r1_observation": "V14 had two unrelated top-50 empty answers after all five attempts, exactly masking two code-attributable fail-to-pass flips",
+    "r2_observation": "AtlasCloud-only lower-concurrency control still reached a fifth-attempt empty answer and was terminated incomplete before a V14 arm",
+    "r3_change": "use StreamLake only at lower concurrency through an explicit public-benchmark policy; prediction payloads, prompts, models, judge, cutoffs, and seed remain unchanged",
+    "public_data_only": true,
+    "private_mode_default_unchanged": true
+  },
+  "route_canary": {
+    "usage_log_path": "reports/public-benchmark-route-canary-20260717.jsonl",
+    "usage_log_sha256": "cf35bf09a9a88504bb3d758960ad4dd59197c8081eb71ce56e95959b00d52992",
+    "glm_5_2_max_tokens_4096_nonempty": true,
+    "deepseek_v4_flash_max_tokens_4096_nonempty": true,
+    "verified_provider": "StreamLake",
+    "unknown_cost_attempts": 0
+  },
+  "evaluation_order": [
+    "v13-control",
+    "v14-treatment"
+  ],
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "z-ai/glm-5.2",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "provider_only": "StreamLake",
+    "provider_policy": "public-benchmark",
+    "reasoning_effort": "high",
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 2,
+    "rpm": 30,
+    "seed": 42,
+    "rejudge": true,
+    "proxy_path": "narratordb/benchmarks/openrouter_proxy.py",
+    "proxy_sha256": "d26bb5c9027373d028e0178f485734b7ffa4713cc23035e0abea655395d5c0ea",
+    "wrapper_path": "scripts/run_paired_evaluation_variant.sh",
+    "wrapper_sha256": "20abd097584874ae95b9938165bdd4c9ce2b430f58ba5931d6fe486ae679e593"
+  },
+  "budget": {
+    "pair_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "prediction_payloads_unchanged_from_r1": true,
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "score_fields_present_in_precommit": false
+  }
+}

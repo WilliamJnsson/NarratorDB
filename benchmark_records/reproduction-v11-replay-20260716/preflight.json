@@ -1,0 +1,639 @@
+{
+  "created_at_utc": "2026-07-16T02:12:07.314367Z",
+  "dataset": {
+    "path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+    "questions": 42,
+    "sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "size_bytes": 22631085
+  },
+  "document_sha256": "4d02a2868d96aaebb772e2c422da38989fbbb379b859c584bf0f89a919c2bff3",
+  "execution": {
+    "commands": [
+      {
+        "argv": [
+          "mkdir",
+          "-p",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v11-replay-v7gpt54mini"
+        ],
+        "step": "create_fresh_run_directories"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "verify-file",
+          "--path",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "--expected-sha256",
+          "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/replay-control-verification.json"
+        ],
+        "step": "verify_replay_control"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "verify-manifest",
+          "--root",
+          "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716",
+          "--manifest",
+          "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/V7_INPUT_SHA256SUMS",
+          "--expected-manifest-sha256",
+          "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/v7-input-verification.json"
+        ],
+        "step": "verify_v7_inputs"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "verify-file",
+          "--path",
+          "reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz",
+          "--expected-sha256",
+          "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/v11-source-verification.json"
+        ],
+        "step": "verify_v11_source"
+      },
+      {
+        "argv": [
+          "tar",
+          "-xzf",
+          "reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz",
+          "-C",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source"
+        ],
+        "step": "extract_v11_source"
+      },
+      {
+        "argv": [
+          "git",
+          "-C",
+          "vendor/memory-benchmarks",
+          "archive",
+          "--format=tar",
+          "--output",
+          "../../reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source.tar",
+          "4b61c5d31b9c668a12b4f5e78064248a02c82d2b"
+        ],
+        "step": "freeze_harness_archive"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "verify-file",
+          "--path",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source.tar",
+          "--expected-sha256",
+          "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source-verification.json"
+        ],
+        "step": "verify_harness_archive"
+      },
+      {
+        "argv": [
+          "tar",
+          "-xf",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source.tar",
+          "-C",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source"
+        ],
+        "step": "extract_harness"
+      },
+      {
+        "argv": [
+          "sqlite3",
+          "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/intelligence.db",
+          ".backup 'reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db'"
+        ],
+        "step": "clone_v7_database"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "copy-checkpoints",
+          "--source",
+          "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini",
+          "--destination",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+          "--question-id-file",
+          "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/checkpoint-copy-audit.json"
+        ],
+        "step": "copy_ingestion_checkpoints"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "validate-checkpoints",
+          "--directory",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+          "--question-id-file",
+          "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+          "--run-id",
+          "v7m42a1",
+          "--expected-questions",
+          "42",
+          "--expected-chunk-size",
+          "2",
+          "--require-zero-predictions",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/checkpoint-validation.json"
+        ],
+        "step": "validate_copied_checkpoints"
+      },
+      {
+        "argv": [
+          "env",
+          "-C",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source",
+          "-u",
+          "OPENROUTER_API_KEY",
+          "-u",
+          "OPENAI_API_KEY",
+          "-u",
+          "AZURE_OPENAI_API_KEY",
+          "-u",
+          "ANTHROPIC_API_KEY",
+          "../../../.venv/bin/python",
+          "-m",
+          "narratordb.benchmark_server",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "8889",
+          "--database",
+          "../intelligence.db",
+          "--mode",
+          "intelligence",
+          "--existing-derived-replay-fingerprint",
+          "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+          "--merge-adjacent",
+          "--merge-gap",
+          "1",
+          "--coalesce-timestamp-sessions",
+          "--context-token-budget",
+          "6000",
+          "--merge-max-chars",
+          "1200"
+        ],
+        "step": "start_migration_backend"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "probe-diagnostics",
+          "--base-url",
+          "http://127.0.0.1:8889",
+          "--directory",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+          "--question-id-file",
+          "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+          "--expected-questions",
+          "42",
+          "--fingerprint",
+          "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/migration-diagnostics.json"
+        ],
+        "step": "probe_migration_readiness"
+      },
+      {
+        "argv": [
+          "kill",
+          "-INT",
+          "${MIGRATION_BACKEND_PID}"
+        ],
+        "step": "stop_migration_backend"
+      },
+      {
+        "argv": [
+          "sqlite3",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db",
+          "PRAGMA wal_checkpoint(TRUNCATE); PRAGMA quick_check;"
+        ],
+        "step": "checkpoint_migrated_database"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "capture-db-counts",
+          "--database",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/post-migration-counts.json"
+        ],
+        "step": "capture_post_migration_counts"
+      },
+      {
+        "argv": [
+          "env",
+          "-C",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source",
+          "-u",
+          "OPENROUTER_API_KEY",
+          "-u",
+          "OPENAI_API_KEY",
+          "-u",
+          "AZURE_OPENAI_API_KEY",
+          "-u",
+          "ANTHROPIC_API_KEY",
+          "../../../.venv/bin/python",
+          "-m",
+          "narratordb.benchmark_server",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "8889",
+          "--database",
+          "../intelligence.db",
+          "--mode",
+          "intelligence",
+          "--existing-derived-replay-fingerprint",
+          "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+          "--merge-adjacent",
+          "--merge-gap",
+          "1",
+          "--coalesce-timestamp-sessions",
+          "--context-token-budget",
+          "6000",
+          "--merge-max-chars",
+          "1200"
+        ],
+        "step": "start_prediction_backend"
+      },
+      {
+        "argv": [
+          "env",
+          "-C",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source",
+          "HTTP_PROXY=http://127.0.0.1:9",
+          "HTTPS_PROXY=http://127.0.0.1:9",
+          "ALL_PROXY=http://127.0.0.1:9",
+          "NO_PROXY=127.0.0.1,localhost",
+          "../../../vendor/memory-benchmarks/.venv/bin/python",
+          "-m",
+          "benchmarks.longmemeval.run",
+          "--project-name",
+          "narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+          "--run-id",
+          "v7m42a1",
+          "--dataset-path",
+          "../../longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+          "--all-questions",
+          "--predict-only",
+          "--backend",
+          "oss",
+          "--mem0-host",
+          "http://127.0.0.1:8889",
+          "--mode",
+          "answerer",
+          "--top-k",
+          "200",
+          "--top-k-cutoffs",
+          "20,50",
+          "--max-workers",
+          "10",
+          "--rpm",
+          "60",
+          "--seed",
+          "42",
+          "--answerer-model",
+          "no-call",
+          "--judge-model",
+          "no-call",
+          "--provider",
+          "openai",
+          "--output-dir",
+          "../official-harness"
+        ],
+        "step": "run_predict_only_replay"
+      },
+      {
+        "argv": [
+          "kill",
+          "-INT",
+          "${PREDICTION_BACKEND_PID}"
+        ],
+        "step": "stop_prediction_backend"
+      },
+      {
+        "argv": [
+          "sqlite3",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db",
+          "PRAGMA wal_checkpoint(TRUNCATE); PRAGMA quick_check;"
+        ],
+        "step": "checkpoint_final_database"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "capture-db-counts",
+          "--database",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/post-prediction-counts.json"
+        ],
+        "step": "capture_post_prediction_counts"
+      },
+      {
+        "argv": [
+          ".venv/bin/python",
+          "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+          "compare-db-counts",
+          "--before",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/post-migration-counts.json",
+          "--after",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/post-prediction-counts.json",
+          "--output",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/database-count-comparison.json"
+        ],
+        "step": "compare_database_counts"
+      },
+      {
+        "argv": [
+          "env",
+          "-C",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source",
+          "../../../.venv/bin/python",
+          "-m",
+          "narratordb.benchmarks.prediction_audit",
+          "--prediction-dir",
+          "../official-harness/predicted_narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+          "--dataset",
+          "../../longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+          "--question-id-file",
+          "../../longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+          "--cutoffs",
+          "20,50",
+          "--require-all",
+          "--output",
+          "../prediction-audit.json"
+        ],
+        "step": "audit_predictions_from_frozen_v11"
+      },
+      {
+        "argv": [
+          "shasum",
+          "-a",
+          "256",
+          "all 42 prediction JSON and 42 ingestion checkpoint JSON files in sorted relative-path order",
+          ">",
+          "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/PREDICTION_SHA256SUMS"
+        ],
+        "step": "freeze_prediction_manifest"
+      }
+    ],
+    "commands_file": {
+      "path": "benchmark_records/reproduction-v11-replay-20260716/commands.json",
+      "sha256": "e5bed434ba0f1bd9fb204f317eecb7527c091d22e78e2af68698587507839ded",
+      "size_bytes": 10619
+    },
+    "config": {
+      "answerer": {
+        "execution": "not called during predict-only replay",
+        "model": "no-call",
+        "provider": "closed-network-sentinel",
+        "reasoning": "not-applicable"
+      },
+      "benchmark": "LongMemEval-S consumed development42 existing-derived replay",
+      "classification": "V11 local retrieval/render over reused V7 compiler artifacts on consumed dev42; not a fresh end-to-end, heldout, publishable 95%, or third-party score",
+      "compiler": {
+        "execution": "reused frozen V7 derived artifacts; no compiler call in replay",
+        "fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+        "model": "openai/gpt-5.4-mini",
+        "provider": "Azure",
+        "reasoning": "minimal"
+      },
+      "created_at_utc": "2026-07-16T02:06:54Z",
+      "fairness": {
+        "dev42_is_consumed_and_prior_scores_are_known": true,
+        "forbidden_claims": [
+          "fresh V11 end-to-end compiler score",
+          "unseen or untouched holdout score",
+          "independent third-party reproduction",
+          "publishable 95 percent result"
+        ],
+        "human_tuning_from_v6_v7_v8_failures_occurred": true,
+        "ingestion_checkpoints_to_copy": 42,
+        "permitted_claim": "consumed-development diagnostic only",
+        "prediction_manifest_frozen_before_answerer_or_judge": true,
+        "questions_dropped": 0,
+        "selective_retries": false,
+        "v7_prediction_files_to_copy": 0
+      },
+      "fresh_outputs": {
+        "database": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db",
+        "harness_source": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source",
+        "prediction_directory": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+        "root": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716",
+        "runtime_source": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source"
+      },
+      "harness": {
+        "all_questions": true,
+        "answerer_model": "no-call",
+        "backend": "oss",
+        "commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+        "expected_archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+        "judge_model": "no-call",
+        "max_workers": 10,
+        "mode": "answerer",
+        "module": "benchmarks.longmemeval.run",
+        "predict_only": true,
+        "predict_only_placeholder": {
+          "environment_name": "OPENAI_API_KEY",
+          "value_class": "fixed non-sensitive no-call sentinel excluded from the secret-safe command manifest"
+        },
+        "repository": "vendor/memory-benchmarks",
+        "rpm": 60,
+        "seed": 42,
+        "top_k": 200,
+        "top_k_cutoffs": [
+          20,
+          50
+        ]
+      },
+      "judge": {
+        "execution": "not called during predict-only replay",
+        "model": "no-call",
+        "provider": "closed-network-sentinel",
+        "reasoning": "not-applicable"
+      },
+      "mode": "intelligence-existing-derived-read-only-replay",
+      "model_access_policy": "No hosted-model access value is available to the replay backend. The predict-only harness receives only a fixed non-sensitive constructor sentinel. No hosted model call is permitted in this phase.",
+      "producer": {
+        "compiler_fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+        "compiler_model": "openai/gpt-5.4-mini",
+        "compiler_prompt_version": "narratordb.memory-compiler.v7",
+        "compiler_provider": "Azure",
+        "compiler_reasoning": "minimal",
+        "complete_jobs": 1976,
+        "database": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/intelligence.db",
+        "database_sha256": "b7c56832ef37ab98b4778403cf329e9338194dd581e6bdcdb7fee43b08960c6c",
+        "execution": "reuse frozen terminal V7 derived artifacts; no compiler call in replay",
+        "input_manifest_sha256": "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+        "partial_jobs": 3,
+        "partial_reason": "provider content filter with raw-source fallback",
+        "prediction_manifest_sha256": "e0f54d6879f46d76a51c2b785b67b5ae45c790a591263bab4d73a0b7211b8cac",
+        "source_archive": "reports/intelligence-v7-source-20260716T201147Z/narratordb-v7-source.tar.gz",
+        "source_archive_sha256": "181df314f0b68ac1bbd3eb3b6363dd2a6b195f7c9beb5fd0d8deec043034c85d",
+        "version": "V7"
+      },
+      "project_name": "narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+      "purpose": "Measure generic V11 local retrieval, rendering, and aggregation changes without paying for or resampling compiler output.",
+      "retrieval": {
+        "aggregation_evidence_pack_format": 1,
+        "claim_render_format": 3,
+        "coalesce_timestamp_sessions": true,
+        "context_token_budget": 6000,
+        "cutoffs": [
+          20,
+          50
+        ],
+        "memory_key_format": 2,
+        "merge_adjacent": true,
+        "merge_gap": 1,
+        "merge_max_chars": 1200,
+        "query_time_hosted_model": false,
+        "top_k": 200
+      },
+      "run_id": "v7m42a1",
+      "runtime_guards": {
+        "compiler_cache_constructed": false,
+        "compiler_cache_sidecar_must_remain_absent": true,
+        "compiler_constructed": false,
+        "compiler_usage_sidecar_must_remain_absent": true,
+        "empty_or_nonterminal_scope_rejected": true,
+        "external_network_closed_during_predict_only": true,
+        "model_environment_variables_unset_for_backend": true,
+        "mutations_rejected": true,
+        "replay_control": "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+        "replay_control_sha256": "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d"
+      },
+      "schema_version": "narratordb.v11-existing-derived-replay-run.v1",
+      "scope": {
+        "dataset": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+        "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+        "question_ids": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+        "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+        "questions": 42,
+        "selection": "every question in the frozen consumed development split; no score-dependent exclusion"
+      },
+      "source": {
+        "archive": "reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz",
+        "archive_entries": 84,
+        "archive_sha256": "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+        "canary_precommit_sha256": "b942a042dc0c5fd28073063035504e0f4848ded8b6504a1644a4c37630616b18",
+        "full_extracted_release_suite_passed": true,
+        "metadata_sha256": "07413b012294a9e6f35702e4c5180dcb7eeca544c3224b16c60ed3fd096db6b8",
+        "passed_canary_report_sha256": "d79c9971b1d91a4e8ebbecc81daa2e313bb489b03c8bad636ac408626c8cba54",
+        "unit_and_integration_tests_passed": 250
+      },
+      "status": "precommitted before V11 replay database creation or prediction"
+    },
+    "config_file": {
+      "path": "benchmark_records/reproduction-v11-replay-20260716/run-config.json",
+      "sha256": "8b03e232c8bb7e862a6180a49b16d9f001775f9b3a73bf8efd732a904d92fc72",
+      "size_bytes": 6737
+    },
+    "credential_policy": {
+      "credentials_recorded": false,
+      "runtime_credentials": "environment-only"
+    }
+  },
+  "fresh_state": {
+    "asserted_fresh": true,
+    "checked_at_utc": "2026-07-16T02:12:07.314787Z",
+    "paths": [
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db",
+        "role": "database"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db-wal",
+        "role": "database-wal"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db-shm",
+        "role": "database-shm"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db-journal",
+        "role": "database-journal"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db.compiler-cache.sqlite3",
+        "role": "compiler-cache"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db.compiler-cache.sqlite3-wal",
+        "role": "compiler-cache-wal"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db.compiler-cache.sqlite3-shm",
+        "role": "compiler-cache-shm"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db.compiler-cache.sqlite3-journal",
+        "role": "compiler-cache-journal"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716",
+        "role": "output-root"
+      },
+      {
+        "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db.compiler-usage.jsonl",
+        "role": "usage-ledger"
+      }
+    ]
+  },
+  "harness": {
+    "clean": true,
+    "commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "git_root": "vendor/memory-benchmarks",
+    "path": "vendor/memory-benchmarks"
+  },
+  "question_scope": {
+    "membership_sha256": "bf32b519cfe22e0b029171de48a455ca24c86f92b7b655a78b2f6b9ae7e2d65f",
+    "path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+    "questions": 42,
+    "sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "size_bytes": 615
+  },
+  "repository": {
+    "path_semantics": "POSIX paths relative to the repository root"
+  },
+  "schema_version": "narratordb.benchmark-reproduction-preflight.v1",
+  "secret_scan": {
+    "credentials_recorded": false,
+    "passed": true,
+    "pattern_labels": [
+      "OpenRouter API key",
+      "OpenAI-style API key",
+      "Mem0 API key"
+    ]
+  },
+  "source_archive": {
+    "archive_format": "tar",
+    "archive_members_secret_scanned": true,
+    "path": "reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz",
+    "sha256": "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+    "size_bytes": 1223649
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-07-14",
+  "status": "development_calibration_not_competitor_headline",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+    "mode": "answerer",
+    "sample": {
+      "total_questions": 30,
+      "per_question_type": 5,
+      "seed": 42,
+      "all_questions": false
+    },
+    "top_k": 200,
+    "cutoffs": [10, 20, 50, 200],
+    "temperature": 0,
+    "max_workers": 1,
+    "requests_per_minute": 60,
+    "max_retries": 5,
+    "request_timeout_seconds": 120
+  },
+  "narratordb_baseline": {
+    "commit": "4c6c10f54b761d4eaedca28ac52688a6653a6245",
+    "retrieval_run_id": "b5e8e02d",
+    "evaluation_run_id": "3f380b3b",
+    "official_pairs_ingested": 7384,
+    "failed_pairs": 0,
+    "stored_messages": 14601,
+    "stored_provenance_rows": 14601,
+    "stored_embeddings": 14601,
+    "database_bytes": 104558592,
+    "journal_mode": "wal",
+    "integrity_check": "ok"
+  },
+  "models": {
+    "answerer_requested": "deepseek/deepseek-v4-flash-20260423",
+    "judge_requested": "deepseek/deepseek-v4-flash-20260423",
+    "response_model": "deepseek/deepseek-v4-flash",
+    "openrouter_provider": "DeepInfra",
+    "endpoint_quantization": "fp4",
+    "reasoning_effort": "high",
+    "provider_fallbacks": false
+  },
+  "scores": {
+    "top_10": {
+      "correct": 26,
+      "total": 30,
+      "accuracy_percent": 86.666667,
+      "by_question_type_percent": {
+        "knowledge-update": 80.0,
+        "multi-session": 40.0,
+        "single-session-assistant": 100.0,
+        "single-session-preference": 100.0,
+        "single-session-user": 100.0,
+        "temporal-reasoning": 100.0
+      }
+    },
+    "top_20": {
+      "correct": 25,
+      "total": 30,
+      "accuracy_percent": 83.333333,
+      "by_question_type_percent": {
+        "knowledge-update": 60.0,
+        "multi-session": 60.0,
+        "single-session-assistant": 100.0,
+        "single-session-preference": 100.0,
+        "single-session-user": 100.0,
+        "temporal-reasoning": 80.0
+      }
+    },
+    "top_50": {
+      "correct": 26,
+      "total": 30,
+      "accuracy_percent": 86.666667,
+      "by_question_type_percent": {
+        "knowledge-update": 60.0,
+        "multi-session": 60.0,
+        "single-session-assistant": 100.0,
+        "single-session-preference": 100.0,
+        "single-session-user": 100.0,
+        "temporal-reasoning": 100.0
+      }
+    },
+    "top_200": {
+      "correct": 23,
+      "total": 30,
+      "accuracy_percent": 76.666667,
+      "by_question_type_percent": {
+        "knowledge-update": 60.0,
+        "multi-session": 60.0,
+        "single-session-assistant": 100.0,
+        "single-session-preference": 60.0,
+        "single-session-user": 100.0,
+        "temporal-reasoning": 80.0
+      }
+    }
+  },
+  "performance": {
+    "retrieval_wall_seconds": 349,
+    "evaluation_wall_seconds": 3008,
+    "search_latency_ms": {
+      "mean": 554.36,
+      "median": 559.4,
+      "p50_nearest_rank": 561.3,
+      "p95_nearest_rank": 737.3,
+      "min": 180.7,
+      "max": 1110.7
+    },
+    "hardware": {
+      "cpu": "AMD EPYC 7663 56-Core Processor",
+      "logical_cpus": 112,
+      "memory_gib": 503,
+      "kernel": "Linux 6.8.0-110-generic x86_64",
+      "python": "3.10.12",
+      "sqlite": "3.37.2"
+    }
+  },
+  "openrouter_usage": {
+    "responses": 242,
+    "finish_reason_stop": 240,
+    "finish_reason_length_retried": 2,
+    "recovered_http_429_attempts": 13,
+    "exhausted_retries": 0,
+    "prompt_tokens": 1682954,
+    "cached_prompt_tokens": 50304,
+    "completion_tokens": 93426,
+    "reasoning_tokens": 89218,
+    "response_metadata_cost_usd": 0.164660652,
+    "account_usage_window_delta_usd": 0.171510714
+  },
+  "smoke_run": {
+    "questions": 6,
+    "correct_at_each_cutoff": 5,
+    "accuracy_percent_at_each_cutoff": 83.333333,
+    "response_metadata_cost_usd": 0.033551694
+  },
+  "aborted_concurrency_probe": {
+    "max_workers": 4,
+    "completed_questions": 1,
+    "successful_responses": 21,
+    "recovered_http_429_attempts_before_stop": 4,
+    "response_metadata_cost_usd": 0.016320186,
+    "reason_stopped": "DeepInfra upstream rate limiting; restarted cleanly with one worker"
+  },
+  "observed_account_usage": {
+    "full_test_window_delta_usd": 0.217889436,
+    "includes": [
+      "six-question smoke",
+      "model/provider probes",
+      "aborted four-worker calibration attempt",
+      "clean thirty-question calibration"
+    ]
+  },
+  "failure_audit": [
+    {
+      "question_id": "195a1a1b",
+      "failed_cutoffs": [200],
+      "classification": "answerer_variance",
+      "finding": "Top-50 and top-200 both evaluated the same complete 44-memory context; the top-200 answer independently added a disallowed movie suggestion."
+    },
+    {
+      "question_id": "2b8f3739",
+      "failed_cutoffs": [10],
+      "classification": "retrieval_cutoff_depth",
+      "finding": "The missing $150 Summer Solstice sale was retrieval rank 13; top-20 and deeper produced the correct $495 total."
+    },
+    {
+      "question_id": "37f165cf",
+      "failed_cutoffs": [10, 20, 50, 200],
+      "classification": "answerer_temporal_aggregation",
+      "finding": "The 416-page and 440-page evidence appeared at ranks 2 and 5, but the answerer abstained instead of summing 856."
+    },
+    {
+      "question_id": "5a4f22c0",
+      "failed_cutoffs": [10, 20, 50, 200],
+      "classification": "retrieval_temporal_intent",
+      "finding": "The exact current-company memory was lexical rank 1 but was excluded from direct hits because a descriptive use of 'previous' overrode 'currently'. A generic post-baseline fix now returns it at direct rank 1."
+    },
+    {
+      "question_id": "618f13b2",
+      "failed_cutoffs": [20, 50, 200],
+      "classification": "answerer_stale_fact_selection",
+      "finding": "The current six-times update was retrieval rank 5. The answerer used it at top-10, then selected the stale four-times fact in larger contexts."
+    },
+    {
+      "question_id": "75f70248",
+      "failed_cutoffs": [200],
+      "classification": "answerer_and_judge_variance",
+      "finding": "Top-50 and top-200 both evaluated the same complete 42-memory context. Similar answers received opposite judge verdicts."
+    },
+    {
+      "question_id": "eeda8a6d",
+      "failed_cutoffs": [10, 20, 50, 200],
+      "classification": "retrieval_vocabulary_gap",
+      "finding": "Generic aquarium advice satisfied the lexical gate, suppressing semantic fallback; the answer-bearing tank memories with numeric fish counts were absent from all five returned results."
+    },
+    {
+      "question_id": "gpt4_4ef30696",
+      "failed_cutoffs": [20, 200],
+      "classification": "answerer_context_sensitivity",
+      "finding": "The answerer returned the correct one day at top-10 and top-50, but eight days at top-20 and zero days at top-200."
+    }
+  ],
+  "post_baseline_change": {
+    "change": "Generic mixed current/historical temporal-intent disambiguation",
+    "benchmark_answers_in_production_code": false,
+    "regression_fixture": "Synthetic Morgan/Aurora Labs case",
+    "same_sample_rescored": false
+  },
+  "local_post_change_validation": {
+    "date": "2026-07-14",
+    "standalone_suite": "passed",
+    "unit_and_protocol_tests": 11,
+    "package_build_and_wheel_smoke": "passed",
+    "locomo_context_retrieval": {
+      "questions": 1540,
+      "answers_in_context": 1297,
+      "recall": 0.8422,
+      "query_latency_ms": {
+        "mean": 39.834,
+        "p50": 38.931,
+        "p95": 51.365,
+        "max": 217.149
+      }
+    },
+    "noise_scale_query_latency_ms": {
+      "messages_requested": 5000,
+      "mean": 5.769,
+      "p50": 4.171,
+      "p95": 15.48,
+      "max": 15.769,
+      "fixed_query_hit_rate": 1.0
+    }
+  },
+  "comparability": {
+    "claim_beats_mem0": false,
+    "reason": "This is an inspected 30-question calibration with V4 Flash. Mem0's published headline is a 500-question run with a different answerer/judge and memory pipeline.",
+    "required_next_step": "Freeze the implementation and run the complete official 500-question set or a predeclared untouched holdout with identical models and rules for every compared system."
+  },
+  "artifact_directory": "reports/longmemeval-v4flash-20260714"
+}

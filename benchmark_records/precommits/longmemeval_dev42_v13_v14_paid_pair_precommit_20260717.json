@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T18:54:52Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "development calibration; paired V13 control versus frozen V14 treatment",
+  "publishability": "development split only; a holdout or full-scope run is required for a generalization claim",
+  "scope": {
+    "question_count": 42,
+    "dataset_path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_id_path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff"
+  },
+  "evaluation_order": [
+    "v13-control",
+    "v14-treatment"
+  ],
+  "arms": {
+    "v13-control": {
+      "project_name": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+      "frozen_prediction_directory": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+      "prediction_manifest_sha256": "347e5db630bfc5b6a2725d137bccb2ec90130c534edda259fda70d90fa610c74",
+      "prediction_audit_sha256": "d1c92ab49921f76aebd1967f9366d5281827062917edf84d0d9b7d531373557f"
+    },
+    "v14-treatment": {
+      "project_name": "narratordb-intelligence-dev42-v14-replay-v7gpt54mini",
+      "frozen_prediction_directory": "reports/longmemeval-intelligence-dev42-v14-replay-v7gpt54mini-20260717/official-harness/predicted_narratordb-intelligence-dev42-v14-replay-v7gpt54mini",
+      "prediction_manifest_sha256": "4cbd288f1f0d2e4c4504445344d7a08c9ae006785c9dd5d234709e2dde2db4b6",
+      "prediction_audit_sha256": "28d0b834d5668d0581fcf7867cca0194dfd1b579f8477da3a1ccbcaf2b6d85d1",
+      "runtime_manifest_sha256": "d05e5adb6115b4605d7fe3a0aeafd742e9a707120ac8a24bc2ee92ec031ded89",
+      "runtime_archive_sha256": "95092f6c83b7fb60d99c2c28ea5fdc7534a44266744036c421f4327a213d01fb",
+      "canonical_prediction_sha256": {
+        "top20": "e1c9a9c98b55bff14e98735582a231a725d59de0adb687e16af8018b5d626001",
+        "top50": "227174225da8abd29018b7076beb09d8014f0e7c77ac7685ce697e2aae51b959",
+        "full": "1daeac99a479b1a274193cc7606d1a61b82543d2e0aee4e06e17162fc7e40764"
+      },
+      "determinism": {
+        "fresh_repeat": "reports/longmemeval-intelligence-dev42-v14-replay-v7gpt54mini-repeat2-20260717",
+        "comparison_sha256": "8ed81342bc38d0d943c2cc9da94f97dd7822ca26198e05483c6ea5bc9ae1abe3",
+        "identical_questions_top20": 42,
+        "identical_questions_top50": 42,
+        "identical_questions_full": 42
+      }
+    }
+  },
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "z-ai/glm-5.2",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "reasoning_effort": "high",
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "rejudge": true
+  },
+  "budget": {
+    "pair_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "prediction_payloads_frozen_before_scoring": true,
+    "score_fields_present_in_precommit": false
+  }
+}

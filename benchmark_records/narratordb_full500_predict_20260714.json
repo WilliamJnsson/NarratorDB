@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-07-14",
+  "status": "final-frozen",
+  "run_id": "narratordb-full500-predict-5af42210",
+  "system": "NarratorDB",
+  "classification": "Frozen official-harness all-500 predict-only retrieval with a separately reported untouched 458-question holdout; no answerer or judge score",
+  "implementation": {
+    "release": "1.1.0",
+    "base_git_commit": "4c6c10f54b761d4eaedca28ac52688a6653a6245",
+    "engine_sha256": "3e76515b93f4082df7571fc70ec9f97d7a0bb102cf1f5fc0710075e5455a212e",
+    "benchmark_server_sha256": "2a3290ebbb948c8dfebedcd71a6334eb8b104da068e5c7e75fa11b6b112a2628",
+    "prediction_audit_sha256": "a474525d4837cbd5f0625a8007b1d6f7bc097953970b50b3405042f63e495d75",
+    "schema_version": 2,
+    "normalized_terms_version": 1,
+    "benchmark_answer_constants_in_engine": false,
+    "post_full500_engine_tuning": false
+  },
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_worktree_clean": true,
+    "harness_run_id": "5af42210",
+    "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+    "questions": 500,
+    "mode": "predict-only",
+    "all_questions": true,
+    "top_k": 200,
+    "cutoffs": [10, 20, 50, 200],
+    "max_workers": 10,
+    "seed": 42,
+    "official_harness_unmodified": true
+  },
+  "embedding": {
+    "role": "local retrieval encoder only; not answerer or judge",
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "snapshot": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    "sentence_transformers": "2.7.0",
+    "numpy": "2.2.6",
+    "torch": "2.10.0+cu128",
+    "model_api_calls": 0
+  },
+  "leakage_control": {
+    "official_all500_status": "final-frozen; includes known development questions",
+    "known_development_questions": 42,
+    "untouched_holdout_questions": 458,
+    "known_development_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "untouched_holdout_ids_sha256": "b2ebe3d023e65369cba071afd622384ce5cc4217e67ed492cd66c7b6a62c6207",
+    "derivation": "Union of the 30-question V4 calibration, six-question smoke, and deterministic 12-question adapter sample; the holdout is their dataset complement.",
+    "labels_or_answers_passed_to_retrieval": false
+  },
+  "ingestion_and_storage": {
+    "official_pairs_processed": 124345,
+    "failed_pairs": 0,
+    "partial_progress_files": 0,
+    "user_scopes": 500,
+    "messages": 245780,
+    "embeddings": 245780,
+    "provenance_rows": 245780,
+    "message_fts_rows": 245780,
+    "database_bytes": 1927802880,
+    "database_sha256": "3cdbf7c1558838c9259ff7aba2e4eb295276e25c38a69bffb7dc13e6dca1c3e0",
+    "journal_mode": "wal",
+    "integrity_check": "ok",
+    "missing_normalized_terms": 0,
+    "orphan_embeddings": 0,
+    "orphan_provenance": 0
+  },
+  "retrieval_diagnostic": {
+    "metric_definition": "Exact-message evidence-session coverage in official prediction output; not answer accuracy",
+    "official_all500": {
+      "questions": 500,
+      "result_count": {"min": 1, "median": 37, "mean": 44.536, "max": 178},
+      "top_10": {"recall_any": 476, "recall_any_rate": 0.952, "recall_all": 405, "recall_all_rate": 0.81},
+      "top_20": {"recall_any": 484, "recall_any_rate": 0.968, "recall_all": 434, "recall_all_rate": 0.868},
+      "top_50": {"recall_any": 489, "recall_any_rate": 0.978, "recall_all": 449, "recall_all_rate": 0.898},
+      "top_200": {"recall_any": 489, "recall_any_rate": 0.978, "recall_all": 449, "recall_all_rate": 0.898}
+    },
+    "known_development42": {
+      "questions": 42,
+      "top_10": {"recall_any": 39, "recall_any_rate": 0.928571, "recall_all": 37, "recall_all_rate": 0.880952},
+      "top_50": {"recall_any": 42, "recall_any_rate": 1.0, "recall_all": 40, "recall_all_rate": 0.952381}
+    },
+    "untouched_holdout458": {
+      "questions": 458,
+      "result_count": {"min": 1, "median": 35.5, "mean": 43.984716, "max": 178},
+      "top_10": {"recall_any": 437, "recall_any_rate": 0.954148, "recall_all": 368, "recall_all_rate": 0.803493},
+      "top_20": {"recall_any": 442, "recall_any_rate": 0.965066, "recall_all": 394, "recall_all_rate": 0.860262},
+      "top_50": {"recall_any": 447, "recall_any_rate": 0.975983, "recall_all": 409, "recall_all_rate": 0.893013},
+      "top_200": {"recall_any": 447, "recall_any_rate": 0.975983, "recall_all": 409, "recall_all_rate": 0.893013},
+      "by_question_type_top10_top50": {
+        "knowledge-update": {
+          "questions": 73,
+          "top_10_any_all": [0.986301, 0.917808],
+          "top_50_any_all": [0.986301, 0.945205]
+        },
+        "multi-session": {
+          "questions": 125,
+          "top_10_any_all": [0.976, 0.648],
+          "top_50_any_all": [0.984, 0.808]
+        },
+        "single-session-assistant": {
+          "questions": 49,
+          "top_10_any_all": [1.0, 1.0],
+          "top_50_any_all": [1.0, 1.0]
+        },
+        "single-session-preference": {
+          "questions": 22,
+          "top_10_any_all": [0.727273, 0.727273],
+          "top_50_any_all": [0.818182, 0.818182]
+        },
+        "single-session-user": {
+          "questions": 63,
+          "top_10_any_all": [0.968254, 0.968254],
+          "top_50_any_all": [0.984127, 0.984127]
+        },
+        "temporal-reasoning": {
+          "questions": 126,
+          "top_10_any_all": [0.928571, 0.746032],
+          "top_50_any_all": [0.97619, 0.873016]
+        }
+      }
+    }
+  },
+  "performance": {
+    "official_harness_wall_seconds": 2606,
+    "official_harness_wall": "43m26s",
+    "questions_per_minute": 11.511896,
+    "pairs_per_second": 47.714889,
+    "messages_per_second": 94.313124,
+    "official_http_search_latency_ms_all500": {
+      "samples": 500,
+      "mean": 769.6972,
+      "median": 790.45,
+      "p95_nearest_rank": 1458.8,
+      "min": 24.7,
+      "max": 1938.4
+    },
+    "official_http_search_latency_ms_holdout458": {
+      "samples": 458,
+      "mean": 772.621397,
+      "median": 796.4,
+      "p95_nearest_rank": 1486.2,
+      "min": 33.3,
+      "max": 1938.4
+    },
+    "query_debug_retained_by_official_oss_client": false,
+    "same_database_sequential_replay_speedup_vs_baseline": {
+      "mean": 12.336088,
+      "median": 12.850728,
+      "p95": 8.306966
+    }
+  },
+  "mem0_latency_reference": {
+    "source": "bundled Mem0 Platform v3 top-50 artifact at the same pinned harness commit",
+    "questions": 500,
+    "mean_ms": 2381.8756,
+    "median_ms": 2468.1,
+    "p95_ms": 3353.5,
+    "narratordb_observed_lower_latency_ratio": {
+      "mean": 3.094562,
+      "median": 3.122399,
+      "p95": 2.298807
+    },
+    "controlled_head_to_head": false,
+    "caveat": "The official latency field is comparable in definition, but Mem0 ran as a managed remote platform on undisclosed infrastructure while NarratorDB ran locally on declared hardware."
+  },
+  "model_calls_and_cost": {
+    "retrieval_model_calls": 0,
+    "retrieval_cost_usd": 0.0,
+    "answerer_model": null,
+    "judge_model": null,
+    "answer_judge_score": null,
+    "paid_v4_flash_status": "pending a fresh rotated OpenRouter key supplied outside chat",
+    "estimated_v4_flash_four_cutoff_cost_usd": {
+      "response_metadata_linear": 2.74,
+      "account_usage_linear": 2.86,
+      "recommended_soft_cap": 3.25
+    }
+  },
+  "regression_gates": {
+    "standalone_suite": "passed after the frozen run",
+    "completed_at": "2026-07-14T12:33:24+02:00",
+    "release_validation_log_sha256": "b8c9fc30e23012f46afb96655fa2054304005f748e7990ece391f01460ed40b3",
+    "compileall": "passed",
+    "ruff": "passed",
+    "sdist_and_wheel_build": "passed",
+    "installed_wheel_smoke": "passed",
+    "unit_tests": {"passed": 24, "failed": 0},
+    "stress_suites": {
+      "provenance": "passed",
+      "advanced_system": "passed",
+      "code_retrieval": "passed",
+      "typed_memory": "passed",
+      "every_angle": "passed",
+      "complex_retrieval": "passed"
+    },
+    "locomo_context_retrieval": {
+      "answers_in_context": 1301,
+      "questions": 1540,
+      "recall": 0.8448,
+      "mean_ms": 6.399,
+      "p95_ms": 12.933
+    },
+    "noise_scale": {
+      "messages_requested": 5000,
+      "fixed_query_hit_rate": 1.0,
+      "mean_ms": 1.407,
+      "p95_ms": 4.393
+    }
+  },
+  "artifact_directory": "reports/longmemeval-full500-frozen-20260714",
+  "comparability": {
+    "exact_official_mem0_harness_retrieval": true,
+    "same_dataset_chunking_topk_cutoffs_concurrency": true,
+    "same_answerer_and_judge_as_mem0_published_score": false,
+    "claim_beats_mem0_accuracy": false,
+    "reason": "This run ends at frozen retrieval. Mem0's published number is an answerer/judge accuracy score using GPT-5; NarratorDB still requires a separately archived, same-model evaluate-only phase."
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-07-14",
+  "status": "development",
+  "run_id": "narratordb-optimized-retrieval-30-20260714",
+  "system": "NarratorDB",
+  "classification": "Post-inspection retrieval replay and regression gate; not an unbiased answerer/judge score",
+  "implementation": {
+    "baseline_git_commit": "4c6c10f54b761d4eaedca28ac52688a6653a6245",
+    "engine_sha256": "3e76515b93f4082df7571fc70ec9f97d7a0bb102cf1f5fc0710075e5455a212e",
+    "benchmark_server_sha256": "2a3290ebbb948c8dfebedcd71a6334eb8b104da068e5c7e75fa11b6b112a2628",
+    "replay_tool_sha256": "81cd8ebffa483a7826148ca9f6d55f4a2d976fd34a7f7871d0eab5a0e48f232b",
+    "schema_version": 2,
+    "normalized_terms_version": 1,
+    "changes": [
+      "Bounded LRU cache for the pure stemmer",
+      "Persisted default-tokenizer normalized terms with in-place per-user migration and health repair",
+      "Eliminated redundant tokenization during storage, FTS rebuild, dedup, lexical-strength checks, and reranking",
+      "Skipped unused semantic-dedup cache work for records carrying stable identity provenance",
+      "Per-stage FTS, semantic, context-fetch, rerank, total, and HTTP-backend timings",
+      "Per-user benchmark locks so different user scopes search concurrently",
+      "Generic mixed current/historical intent disambiguation",
+      "Generic semantic rescue for countable-entity vocabulary gaps with no strict lexical hit",
+      "Generic current count/state ranking while excluding interval, measurement, and monetary questions"
+    ],
+    "benchmark_answer_constants_in_engine": false
+  },
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+    "source_evaluation_run_id": "3f380b3b",
+    "questions": 30,
+    "per_question_type": 5,
+    "seed": 42,
+    "cutoffs": [10, 20, 50, 200],
+    "retrieval_limit": 200
+  },
+  "retrieval_replay": {
+    "all_user_scopes_healthy": true,
+    "optimized_database_bytes": 117903360,
+    "ranking_changed_questions": 5,
+    "changed_question_ids": [
+      "06db6396",
+      "50635ada",
+      "5a4f22c0",
+      "618f13b2",
+      "eeda8a6d"
+    ],
+    "evidence_session_coverage": {
+      "baseline": {
+        "top_10_recall_any": "30/30",
+        "top_10_recall_all": "30/30",
+        "top_20_recall_all": "30/30",
+        "top_50_recall_all": "30/30",
+        "top_200_recall_all": "30/30"
+      },
+      "optimized": {
+        "top_10_recall_any": "30/30",
+        "top_10_recall_all": "30/30",
+        "top_20_recall_all": "30/30",
+        "top_50_recall_all": "30/30",
+        "top_200_recall_all": "30/30"
+      }
+    },
+    "targeted_generic_effects": {
+      "current_six_times_fact_rank": {
+        "baseline": 5,
+        "optimized": 4
+      },
+      "previously_absent_aquarium_fact_ranks": [3, 9],
+      "current_company_evidence_session_rank": {
+        "baseline": 10,
+        "optimized": 1
+      }
+    },
+    "latency_ms": {
+      "baseline": {
+        "mean": 554.36,
+        "median": 559.4,
+        "p95_nearest_rank": 737.3,
+        "min": 180.7,
+        "max": 1110.7
+      },
+      "optimized": {
+        "mean": 44.938072,
+        "median": 43.530608,
+        "p95_nearest_rank": 88.756829,
+        "min": 3.757389,
+        "max": 91.257743
+      },
+      "speedup": {
+        "mean": 12.336088,
+        "median": 12.850728,
+        "p95": 8.306966
+      },
+      "optimized_stage_means": {
+        "fts": 3.688348,
+        "semantic": 0.865206,
+        "context_fetch": 1.073004,
+        "rerank": 39.253119,
+        "total": 44.938072
+      }
+    },
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "answerer_judge_rescore": false
+  },
+  "full_regression": {
+    "standalone_suite": "passed",
+    "unit_tests": 18,
+    "package_build": "passed",
+    "wheel_smoke": "passed",
+    "stress_suites": [
+      "provenance",
+      "advanced_system",
+      "code_retrieval",
+      "typed_memory",
+      "every_angle",
+      "complex_retrieval"
+    ],
+    "locomo_context_retrieval": {
+      "questions": 1540,
+      "answers_in_context": 1301,
+      "recall": 0.8448,
+      "prior_answers_in_context": 1297,
+      "prior_recall": 0.8422,
+      "latency_ms": {
+        "mean": 6.356,
+        "p50": 5.773,
+        "p95": 12.664,
+        "p99": 17.335,
+        "max": 164.864
+      }
+    },
+    "noise_scale": {
+      "messages_requested": 5000,
+      "messages_stored_after_dedup": 4064,
+      "throughput_messages_per_second": 90.29,
+      "fixed_query_hit_rate": 1.0,
+      "latency_ms": {
+        "mean": 1.388,
+        "p50": 0.858,
+        "p95": 4.369,
+        "p99": 4.406,
+        "max": 4.967
+      }
+    }
+  },
+  "artifact_directory": "reports/narratordb-optimized-retrieval-20260714",
+  "comparability": {
+    "claim_beats_mem0": false,
+    "reason": "This replay uses an inspected 30-question development sample and makes no answerer or judge calls.",
+    "required_next_step": "Freeze this implementation, run all 500 untouched questions through the pinned official harness, and score with the declared answerer/judge."
+  }
+}

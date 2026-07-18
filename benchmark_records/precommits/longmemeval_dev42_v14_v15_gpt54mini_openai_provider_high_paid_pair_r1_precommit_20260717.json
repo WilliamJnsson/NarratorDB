@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T20:21:26Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "paired V14/V15 evaluation with GPT-5.4-Mini high reasoning on the official OpenAI inference provider through OpenRouter",
+  "inherits_evaluator_protocol_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v13_v14_gpt54mini_openai_provider_paid_pair_r2_precommit_20260717.json",
+    "sha256": "585e79ef40e5b37846c19dfe828c1f3763de86631be8ddbc9331b2edbe1b8cb0"
+  },
+  "frozen_arms": {
+    "v14_control": {
+      "prediction_directory": "reports/longmemeval-intelligence-dev42-v14-replay-v7gpt54mini-20260717/official-harness/predicted_narratordb-intelligence-dev42-v14-replay-v7gpt54mini",
+      "prediction_manifest": "reports/longmemeval-intelligence-dev42-v14-replay-v7gpt54mini-20260717/PREDICTION_SHA256SUMS",
+      "prediction_manifest_sha256": "4cbd288f1f0d2e4c4504445344d7a08c9ae006785c9dd5d234709e2dde2db4b6"
+    },
+    "v15_treatment": {
+      "prediction_directory": "reports/longmemeval-intelligence-dev42-v15-replay-v7gpt54mini-repeat2-20260717/official-harness/predicted_narratordb-intelligence-dev42-v15-replay-v7gpt54mini-repeat2",
+      "prediction_manifest": "reports/longmemeval-intelligence-dev42-v15-replay-v7gpt54mini-repeat2-20260717/PREDICTION_SHA256SUMS",
+      "prediction_manifest_sha256": "2b405ddebfba6eeff41e0e10302c3b22519ad5456de834387fadda8837cd095f",
+      "replay_artifact_manifest_sha256": "71e40ddcb761dab4edb5e649e71635e1d2c7b44f8d8d23b28728eea7fb670c5e"
+    }
+  },
+  "offline_change_control": {
+    "comparison_path": "reports/longmemeval-intelligence-dev42-v15-replay-v7gpt54mini-repeat2-20260717/offline-comparison/v14-v15-repeat1-v15-repeat2.json",
+    "comparison_sha256": "dae866e573864f02ae7baab403c32bf59c92e59b8c2269d70f75ff1f15f0e067",
+    "v15_repeat_identity": "42/42 at top20, top50, and full",
+    "v14_v15_identity": "41/42 at top20, top50, and full",
+    "sole_changed_question_id": "88432d0a",
+    "score_or_judge_fields_used": false
+  },
+  "route_canary": {
+    "usage_log_path": "reports/gpt54mini-openai-provider-high-reasoning-canary-r1-20260717.jsonl",
+    "usage_log_sha256": "5f47dcadaadc11e85bb79df19492fb656027bef69271b59be87215d21002faa5",
+    "gpt_5_4_mini_provider": "OpenAI",
+    "gpt_reasoning_effort": "high",
+    "gpt_reasoning_tokens_positive": true,
+    "gpt_nonempty": true,
+    "judge_nonempty": true,
+    "completion_calls": 2,
+    "unknown_cost_attempts": 0,
+    "malformed_responses": 0,
+    "cost_usd": 0.0001608648
+  },
+  "evaluation_order": [
+    "v14-control",
+    "v15-treatment"
+  ],
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "openai/gpt-5.4-mini",
+    "answerer_provider_only": "OpenAI",
+    "answerer_output_token_parameter": "max_tokens",
+    "answerer_temperature_omitted": true,
+    "answerer_reasoning_effort": "high",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_allow": [
+      "DeepInfra",
+      "StreamLake",
+      "GMICloud",
+      "Baidu",
+      "AtlasCloud"
+    ],
+    "judge_reasoning_parameter_injected": false,
+    "provider_policy": "public-benchmark",
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "rejudge": true,
+    "proxy_path": "narratordb/benchmarks/openrouter_proxy.py",
+    "proxy_sha256": "7ce24f80cb48843c8956e24eba62c215fabac3d97e673dd355ab7051cbc64948",
+    "wrapper_path": "scripts/run_paired_evaluation_variant.sh",
+    "wrapper_sha256": "6b067e81995f4c77dd73b766e27cbd7dcd45cb4f38904d1eb2dac46f858a785a"
+  },
+  "budget": {
+    "pair_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "prompt_or_judge_rule_changes": false,
+    "score_fields_present_in_precommit": false,
+    "reporting_rule": "label as GPT-5.4-Mini high-reasoning development score via OpenAI provider through OpenRouter"
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "schema": "narratordb.campaign-budget-declaration.v2",
+  "campaign_id": "narratordb-95-dev-20260715",
+  "provider_cap_usd": "250",
+  "governance_ceiling_eur": "300",
+  "prior_immutable_costs": [
+    {
+      "source_id": "v6-dev42-benchmark-record",
+      "record_path": "../narratordb_intelligence_dev42_gpt54mini_20260716.json",
+      "record_sha256": "dcb407554ce44e027f95a036b8ec06d399ea990fc94f05db569f356e318acf27",
+      "cost_usd": "24.90064606428"
+    },
+    {
+      "source_id": "v7-synthetic-canary",
+      "record_path": "../../reports/intelligence-v7-canaries-20260716/gpt54mini-v7-synthetic-canary.json",
+      "record_sha256": "b324180fa9ec24fab09094112c933ffe3e82e8a6b97e8136fcaea923800171bb",
+      "cost_usd": "0.01470225"
+    },
+    {
+      "source_id": "v7-synthetic-canary-rerun",
+      "record_path": "../../reports/intelligence-v7-canaries-20260716/gpt54mini-v7-synthetic-canary-rerun.json",
+      "record_sha256": "fb73f82d32884f07a22ac54dce61a766c56da700521cbe352d438d17a5851c4f",
+      "cost_usd": "0.01371975"
+    },
+    {
+      "source_id": "glm52-v8-failed-zero-cost-canary",
+      "record_path": "../../reports/intelligence-glm52-canaries-20260716/v8-glm52-synthetic-canary.json",
+      "record_sha256": "6cbd1f66fe4e2693c40c3134feb56c00a4052c637c51a65d591bd19244bda1a2",
+      "cost_usd": "0"
+    },
+    {
+      "source_id": "glm52-v9-route-canary-attempt-summary",
+      "record_path": "../../reports/intelligence-glm52-canaries-20260716/route-attempts-through-wafer-summary.json",
+      "record_sha256": "08d5b4a4f28239595e8e893b4714875ddb08244a575499569052e9048a80393d",
+      "cost_usd": "0.00812595"
+    },
+    {
+      "source_id": "glm52-v10-failed-optional-router-metadata-canary",
+      "record_path": "../../reports/intelligence-v10-canaries-20260716/v10-glm52-fp4-allowlist-canary.json",
+      "record_sha256": "59dd27c3cd3ce34e8eb011ff58d64c8a289285156662571a9f50788a3dd80ceb",
+      "cost_usd": "0.01986928"
+    },
+    {
+      "source_id": "glm52-v11-passed-compiler-route-canary",
+      "record_path": "../../reports/intelligence-v11-canaries-20260716/v11-glm52-fp4-allowlist-canary.json",
+      "record_sha256": "d79c9971b1d91a4e8ebbecc81daa2e313bb489b03c8bad636ac408626c8cba54",
+      "cost_usd": "0.01658584"
+    },
+    {
+      "source_id": "v7-dev42-sealed-compiler-audit",
+      "record_path": "../../reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/compiler-audit.json",
+      "record_sha256": "495bdad21e780c1d0777b1a2ab2ad735407ed0fe8ee3e60e42707d946eeadd88",
+      "cost_usd": "33.14190525"
+    }
+  ],
+  "active_usage_ledgers": [
+    {
+      "source_id": "v4-hardening-aborted-compiler",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/intelligence.db.compiler-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v4-hardening-grounded-salvage-canary",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/v4-grounded-salvage-canary-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v4-hardening-recovery-canary",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/v4-recovery-canary-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v4-hardening-summary-rebind-canary",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/v4-summary-rebind-canary-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v4-hardening-validation-diagnostic",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/v4-validation-diagnostic-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v4-validation-aborted-compiler",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v4-validation/intelligence.db.compiler-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v5-content-filter-aborted-compiler",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v5-content-filter/intelligence.db.compiler-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v5-evidence-aborted-compiler",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v5-evidence/intelligence.db.compiler-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v5-storage-aborted-compiler",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v5-storage/intelligence.db.compiler-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v5-token-limit-aborted-compiler",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v5-token-limit/intelligence.db.compiler-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v7-dev6-gate-compiler",
+      "kind": "compiler",
+      "path": "../../reports/longmemeval-intelligence-dev6-v7-gpt54mini-20260716/intelligence.db.compiler-usage.jsonl",
+      "identity_policy": {
+        "request_models": ["openai/gpt-5.4-mini"],
+        "providers": ["Azure"]
+      }
+    },
+    {
+      "source_id": "v7-dev6-gate-evaluator",
+      "kind": "evaluator",
+      "path": "../../reports/longmemeval-intelligence-dev6-v7-gpt54mini-20260716/evaluate-openrouter-usage.jsonl",
+      "identity_policy": {
+        "request_models": [
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "response_models": [
+          "deepseek/deepseek-v4-flash",
+          "z-ai/glm-5.2"
+        ],
+        "providers": [
+          "AtlasCloud",
+          "Baidu",
+          "DeepInfra",
+          "GMICloud",
+          "StreamLake"
+        ]
+      }
+    },
+    {
+      "source_id": "v7-dev42-paired-evaluator",
+      "kind": "evaluator",
+      "path": "../../reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/evaluation/openrouter-usage.jsonl",
+      "identity_policy": {
+        "request_models": [
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "response_models": [
+          "deepseek/deepseek-v4-flash",
+          "z-ai/glm-5.2"
+        ],
+        "providers": [
+          "AtlasCloud",
+          "Baidu",
+          "DeepInfra",
+          "GMICloud",
+          "StreamLake"
+        ]
+      }
+    },
+    {
+      "source_id": "v8-dev42-replay-paired-evaluator",
+      "kind": "evaluator",
+      "path": "../../reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/evaluation/openrouter-usage.jsonl",
+      "identity_policy": {
+        "request_models": [
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "response_models": [
+          "deepseek/deepseek-v4-flash",
+          "z-ai/glm-5.2"
+        ],
+        "providers": [
+          "AtlasCloud",
+          "Baidu",
+          "DeepInfra",
+          "GMICloud",
+          "StreamLake"
+        ]
+      }
+    },
+    {
+      "source_id": "v11-pair-v7-control-evaluator",
+      "kind": "evaluator",
+      "path": "../../reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/paired-evaluation/v7-reference/openrouter-usage.jsonl",
+      "identity_policy": {
+        "request_models": [
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "response_models": [
+          "deepseek/deepseek-v4-flash",
+          "z-ai/glm-5.2"
+        ],
+        "providers": [
+          "AtlasCloud",
+          "Baidu",
+          "DeepInfra",
+          "GMICloud",
+          "StreamLake"
+        ]
+      }
+    },
+    {
+      "source_id": "v11-pair-v11-replay-evaluator",
+      "kind": "evaluator",
+      "path": "../../reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/paired-evaluation/v11/openrouter-usage.jsonl",
+      "identity_policy": {
+        "request_models": [
+          "deepseek/deepseek-v4-flash-20260423",
+          "z-ai/glm-5.2"
+        ],
+        "response_models": [
+          "deepseek/deepseek-v4-flash",
+          "z-ai/glm-5.2"
+        ],
+        "providers": [
+          "AtlasCloud",
+          "Baidu",
+          "DeepInfra",
+          "GMICloud",
+          "StreamLake"
+        ]
+      }
+    }
+  ]
+}

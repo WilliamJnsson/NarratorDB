@@ -1,0 +1,116 @@
+{
+  "schema_version": "narratordb.v13-paid-paired-preflight-r5.v1",
+  "verified_at_utc": "2026-07-16T13:42:01Z",
+  "status": "unsealed offline R5 preflight passed locally; immutable R4 terminal failure/cost preserved; no R5 attempt or network call; independent candidate audit and final seal still required",
+  "predecessor": {
+    "terminal_precommit_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716",
+    "terminal_precommit_seal_sha256": "79396bbc05079713fd7bdd6df3c0107347344bd83a4f7ed257630fdc58118ebf",
+    "terminal_evaluation_failure_record_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-7939-failed-v7-completeness-20260716.json",
+    "terminal_evaluation_failure_record_sha256": "858b46be7dab3f958a40888643ffbf3a117a43b8ebb2ee7ed6bbc2a4af8c8271",
+    "terminal_evaluation_failure_record_seal_sha256": "f46f2bc92ab3cbb56b68e810e185e18e0bac9e4aeada599d7719950e1fb0aa11",
+    "r4_v7_ledger_identity_audit_sha256": "3c7597189e54bfb2718eb642d2431744d4c7ab2a2225ff5cd7ac8a9c65ad2a4b",
+    "r4_v7_cost_usd": "0.92196287",
+    "r4_v13_model_or_judge_calls": 0,
+    "r4_score_release_authorized": false
+  },
+  "closed_world": {
+    "directory": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-20260716",
+    "preseal_regular_files": 22,
+    "declared_hashed_members": 22,
+    "declared_total_after_seal": 23,
+    "final_sha256sums_present": false,
+    "flat_regular_single_link_tree_required": true
+  },
+  "scope": {
+    "questions_per_variant": 42,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "order": [
+      "v7-control",
+      "v13-first"
+    ],
+    "selective_retries": false,
+    "answerer_model": "z-ai/glm-5.2",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "providers": [
+      "DeepInfra",
+      "StreamLake",
+      "GMICloud",
+      "Baidu",
+      "AtlasCloud"
+    ],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42
+  },
+  "budget": {
+    "r5_soft_fuse_usd_per_arm": "2.50",
+    "r5_max_new_spend_usd": "5.00",
+    "baseline_including_r4_usd": "109.23207164191",
+    "projected_with_fuses_usd": "114.23207164191",
+    "provider_cap_usd": "250",
+    "governance_ceiling_eur": "300"
+  },
+  "hardened_controls": {
+    "live_proxy_hash_bound": true,
+    "null_blank_and_http_error_sanitized": true,
+    "graceful_signal_shutdown_and_stop_record": true,
+    "reservation_drain_before_stop": true,
+    "vendor_interpreter_only": true,
+    "provisional_score_streaming": false,
+    "score_blind_arm_gate_each_arm": true,
+    "exact_decimal_ledger_fuse": true,
+    "completed_status_and_proxy_stop_hash_bound": true,
+    "preaction_gate_before_later_telemetry": true,
+    "finalization_recomputes_both_arm_gates": true
+  },
+  "checks": {
+    "json_and_shell_syntax": true,
+    "bound_input_hashes_verified": 66,
+    "closed_world_inventory_matches": true,
+    "r5_attempt_root_present": false,
+    "r5_provider_calls": 0,
+    "r5_fx_calls": 0,
+    "r5_answerer_calls": 0,
+    "r5_judge_calls": 0,
+    "r5_scoring_calls": 0,
+    "r5_paid_cost_usd": "0",
+    "commands_total": 35,
+    "commands_executed": 0,
+    "credential_actions": 5,
+    "credential_stored": false,
+    "final_seal_present": false,
+    "json_duplicate_keys_absent": true,
+    "secret_scan_passed_without_printing_matches": true,
+    "symlink_hardlink_bytecode_startup_hook_scan_passed": true,
+    "all_commands_executed_false": true,
+    "bundle_wide_ruff_passed": true,
+    "all_94_sibling_path_hash_bindings_reconciled": true
+  },
+  "test_evidence": {
+    "proxy_tests": "21 of 21 passed",
+    "arm_gate_tests": "8 of 8 direct tests passed; integration/mutation coverage is in the admission suite",
+    "admission_tests": "54 of 54 passed in the final hash-stable offline run",
+    "credential_transport_tests": "9 passed; 2 final-seal-only checks intentionally skipped while unsealed; 11 discovered",
+    "direct_ledger_tests": "23 of 23 passed",
+    "independent_candidate_audit": "pending",
+    "total_passed": 115,
+    "final_seal_only_skipped": 2
+  },
+  "ready_to_seal_precommit": true,
+  "ready_to_execute_paid_scoring": false,
+  "precommit_member_hashes": {
+    "protocol_sha256": "1bbf539aca4f101c8fef40e1cbf8306b4f75d1276b14b029a34a3c1f6335f1e4",
+    "authorization_requirements_sha256": "7f2a9d083c8d2b3a158ac6959ca48d5debae4b51f13b8d59c1cc7381e05b1c67",
+    "input_bindings_sha256": "b2901ea3e3345a7ec714a1085aefa75640b66199de4a548701dc9a514c4f6d4c",
+    "bound_inputs_sha256": "c9a32926e2967f7015ad12efb56c60f6f49751b00d188fb4bef433616d8699a7",
+    "inventory_sha256": "1c790820cd019618f41516317dd8665d0b44c110173003702c46fd6c87c7396a",
+    "commands_sha256": "08b43afc0c37d8ff13d1b260fc64796b9c40237bb6e8cc7b95b8fae28f5dc9be",
+    "verifier_sha256": "af85ea4bef1809054a7d88bc0b372e337983ca66aec9e666a2364e80b5948094",
+    "schema_sha256": "0f9f5d21a06a5dc380501c64ace82e6c66608af807ae67d33a343bb4dbaed7ba",
+    "provider_telemetry_capture_sha256": "e1210da57417c315112a5eef4e2eee3a6c46f9150fdaefb97916bc74b16a38a3",
+    "admission_tests_sha256": "59f5cf689c0b88aa978e3bf5c0909202e62e83081bca9118ee68fc57805e6f60"
+  }
+}

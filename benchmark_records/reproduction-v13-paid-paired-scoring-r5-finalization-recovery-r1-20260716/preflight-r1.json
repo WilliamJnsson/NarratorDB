@@ -1,0 +1,32 @@
+{
+  "candidate_created_at_utc": "2026-07-16T15:58:29Z",
+  "checks": {
+    "bound_input_manifest_created": true,
+    "candidate_dependency_sha256": {
+      "BOUND_INPUTS_SHA256SUMS": "e5685ad290fc8fa4e57c4138a850a93b89da590c5e8ed91d8adb57a16930e1ba",
+      "README.md": "79637c9eb7bf734a09985b212c3800eadeaa2f425c8a086c5a2b556e03f09d4d",
+      "closed-world-inventory.json": "acf8994d308b1b2b8a560e475c586877a185de1c84c72f4a83749138504c6b3b",
+      "commands-r1.json": "20af2a00fd6951a222a077002f06e826731325a0ee6c1606705f45c234148d12",
+      "offline-recovery.sb": "95d4ed08e1c2dc84632980cc21023a9fbafdf2f2a71dff824356eccd87ccd732",
+      "recovery-protocol-r1.json": "4f6c1fff9932d08c47eefb84097e4101a8bbbd692e6897c486f4f827ef944d91",
+      "run_offline_recovery.sh": "582bddb61e570705f0d008b253ffae3330b43c5aedf796619dca9f59247342f0",
+      "test_finalization_recovery.py": "6283ad08947d7741e264b12cf41c080638b20d4dd8e7b3d3f657d693716bc4f0",
+      "verify_finalization_recovery.py": "0aba4f56eaf8e40353588e819610775a721f8a420689b098ac02329057d60d8d"
+    },
+    "candidate_source_syntax_checked": true,
+    "candidate_tests_passed": true,
+    "closed_world_inventory_created": true,
+    "original_attempt_tree_fingerprint_sha256": "db0f54b46b3c24c6fac212e59a472365451dd88638f2b8274bf94538b804f804",
+    "output_root_absent": true,
+    "recovery_bundle_files_before_seal": 10,
+    "recovery_go_absent": true,
+    "recovery_sha256sums_absent": true,
+    "ruff_passed": true,
+    "sandbox_worker_smoke_passed": true,
+    "terminal_checksum_manifest_sha256": "39f31bfea26ba968f52e9c2ca0ccfc346021dba8c9a8b27e8ace0b96834ea2ed",
+    "terminal_record_sha256": "5b2f8963ec0e8fa7fbbfb8df99692e49407d535ea80761952afc5c303c44e869",
+    "tests_passed": 22
+  },
+  "schema_version": "narratordb.v13-paid-r5-offline-recovery-preflight.v1",
+  "status": "UNSEALED_CANDIDATE_NOT_AUTHORIZED_FOR_EXECUTION"
+}

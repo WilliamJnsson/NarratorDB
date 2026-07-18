@@ -1,0 +1,36 @@
+{
+  "benchmark": "LongMemEval_S",
+  "dataset": {
+    "filename": "longmemeval_s_cleaned.json",
+    "questions": 500,
+    "sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442"
+  },
+  "derivation": {
+    "description": "Development is the union of deterministic, stratified samples; holdout is the exact dataset complement.",
+    "question_types": [
+      "knowledge-update",
+      "multi-session",
+      "single-session-assistant",
+      "single-session-preference",
+      "single-session-user",
+      "temporal-reasoning"
+    ],
+    "sample_per_type": [
+      5,
+      1,
+      2
+    ],
+    "seed": 42
+  },
+  "development": {
+    "filename": "longmemeval_s_dev42_question_ids.json",
+    "questions": 42,
+    "sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff"
+  },
+  "holdout": {
+    "filename": "longmemeval_s_holdout458_question_ids.json",
+    "questions": 458,
+    "sha256": "b2ebe3d023e65369cba071afd622384ce5cc4217e67ed492cd66c7b6a62c6207"
+  },
+  "schema_version": 1
+}

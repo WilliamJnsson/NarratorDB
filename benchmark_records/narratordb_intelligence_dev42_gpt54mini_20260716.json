@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "record": "narratordb_intelligence_dev42_gpt54mini_20260716",
+  "recorded_at": "2026-07-16",
+  "status": "development",
+  "run_id": "i42mini1",
+  "system": "NarratorDB Intelligence",
+  "classification": "inspected development split; complete official-harness answer/judge score; not a Mem0 head-to-head",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_worktree_clean": true,
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_id_scope_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "questions": 42,
+    "scope": "declared dev42",
+    "all_questions_in_materialized_dataset": true,
+    "seed": 42,
+    "top_k": 200,
+    "top_k_cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm": 60
+  },
+  "engine": {
+    "version": "2.0.0",
+    "git_commit": "4fe10683ed4e4ecb85482c7a7a71dc08a84d4a83",
+    "dirty_worktree": true,
+    "git_diff_sha256_tracked_only": "e967eb54da182b76a109993426bcf6d8cd5781e04abaa72722ee984e853b058e",
+    "source_manifest_sha256": "1d6a31f87e0dcadfe2a8ba8059e5b263dae80ec9a7590edb8d6c7e3465ff4d8b",
+    "source_manifest": "SOURCE_SHA256SUMS",
+    "database_sha256": "65666c85c825919439ba3a1f64cccb7c709b5466c718bb70fc7a22a454b3a6ce",
+    "compiler_cache_sha256": "533423fc8c7b6c762f6af473c65876fabeb2b2e50365411f94f0357462b7ea71",
+    "memory_mode": "intelligence",
+    "coalesce_timestamp_sessions": true,
+    "context_token_budget": 6000,
+    "raw_fallback_enabled": true
+  },
+  "compiler": {
+    "transport": "OpenRouter",
+    "model": "openai/gpt-5.4-mini",
+    "provider_only": "Azure",
+    "reasoning_effort": "minimal",
+    "max_output_tokens": 8192,
+    "prompt_version": "narratordb.memory-compiler.v6",
+    "fingerprint": "openai/gpt-5.4-mini:79cc8a6efc83b4157498",
+    "privacy": {
+      "zero_data_retention": true,
+      "data_collection": "deny",
+      "allow_fallbacks": false,
+      "runtime_key_only": true
+    },
+    "jobs": {
+      "complete": 1979,
+      "partial": 0,
+      "blocked": 0,
+      "exhausted": 0,
+      "current_sessions_missing_terminal_materialization": 0
+    },
+    "usage": {
+      "calls": 1979,
+      "prompt_tokens": 6853890,
+      "completion_tokens": 4281891,
+      "reasoning_tokens": 220774,
+      "cached_tokens": 0,
+      "finish_reason_stop": 1979,
+      "cost_usd": 24.408927
+    }
+  },
+  "prediction": {
+    "questions": 42,
+    "pairs_processed": 10375,
+    "pairs_failed": 0,
+    "partial_progress_files": 0,
+    "result_counts": {
+      "min": 27,
+      "median": 51.0,
+      "max": 55,
+      "mean": 48.095238
+    },
+    "audit_complete": true,
+    "audit_sha256": "1ed55f5127e003c7baa068f0f1d5d98de28abf65abb34b59369f07076bd8df64",
+    "checksum_manifest_sha256": "2b564548b733cf62489c9014934660e45060d623c2708bc276c74638b04233dc",
+    "legacy_evidence_coverage_valid": false,
+    "legacy_evidence_coverage_note": "The key-free auditor requires a result to equal a complete source message. Intelligence results contain a structured claim plus exact quoted excerpts, so its reported zero evidence coverage is a representation mismatch and is not used as a retrieval-quality claim.",
+    "official_http_search_latency_ms": {
+      "samples": 42,
+      "mean": 21490.340476,
+      "median": 15376.95,
+      "p95": 36039.7,
+      "min": 3729.3,
+      "max": 185036.4
+    }
+  },
+  "evaluation": {
+    "answerer": "z-ai/glm-5.2",
+    "judge": "deepseek/deepseek-v4-flash-20260423",
+    "transport": "narratordb.benchmarks.openrouter_proxy",
+    "provider_allowlist": [
+      "DeepInfra",
+      "StreamLake",
+      "GMICloud",
+      "Baidu",
+      "AtlasCloud"
+    ],
+    "reasoning_effort": "high",
+    "official_harness_score_complete": true,
+    "empty_answers": 0,
+    "empty_judges": 0,
+    "missing_cutoffs": 0,
+    "frozen_payload_mismatches": 0,
+    "returned_none_responses_retried_by_harness": 16,
+    "attempt_five_failures": 0,
+    "usage": {
+      "calls": 184,
+      "prompt_tokens": 819752,
+      "cached_tokens": 499025,
+      "completion_tokens": 102173,
+      "reasoning_tokens": 81215,
+      "finish_reason_stop": 181,
+      "finish_reason_length": 3,
+      "upstream_errors": 0,
+      "cost_usd": 0.49171906428
+    },
+    "audit_sha256": "69b0b7a5186d57b8816a1915e022aa807a6e8ce8aaee1a60e695007b09711a33",
+    "usage_log_sha256": "4cedf24efbb86d4b030ee8cf2e60fe2cc8b832a18a3f8956ceb47124cfc97338",
+    "official_result_sha256": "c31bf72e8378950b1498327b0e7db7da8a96a3598d377c6d00b3a32eb3a7850c"
+  },
+  "official_scores": {
+    "top_20": {
+      "correct": 29,
+      "total": 42,
+      "accuracy_percent": 69.0476
+    },
+    "top_50": {
+      "correct": 31,
+      "total": 42,
+      "accuracy_percent": 73.8095
+    },
+    "by_question_type_top50_percent": {
+      "knowledge-update": 80.0,
+      "multi-session": 50.0,
+      "single-session-assistant": 42.8571,
+      "single-session-preference": 75.0,
+      "single-session-user": 100.0,
+      "temporal-reasoning": 100.0
+    },
+    "denominator_policy": "all 42 declared development questions retained"
+  },
+  "cost": {
+    "compiler_usd": 24.408927,
+    "answerer_judge_usd": 0.49171906428,
+    "clean_run_total_usd": 24.90064606428
+  },
+  "leakage_control": {
+    "development_set_inspected": true,
+    "compiler_query_independent": true,
+    "compiler_received_ground_truth_answers": false,
+    "fresh_database_cache_and_prediction_directory": true,
+    "selective_reruns": false,
+    "classification": "development result only; not an untouched holdout"
+  },
+  "comparability": {
+    "claim_beats_mem0_accuracy": false,
+    "beats_previous_narratordb_82_8_top50": false,
+    "mem0_published_reference_top50_percent": 94.8,
+    "mem0_artifact_derived_top50_percent": 90.4,
+    "notes": [
+      "This is an inspected 42-question development subset, not the full 500-question benchmark.",
+      "Mem0's published result used its managed Platform backend and GPT-5 answer/judge; this run used NarratorDB Intelligence compilation with GLM-5.2 answering and dated DeepSeek judging.",
+      "The evaluation stack matches NarratorDB's prior 82.8% full-run stack, but the question scope differs, so the numeric difference is diagnostic rather than a controlled full-set regression claim.",
+      "The result exposes two design gaps: weak multi-session consolidation and omission/ranking of assistant-authored memories."
+    ]
+  },
+  "validation": {
+    "sqlite_main_quick_check": "ok",
+    "sqlite_compiler_cache_quick_check": "ok",
+    "frozen_prediction_checksums_unchanged_after_evaluation": true,
+    "pre_run_full_tests": 140,
+    "post_prompt_v6_focused_tests": 46,
+    "secret_persisted_in_record": false
+  }
+}

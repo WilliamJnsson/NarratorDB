@@ -1,0 +1,124 @@
+{
+  "schema_version": "narratordb.v13-paid-pair-terminal-evaluation-failure.v1",
+  "recorded_at_utc": "2026-07-16T12:10:28Z",
+  "status": "terminal incomplete V7 arm; V13 never executed; scores not authorized for release",
+  "failed_precommit": {
+    "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716",
+    "seal_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/SHA256SUMS",
+    "seal_sha256": "79396bbc05079713fd7bdd6df3c0107347344bd83a4f7ed257630fdc58118ebf",
+    "bound_inputs_manifest_sha256": "da2bc5e797c827b8744a19cdcb912cc05fcafac3c8b807a851bae206a678db8f",
+    "sealed_members_still_verify": true,
+    "bound_inputs_still_verify": true,
+    "sealed_members_modified_after_failure": false
+  },
+  "attempt": {
+    "root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1",
+    "regular_file_count_at_terminalization": 5169,
+    "v7_process_exit_status": 0,
+    "v7_attempt_status": "completed",
+    "v7_attempt_status_sha256": "a38c0f3b275e9b1e9f7a192b4d7c4f1bf7589df620216fc302c3f5060ab4cccd",
+    "v7_result_sha256": "a2668c201fe9b9ee995cae87d832446f1b159ca1030d9bae65c98a3f4b6c7045",
+    "v7_usage_ledger_sha256": "6e5e7eecb1db8f7d9b8f1ac14d3cc1d5673882a78bfce2afca2e8bdfe574b9cb",
+    "v7_identity_audit_sha256": "3c7597189e54bfb2718eb642d2431744d4c7ab2a2225ff5cd7ac8a9c65ad2a4b",
+    "v7_identity_audit_complete": true,
+    "v7_ledger_events": 193,
+    "v7_ledger_cost_usd": "0.92196287",
+    "v7_unknown_cost_attempts": 0,
+    "v7_invalid_completion_identities": 0,
+    "v13_execution_authorization_was_created_before_terminal_finding": true,
+    "v13_execution_authorization_sha256": "8c85f657e95176ebde0249ebb51f9fb31decdedf299d4e0cbd3753163c60b06a",
+    "v13_execution_authorization_audit_sha256": "1ea892df5007473aef1e31461d61af9fec288cbc1314a266c137c84e45f98136",
+    "v13_execution_authorization_overridden_by_terminal_completeness_failure": true,
+    "v13_model_or_judge_calls": 0,
+    "v13_usage_ledger_bytes": 2,
+    "v13_usage_ledger_sha256": "75a11da44c802486bc6f65640aa48a730f0f684c5c07a42ba3cd1735eb3fb070"
+  },
+  "terminal_findings": [
+    {
+      "code": "v7-empty-generated-answers",
+      "count": 4,
+      "cutoff": "top_50",
+      "question_ids": [
+        "60d45044",
+        "75499fd8",
+        "c8c3f81d",
+        "faba32e5"
+      ],
+      "finding": "The frozen score-blind evaluation audit found four empty generated-answer payloads."
+    },
+    {
+      "code": "v7-empty-judge-payloads",
+      "count": 2,
+      "cutoff": "top_50",
+      "question_ids": [
+        "88432d0a",
+        "c8c3f81d"
+      ],
+      "finding": "The frozen score-blind evaluation audit found two empty judge payloads; one question/cutoff also had an empty generated answer."
+    },
+    {
+      "code": "contentless-upstream-completions",
+      "count": 30,
+      "request_model": "z-ai/glm-5.2",
+      "provider": "AtlasCloud",
+      "finish_reason": "stop",
+      "finding": "The content-free ledger recorded 30 HTTP-200 completion events whose response_complete flag was false."
+    },
+    {
+      "code": "undersized-concurrent-soft-fuse",
+      "local_http_402_failures": 17,
+      "configured_variant_cap_usd": "1.25",
+      "request_reservation_usd": "0.05",
+      "safety_reserve_usd": "0.01",
+      "max_workers": 10,
+      "finding": "The local fuse rejected retries when actual spend plus concurrent reservations approached the small per-variant ceiling. Actual settled V7 spend remained below the ceiling, but the reservation-pressure policy caused 17 local 402 failures."
+    },
+    {
+      "code": "wrapper-completion-gate-too-late",
+      "finding": "The harness and wrapper returned zero before the frozen completeness audit ran. The sealed postrun zero-counter gate would deterministically reject the arm, so the valid process exit and identity audit cannot authorize score release."
+    }
+  ],
+  "score_blind_validation": {
+    "evaluated_questions": 42,
+    "frozen_questions": 42,
+    "cutoffs": [
+      "top_20",
+      "top_50"
+    ],
+    "complete": false,
+    "official_harness_score_complete": true,
+    "empty_answers": 4,
+    "empty_judges": 2,
+    "frozen_payload_mismatches": 0,
+    "missing_evaluated_ids": 0,
+    "extra_evaluated_ids": 0,
+    "missing_cutoffs": 0,
+    "invalid_scores": 0,
+    "inconsistent_verdicts": 0,
+    "score_values_used_to_determine_failure": false,
+    "score_release_authorized": false
+  },
+  "call_and_cost_state": {
+    "provider_usage_before_v7_usd": "121.362526048",
+    "provider_usage_before_v13_usd": "122.284488918",
+    "provider_delta_usd": "0.92196287",
+    "provider_cap_usd": "250",
+    "campaign_observed_spend_after_v7_usd": "109.23207164191",
+    "v7_paid_cost_usd": "0.92196287",
+    "v13_paid_cost_usd": "0",
+    "credential_material_recorded": false
+  },
+  "disposition": {
+    "execute_v13": false,
+    "resume_or_repair_r4_attempt1": false,
+    "rerun_r4_v7": false,
+    "delete_or_combine_r4_artifacts": false,
+    "publish_r4_score": false,
+    "preserve_as_evidence": true,
+    "replacement_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-20260716",
+    "replacement_attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1",
+    "replacement_requires_new_seal_and_independent_audit": true,
+    "replacement_requires_per_arm_completeness_before_next_arm": true,
+    "replacement_requires_production_sized_variant_fuse_under_existing_aggregate_caps": true
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh \"${PLUGIN_ROOT}/scripts/run-hook.sh\" UserPromptSubmit",
+            "timeout": 10,
+            "statusMessage": "NarratorDB · learning quietly…"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh \"${PLUGIN_ROOT}/scripts/run-hook.sh\" PreCompact",
+            "timeout": 10,
+            "statusMessage": "NarratorDB · preserving context…"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh \"${PLUGIN_ROOT}/scripts/run-hook.sh\" Stop",
+            "timeout": 10,
+            "statusMessage": "NarratorDB · saving durable context…"
+          }
+        ]
+      }
+    ]
+  }
+}

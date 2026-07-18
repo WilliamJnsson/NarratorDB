@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-07-14",
+  "status": "aborted",
+  "run_id": "narratordb-full500-v4flash-deepinfra-aborted-20260714",
+  "system": "NarratorDB",
+  "classification": "Aborted provider-throttling diagnostic; excluded from every final score",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+    "mode": "evaluate-only",
+    "intended_questions": 500,
+    "questions_written_before_abort": 2,
+    "frozen_retrieval_run_id": "5af42210",
+    "cutoffs": [10, 20, 50, 200],
+    "max_workers": 10,
+    "requests_per_minute_per_model_client": 60,
+    "seed": 42
+  },
+  "models": {
+    "answerer": "deepseek/deepseek-v4-flash-20260423",
+    "judge": "deepseek/deepseek-v4-flash-20260423",
+    "reasoning_effort": "high",
+    "temperature": 0,
+    "provider": "DeepInfra",
+    "provider_fallbacks": false
+  },
+  "usage": {
+    "successful_http_200_responses": 16,
+    "upstream_http_429_responses": 66,
+    "prompt_tokens": 76348,
+    "completion_tokens": 1694,
+    "reasoning_tokens": 1740,
+    "response_cost_usd": 0.004945968
+  },
+  "failure": {
+    "exhausted_five_attempt_judge_calls": 1,
+    "empty_judge_outputs": 1,
+    "reason": "DeepInfra throttling caused one judge call to exhaust the unchanged official five-attempt retry policy. The attempt was stopped before an empty judgment could become a systematic false score."
+  },
+  "publication": {
+    "score_published": false,
+    "included_in_final_denominator": false,
+    "included_in_final_cost": false,
+    "replacement": "Fresh all-question run copied from the untouched frozen prediction archive"
+  },
+  "artifact_directory": "reports/longmemeval-full500-v4flash-deepinfra-aborted-20260714"
+}

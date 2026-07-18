@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T23:42:09Z",
+  "benchmark": "LongMemEval-S dev42",
+  "classification": "post-hoc consumed development set; not an untouched holdout, headline benchmark, or Mem0 head-to-head",
+  "purpose": "clean V17 GPT-5.4-mini/OpenAI primary plus unconditional exact replication with first-party DeepSeek judging",
+  "score_fields_present": false,
+  "supersedes_no_score_experiment": {
+    "audit_path": "reports/longmemeval-intelligence-dev42-v17-gpt54mini-openai-high-baidu-paid-pair-r1-20260717/ABANDONED_NO_SCORE_AUDIT.json",
+    "audit_sha256": "4969710308cac71e497a62246786d454479d8b233dfd97ff854259f70d2e8657",
+    "evidence_manifest_sha256": "a8371d591e0df184e2644e3c045dd4989d9a323eaa9b0b8dce762056f28edfd5",
+    "prior_conservative_exposure_usd": 0.015344432,
+    "prior_benchmark_calls": 0,
+    "prior_score_observed": false
+  },
+  "sealed_protocol": {
+    "directory": "benchmark_records/reproduction-v17-gpt54mini-openai-high-deepseek-paid-pair-r1-20260717",
+    "sealed_files_manifest_sha256": "c018277565d0f1c7f521fcb0a32562888a5d533bc823d74c89ee6a408c9cdfea",
+    "bound_inputs_manifest_sha256": "1e4492b02c650260739c3d234251353b4ffb913379b9e55e3b44c41dde3e0011"
+  },
+  "accepted_v17_predictions": {
+    "source_root": "reports/longmemeval-intelligence-dev42-v17-replay-v7gpt54mini-repeat2-attempt2-20260717",
+    "source_prediction_directory": "official-harness/predicted_narratordb-intelligence-dev42-v17-replay-v7gpt54mini-repeat2-attempt2",
+    "prediction_manifest_sha256": "ebf154a1d679259219b47a802b210809f184f10ba0fcff2f90e01d477babb29d",
+    "repeat_identity": "42/42 at top20, top50, and full",
+    "top20_sha256": "c176ba1ff9804e604a0d718ff28daf8e9dfebacbe0480a8ce22efd596aefdcc9",
+    "top50_sha256": "4f748fd166f35e78650e446639baac78b4e26005f8de5b3f39597a4851ce8649",
+    "full_sha256": "cbd4fd9f8d5153340048704c7667650cd18d3143e9ff85be0068891e8a22be5c"
+  },
+  "joint_frozen_arms": [
+    {
+      "label": "primary",
+      "order": 1,
+      "run_root": "reports/longmemeval-intelligence-dev42-v17-gpt54mini-openai-high-deepseek-paid-pair-r1-20260717/primary",
+      "frozen_copy_manifest_sha256": "eb3ba26060e632e4377b70c54494d09f2e3f04a4dcbcc88f494bbc329624a3ec",
+      "hard_fuse_usd": 2.45
+    },
+    {
+      "label": "replication",
+      "order": 2,
+      "run_root": "reports/longmemeval-intelligence-dev42-v17-gpt54mini-openai-high-deepseek-paid-pair-r1-20260717/replication",
+      "frozen_copy_manifest_sha256": "051620bd575fd65c6eafef6f70ac449f296f7e0efc46687523c58f7418f67e19",
+      "hard_fuse_usd": 2.45
+    }
+  ],
+  "arm_execution_rule": "run both full arms in fixed order regardless of primary score; no selective retries",
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_source_tar_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "openai/gpt-5.4-mini",
+    "answerer_provider_only": "OpenAI",
+    "answerer_reasoning_effort": "high",
+    "answerer_temperature_omitted": true,
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_only": "DeepSeek",
+    "judge_allow_fallbacks": false,
+    "judge_temperature": 0,
+    "judge_reasoning_injection": false,
+    "top_k": 200,
+    "cutoffs": [20, 50],
+    "questions": 42,
+    "max_workers": 2,
+    "rpm": 30,
+    "seed": 42,
+    "rejudge": true,
+    "gateway": "OpenRouter",
+    "public_benchmark_routing": true
+  },
+  "pre_score_gates": {
+    "fresh_provider_telemetry_max_age_minutes": 15,
+    "fresh_exact_model_endpoint_metadata": true,
+    "endpoint_model": "deepseek/deepseek-v4-flash-20260423",
+    "endpoint_provider": "DeepSeek",
+    "synthetic_route_canary_required": true,
+    "abort_on_provider_or_model_mismatch": true,
+    "abort_on_incomplete_response": true,
+    "abort_on_http_429": true
+  },
+  "budget": {
+    "prior_conservative_exposure_usd": 0.015344432,
+    "new_canary_hard_fuse_usd": 0.084655568,
+    "primary_hard_fuse_usd": 2.45,
+    "replication_hard_fuse_usd": 2.45,
+    "new_allocation_usd": 4.984655568,
+    "strict_global_campaign_ceiling_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0,
+    "stability_rule": "both independently answered and judged full arms must pass"
+  },
+  "fairness": {
+    "same_prediction_bytes_for_both_arms": true,
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "score_observed_before_joint_precommit": false,
+    "reporting_rule": "V17 post-hoc dev42 development score only; fresh holdout and third-party reproduction remain required"
+  }
+}

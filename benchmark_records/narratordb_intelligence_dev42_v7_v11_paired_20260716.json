@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "record": "narratordb_intelligence_dev42_v7_v11_paired_20260716",
+  "recorded_at": "2026-07-16",
+  "status": "development_negative_not_promoted",
+  "system": "NarratorDB Intelligence",
+  "classification": "paired official-harness evaluation on inspected LongMemEval-S dev42; V11 is a consumed-development local retrieval replay over reused V7 compiler artifacts, not a fresh end-to-end, heldout, third-party, competitor, or publishable 95 percent score",
+  "protocol": {
+    "sha256": "2ca59bd60ff0229f23d07845ad0e1afbd32150c713989ffae2e54501db18aa8f",
+    "questions_per_variant": 42,
+    "cutoffs": [20, 50],
+    "answerer_model": "z-ai/glm-5.2",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "reasoning_effort": "high",
+    "same_harness_models_scope_cutoffs_and_routing": true,
+    "fresh_byte_identical_evaluation_copies": true,
+    "questions_dropped": 0,
+    "selective_retries": false
+  },
+  "variants": {
+    "v7_control": {
+      "top_20": {"correct": 35, "total": 42, "accuracy_percent": 83.3333},
+      "top_50": {"correct": 38, "total": 42, "accuracy_percent": 90.4762},
+      "evaluation_audit_sha256": "4250a93e60060b087e50ba17fe56249f64cb99df23fb0375b9dcc2b2f7639572",
+      "usage_events": 183,
+      "malformed_http_200_responses_retried": 15,
+      "cost_usd": "0.734585144"
+    },
+    "v11_existing_derived_replay": {
+      "top_20": {"correct": 35, "total": 42, "accuracy_percent": 83.3333},
+      "top_50": {"correct": 37, "total": 42, "accuracy_percent": 88.0952},
+      "prediction_manifest_sha256": "1c5f074fbf0d11caa12650e97e7de27d878f43bcc4296cc0be1a7edede956783",
+      "prediction_audit_sha256": "f2f44e87c39c6f7e9bdc79d35e3e1f1f37d04270eab2eca1be1d61ecc73ce59b",
+      "prediction_freeze_metadata_sha256": "ebf98166c5a9a9388eedb1494b2c360bacdffb33be07c03f31fc5eac47761bdb",
+      "evaluation_audit_sha256": "1c050c9ca7d1d1bb5a332b8e94e525cb425fbd97f561d2933872cef2244a472e",
+      "usage_events": 181,
+      "malformed_http_200_responses_retried": 13,
+      "cost_usd": "0.61808457",
+      "compiler_constructed_in_replay": false,
+      "compiler_cache_constructed_in_replay": false,
+      "hosted_compiler_calls": 0,
+      "database_unchanged_during_prediction": true
+    }
+  },
+  "paired_difference_v11_minus_v7": {
+    "top_20_correct": 0,
+    "top_20_percentage_points": 0.0,
+    "top_50_correct": -1,
+    "top_50_percentage_points": -2.381,
+    "promotion_allowed": false
+  },
+  "flip_audit": {
+    "full_retrieval_payloads_identical": 33,
+    "aggregation_pack_payloads_changed": 8,
+    "changed_only_after_rank_131": 1,
+    "top_20": {
+      "pass_to_fail": ["75f70248"],
+      "fail_to_pass": ["afdc33df"],
+      "both_flips_had_identical_retrieval_payloads": true
+    },
+    "top_50": {
+      "pass_to_fail": ["09d032c9", "618f13b2"],
+      "fail_to_pass": ["9d25d4e0"],
+      "identical_retrieval_variance_ids": ["09d032c9"],
+      "aggregation_loss_ids": ["618f13b2"],
+      "aggregation_gain_ids": ["9d25d4e0"]
+    },
+    "aggregation_pack_questions": {
+      "questions": 8,
+      "v7_top_20_correct": 5,
+      "v11_top_20_correct": 5,
+      "v7_top_50_correct": 6,
+      "v11_top_50_correct": 6
+    },
+    "interpretation": "The observed one-question aggregate regression is statistically inconclusive and is entirely explained by an identical-context answerer/evaluator flip. Aggregation itself produced one measured gain and one measured loss."
+  },
+  "integrity": {
+    "both_evaluation_audits_complete": true,
+    "empty_answers": 0,
+    "empty_judges": 0,
+    "frozen_payload_mismatches": 0,
+    "unknown_cost_attempts": 0,
+    "invalid_completion_identities": 0,
+    "all_retry_events_preserved": true
+  },
+  "cost": {
+    "paired_evaluator_total_usd": "1.352669714",
+    "provider_delta_matches_ledgers": true,
+    "campaign_observed_spend_usd": "108.31010877191",
+    "campaign_remaining_headroom_usd": "141.68989122809",
+    "provider_post_pair_remaining_usd": "128.637473952",
+    "campaign_declaration_sha256": "a446b5cccb9e3e6cdff5a7f388efbdab92eebacefc44d70cbcaa791f82c1e794",
+    "campaign_audit_sha256": "04ecff276d87f5a6963d42833061dfec90eef66c47ded348c335610f8359d759",
+    "provider_telemetry_sha256": "81848a8fd9963e736f9979f2e541bd77e0408f82554f99854bc23c13683ac37a"
+  },
+  "disposition": "Preserve V11 as a fair negative consumed-development result. Keep the aggregation architecture, repair only generic cumulative-state and query-relevance behavior, validate locally before any additional paid evaluation, and reserve a 95 percent claim for a fresh precommitted or independent run."
+}

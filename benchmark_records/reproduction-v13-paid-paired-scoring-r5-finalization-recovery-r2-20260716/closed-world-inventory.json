@@ -1,0 +1,20 @@
+{
+  "allowed_bundle_files_before_seal": [
+    "BOUND_INPUTS_SHA256SUMS",
+    "README.md",
+    "closed-world-inventory.json",
+    "commands-r2.json",
+    "launcher-executables-r2.json",
+    "offline-recovery.sb",
+    "preflight-r2.json",
+    "recovery-protocol-r2.json",
+    "run_offline_recovery.sh",
+    "test_finalization_recovery.py",
+    "verify_finalization_recovery.py"
+  ],
+  "allowed_file_created_at_seal": "SHA256SUMS",
+  "allowed_subdirectories": [],
+  "bundle_root": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716",
+  "candidate_status": "UNSEALED_CANDIDATE",
+  "schema_version": "narratordb.v13-paid-r5-recovery-closed-world-inventory.v1"
+}

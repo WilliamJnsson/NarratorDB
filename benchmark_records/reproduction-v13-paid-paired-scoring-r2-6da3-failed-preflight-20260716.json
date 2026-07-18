@@ -1,0 +1,70 @@
+{
+  "schema_version": "narratordb.v13-paid-precommit-failed-preflight.v1",
+  "recorded_at_utc": "2026-07-16T10:17:19Z",
+  "status": "terminal failed local preflight; superseded; never execute",
+  "failed_precommit": {
+    "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716",
+    "seal_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716/SHA256SUMS",
+    "seal_sha256": "6da3710cf160884a4c6d2ca49e417019db92bd7b9d47afa53d5f10a97828d22c",
+    "bound_inputs_manifest_sha256": "6e53dc3c889a027a6c0e88e5b6c17a83e63790e9011615a716c8481b9c1e5587",
+    "sealed_members_still_verify": true,
+    "bound_inputs_still_verify": true,
+    "sealed_members_modified_after_failure": false
+  },
+  "terminal_findings": [
+    {
+      "code": "credential-inherited-by-pre-proxy-children",
+      "finding": "The paid wrapper copied and unset OPENROUTER_API_KEY only after command substitution and external seal, inventory, and input-verification processes had already run. Those pre-proxy children could inherit the provider credential even though they did not require it."
+    },
+    {
+      "code": "credential-exposed-in-external-env-argv",
+      "finding": "The frozen credential-bearing commands used external env with an OPENROUTER_API_KEY=value argument. The secret was therefore transiently present in the env process argument vector instead of being carried only in the intended child environment."
+    }
+  ],
+  "offline_attempt_evidence": {
+    "attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1",
+    "attempt1_present": true,
+    "last_completed_frozen_command_one_based": 14,
+    "last_completed_command_path": "prepare_before_any_model_call[9]",
+    "first_network_command_one_based": 15,
+    "first_network_command_dispatched": false,
+    "non_tool_regular_file_count": 173,
+    "credential_shaped_material_count": 0,
+    "v7_working_copy_manifest_sha256": "b0712a50a9fb4970ac44cc50cb87bd25c19d17c498df0211582c9afc6f48d0e3",
+    "v13_working_copy_manifest_sha256": "e6fb84a0b54167d4fb1e003d9649aa2241a73183376a05eb9244de1c9be7ac06",
+    "v7_initial_ledger_bytes": 1,
+    "v7_initial_ledger_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "v13_initial_ledger_bytes": 2,
+    "v13_initial_ledger_sha256": "75a11da44c802486bc6f65640aa48a730f0f684c5c07a42ba3cd1735eb3fb070",
+    "campaign_audit_before_v7_sha256": "74cab9cb1781ac7c1f7cffa6a03224a8535be30713a751fdca020438efbfece6",
+    "campaign_audit_complete": true,
+    "provider_telemetry_present": false,
+    "ecb_capture_present": false,
+    "execution_authorization_present": false,
+    "proxy_or_health_artifact_present": false,
+    "evaluator_or_attempt_status_present": false,
+    "evaluation_audit_or_score_present": false,
+    "proxy_port_8890_listening": false
+  },
+  "call_and_cost_state": {
+    "compiler_calls": 0,
+    "answerer_calls": 0,
+    "judge_calls": 0,
+    "scoring_calls": 0,
+    "provider_telemetry_calls": 0,
+    "ecb_fx_calls": 0,
+    "external_model_network_calls": 0,
+    "paid_cost_usd": "0"
+  },
+  "disposition": {
+    "execute_failed_precommit": false,
+    "execute_offline_prepared_attempt": false,
+    "repair_in_place": false,
+    "delete_or_resume_attempt1": false,
+    "preserve_as_evidence": true,
+    "replacement_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r3-20260716",
+    "replacement_attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r3-20260716/attempt1",
+    "replacement_must_receive_new_seal_and_independent_audit": true
+  },
+  "credential_material_recorded": false
+}

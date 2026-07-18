@@ -1,0 +1,256 @@
+{
+  "schema_version": "narratordb.v13-paid-paired-command-manifest.v3",
+  "created_at_utc": "2026-07-16T10:20:00Z",
+  "working_directory": "/Users/william/Desktop/narratorDB",
+  "status": "R4 frozen commands only; no paid, model, judge, provider-telemetry, or FX command executed",
+  "runtime_environment": {
+    "required_secret_name": "OPENROUTER_API_KEY",
+    "secret_value_recorded": false,
+    "required_published_seal_name": "NARRATORDB_PAID_PRECOMMIT_SHA256",
+    "published_seal_value_is_external": true,
+    "sealed_python_scripts_use_no_bytecode": true,
+    "standalone_sealed_python_scripts_use_isolated_no_site_startup": true,
+    "frozen_module_commands_disable_site_startup_and_user_site": true,
+    "credential_launcher_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh",
+    "credential_launcher_direct_privileged_bash": true,
+    "credential_in_argument_vector": false,
+    "secret_injected_per_credential_command_only": true,
+    "operator_pty_injection_protocol": {
+      "schema_version": "narratordb.r4-operator-pty-credential-injection.v1",
+      "first_write_exact_line": "set +x +v; set +o history; unset HISTFILE PROMPT_COMMAND BASH_XTRACEFD; trap - DEBUG RETURN; unset OPENROUTER_API_KEY; unset R4_OPERATOR_KEY; IFS= read -r -s -p 'R4_OPENROUTER_KEY> ' R4_OPERATOR_KEY",
+      "first_write_terminator": "one newline only",
+      "first_wait_condition": "wait until the exact R4_OPENROUTER_KEY> prompt is visible and read is blocked before writing again",
+      "second_write_rule": "write only the secret value and one newline; do not queue any export, command, or trailing shell text in this write",
+      "second_wait_condition": "wait until the read returns and the shell prompt is visible before writing again",
+      "secret_shape_gate": {
+        "required_prefix": "sk-or-",
+        "minimum_characters": 30,
+        "performed_with_shell_builtins_before_launcher": true
+      },
+      "third_write_exact_lines_by_action": {
+        "telemetry-before-v7": "case \"${R4_OPERATOR_KEY-}\" in sk-or-*) ;; *) unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96 ;; esac; if (( ${#R4_OPERATOR_KEY} < 30 )); then unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96; fi; OPENROUTER_API_KEY=\"$R4_OPERATOR_KEY\" benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh telemetry-before-v7; rc=$?; unset OPENROUTER_API_KEY R4_OPERATOR_KEY; if (( rc != 0 )); then exit \"$rc\"; fi",
+        "evaluate-v7": "case \"${R4_OPERATOR_KEY-}\" in sk-or-*) ;; *) unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96 ;; esac; if (( ${#R4_OPERATOR_KEY} < 30 )); then unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96; fi; OPENROUTER_API_KEY=\"$R4_OPERATOR_KEY\" benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh evaluate-v7; rc=$?; unset OPENROUTER_API_KEY R4_OPERATOR_KEY; if (( rc != 0 )); then exit \"$rc\"; fi",
+        "telemetry-before-v13": "case \"${R4_OPERATOR_KEY-}\" in sk-or-*) ;; *) unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96 ;; esac; if (( ${#R4_OPERATOR_KEY} < 30 )); then unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96; fi; OPENROUTER_API_KEY=\"$R4_OPERATOR_KEY\" benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh telemetry-before-v13; rc=$?; unset OPENROUTER_API_KEY R4_OPERATOR_KEY; if (( rc != 0 )); then exit \"$rc\"; fi",
+        "evaluate-v13": "case \"${R4_OPERATOR_KEY-}\" in sk-or-*) ;; *) unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96 ;; esac; if (( ${#R4_OPERATOR_KEY} < 30 )); then unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96; fi; OPENROUTER_API_KEY=\"$R4_OPERATOR_KEY\" benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh evaluate-v13; rc=$?; unset OPENROUTER_API_KEY R4_OPERATOR_KEY; if (( rc != 0 )); then exit \"$rc\"; fi",
+        "telemetry-after-pair": "case \"${R4_OPERATOR_KEY-}\" in sk-or-*) ;; *) unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96 ;; esac; if (( ${#R4_OPERATOR_KEY} < 30 )); then unset OPENROUTER_API_KEY R4_OPERATOR_KEY; exit 96; fi; OPENROUTER_API_KEY=\"$R4_OPERATOR_KEY\" benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh telemetry-after-pair; rc=$?; unset OPENROUTER_API_KEY R4_OPERATOR_KEY; if (( rc != 0 )); then exit \"$rc\"; fi"
+      },
+      "third_write_terminator": "one newline only",
+      "credential_transport": "prefix assignment to launcher environment only; never argv; unset local and exported names immediately after return",
+      "nonzero_policy": "terminalize and preserve the attempt; never rerun or resume",
+      "credential_value_recorded": false,
+      "fresh_shell_exact_argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin:/usr/sbin:/sbin",
+        "HOME=/tmp",
+        "TMPDIR=/tmp",
+        "LANG=C",
+        "LC_ALL=C",
+        "/bin/bash",
+        "--noprofile",
+        "--norc",
+        "-p"
+      ],
+      "fresh_shell_working_directory": "/Users/william/Desktop/narratorDB",
+      "fresh_shell_login": false,
+      "fresh_shell_tty_required": true,
+      "reusing_an_existing_shell_forbidden": true,
+      "first_write_safety": "disable xtrace, verbose input, and history; unset history/debug hook state; clear DEBUG and RETURN traps; then read in a separate blocked write",
+      "published_seal_initialization_placeholder": "<EXTERNALLY_PUBLISHED_R4_SEAL>",
+      "published_seal_initialization_template_line": "NARRATORDB_PAID_PRECOMMIT_SHA256='<EXTERNALLY_PUBLISHED_R4_SEAL>'; export NARRATORDB_PAID_PRECOMMIT_SHA256; if (( ${#NARRATORDB_PAID_PRECOMMIT_SHA256} != 64 )); then exit 95; fi; case \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" in ''|*[!0-9a-f]*) exit 95 ;; esac; test \"$(shasum -a 256 benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/SHA256SUMS | awk '{print $1}')\" = \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" || exit 95",
+      "published_seal_initialization_rule": "after the fresh env -i shell starts and before any static or credential action, substitute only the externally published lowercase 64-hex R4 seal for the placeholder, write the resulting nonsecret line plus one newline, require exact length and character-class gates, rehash the physical SHA256SUMS file, and wait for a successful shell prompt return",
+      "parent_export_survives_clean_shell": false
+    }
+  },
+  "static_preflight": [
+    {
+      "id": "verify-r4-seal",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; cd benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716 && shasum -a 256 -c SHA256SUMS",
+      "executed": false
+    },
+    {
+      "id": "verify-bound-inputs",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; shasum -a 256 -c benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/BOUND_INPUTS_SHA256SUMS",
+      "executed": false
+    },
+    {
+      "id": "verify-published-seal",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; test \"$(shasum -a 256 benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/SHA256SUMS | awk '{print $1}')\" = \"$NARRATORDB_PAID_PRECOMMIT_SHA256\"",
+      "executed": false
+    },
+    {
+      "id": "verify-fresh-r4-attempt-root",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; test ! -e reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1 && ! lsof -nP -iTCP:8890 -sTCP:LISTEN >/dev/null 2>&1",
+      "executed": false
+    }
+  ],
+  "prepare_before_any_model_call": [
+    {
+      "id": "extract-frozen-tools",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; mkdir -p reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/harness-source && tar -xzf reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz -C reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source && tar -xf reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/harness-source.tar -C reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/harness-source",
+      "executed": false
+    },
+    {
+      "id": "copy-vendor-harness-environment",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; test ! -e reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/harness-site-packages && cp -R vendor/memory-benchmarks/.venv/lib/python3.12/site-packages reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/harness-site-packages && chmod -R a-w reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/harness-site-packages",
+      "executed": false
+    },
+    {
+      "id": "make-extracted-tools-read-only",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; chmod -R a-w reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/harness-source",
+      "executed": false
+    },
+    {
+      "id": "verify-sealed-staged-sources-before-copy",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-20260716/verify_staged_copy.py --manifest reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/frozen-copy-manifest.json --expected-manifest-sha256 fbb21b8a00502b762874c0a2a24aa6db5a6c9a0185d0b36189b62f958cc123d6 --require-read-only && env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-20260716/verify_staged_copy.py --manifest reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/frozen-copy-manifest.json --expected-manifest-sha256 0ec08135fa114b4903eaa0a7d004d5ec82d22a2c55d313ef270d87d2595d71fa --require-read-only",
+      "executed": false
+    },
+    {
+      "id": "prepare-v7-working-copy",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source/narratordb/benchmarks/paired_evaluation.py prepare --frozen-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini --evaluation-output-root reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/official-harness --project-name narratordb-intelligence-dev42-v7-gpt54mini --question-id-file reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json --expected-questions 42 --expected-question-ids-sha256 60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+      "executed": false
+    },
+    {
+      "id": "prepare-v13-working-copy",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source/narratordb/benchmarks/paired_evaluation.py prepare --frozen-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini --evaluation-output-root reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/official-harness --project-name narratordb-intelligence-dev42-v13-replay-v7gpt54mini --question-id-file reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json --expected-questions 42 --expected-question-ids-sha256 60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+      "executed": false
+    },
+    {
+      "id": "make-working-predictions-writable",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; find reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini -type f -exec chmod u+w {} +",
+      "executed": false
+    },
+    {
+      "id": "make-working-copy-manifests-read-only",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; chmod a-w reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/official-harness/frozen-copy-manifest.json reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/official-harness/frozen-copy-manifest.json",
+      "executed": false
+    },
+    {
+      "id": "create-distinct-initial-ledgers",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; mkdir -p reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation && (umask 022; set -o noclobber; printf '\\n' > reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl; printf '\\n\\n' > reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl) && test \"$(shasum -a 256 reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl | awk '{print $1}')\" = 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b && test \"$(shasum -a 256 reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl | awk '{print $1}')\" = 75a11da44c802486bc6f65640aa48a730f0f684c5c07a42ba3cd1735eb3fb070",
+      "executed": false
+    },
+    {
+      "id": "campaign-audit-before-v7",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; mkdir -p reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/precall && env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-campaign-audit --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/precall/campaign-audit-before-v7.json",
+      "executed": false
+    },
+    {
+      "id": "provider-telemetry-before-v7",
+      "command": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh telemetry-before-v7",
+      "credential_process": true,
+      "executed": false
+    },
+    {
+      "id": "ecb-before-v7",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C NO_PROXY='*' no_proxy='*' PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/capture_ecb_fx.py --repository-root . --raw-output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/precall/ecb-daily-before-v7.xml --metadata-output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/precall/ecb-usd-eur-before-v7.json --parser benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py",
+      "executed": false
+    },
+    {
+      "id": "build-and-audit-before-v7-authorization",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-authorization --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --phase before-v7 --run-root reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control --project-name narratordb-intelligence-dev42-v7-gpt54mini --dataset-path reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json --published-precommit-sha256 \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/precall/execution-authorization-before-v7.json && env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-audit --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --phase before-v7 --run-root reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control --project-name narratordb-intelligence-dev42-v7-gpt54mini --dataset-path reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json --published-precommit-sha256 \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" --authorization reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/precall/execution-authorization-before-v7.json --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/precall/execution-authorization-before-v7.audit.json",
+      "executed": false
+    }
+  ],
+  "paid_pair": [
+    {
+      "id": "execute-v7-once",
+      "command": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh evaluate-v7",
+      "credential_process": true,
+      "executed": false
+    },
+    {
+      "id": "identity-audit-v7",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; (umask 222; set -o noclobber; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_evaluator_ledger.py --ledger \"$PWD/reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl\" > reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/ledger-identity-audit.json) && chmod a-w reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl",
+      "executed": false
+    },
+    {
+      "id": "campaign-audit-before-v13",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; mkdir -p reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/between && env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-campaign-audit --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/between/campaign-audit-before-v13.json",
+      "executed": false
+    },
+    {
+      "id": "provider-telemetry-before-v13",
+      "command": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh telemetry-before-v13",
+      "credential_process": true,
+      "executed": false
+    },
+    {
+      "id": "ecb-before-v13",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C NO_PROXY='*' no_proxy='*' PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/capture_ecb_fx.py --repository-root . --raw-output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/between/ecb-daily-before-v13.xml --metadata-output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/between/ecb-usd-eur-before-v13.json --parser benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py",
+      "executed": false
+    },
+    {
+      "id": "build-and-audit-before-v13-authorization",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-authorization --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --phase before-v13 --run-root reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first --project-name narratordb-intelligence-dev42-v13-replay-v7gpt54mini --dataset-path reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json --published-precommit-sha256 \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/between/execution-authorization-before-v13.json && env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-audit --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --phase before-v13 --run-root reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first --project-name narratordb-intelligence-dev42-v13-replay-v7gpt54mini --dataset-path reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json --published-precommit-sha256 \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" --authorization reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/between/execution-authorization-before-v13.json --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/between/execution-authorization-before-v13.audit.json",
+      "executed": false
+    },
+    {
+      "id": "execute-v13-once",
+      "command": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh evaluate-v13",
+      "credential_process": true,
+      "executed": false
+    }
+  ],
+  "postrun_before_score_release": [
+    {
+      "id": "identity-audit-v13",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; (umask 222; set -o noclobber; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_evaluator_ledger.py --ledger \"$PWD/reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl\" > reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/ledger-identity-audit.json) && chmod a-w reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl",
+      "executed": false
+    },
+    {
+      "id": "final-campaign-audit",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; mkdir -p reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun && env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-campaign-audit --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun/campaign-audit-after-pair.json",
+      "executed": false
+    },
+    {
+      "id": "final-provider-telemetry",
+      "command": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/launch_with_openrouter_key.sh telemetry-after-pair",
+      "credential_process": true,
+      "executed": false
+    },
+    {
+      "id": "final-ecb-capture",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C NO_PROXY='*' no_proxy='*' PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/capture_ecb_fx.py --repository-root . --raw-output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun/ecb-daily-after-pair.xml --metadata-output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun/ecb-usd-eur-after-pair.json --parser benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py",
+      "executed": false
+    },
+    {
+      "id": "build-audit-and-verify-final-spend",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-finalization --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --published-precommit-sha256 \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun/final-spend-authorization.json && env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-finalization-audit --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --published-precommit-sha256 \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" --authorization reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun/final-spend-authorization.json --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun/final-spend-authorization.audit.json && (umask 222; set -o noclobber; env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py verify-finalization --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --published-precommit-sha256 \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" > reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun/score-release-verification.json) && jq -e '.ok == true and .score_release_authorized == true and .credential_recorded == false and .model_content_recorded == false' reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/postrun/score-release-verification.json >/dev/null",
+      "executed": false
+    },
+    {
+      "id": "evaluation-audit-v7",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; (umask 222; set -o noclobber; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source/narratordb/benchmarks/evaluation_audit.py --evaluated-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini --frozen-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini --usage-log reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl --evaluator-log reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation/evaluate.log --expected-questions 42 --cutoffs 20,50 --question-id-file reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json --require-complete --require-official-score-complete > reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation-audit.json)",
+      "executed": false
+    },
+    {
+      "id": "evaluation-audit-v13",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; (umask 222; set -o noclobber; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source/narratordb/benchmarks/evaluation_audit.py --evaluated-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini --frozen-directory reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini --usage-log reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl --evaluator-log reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation/evaluate.log --expected-questions 42 --cutoffs 20,50 --question-id-file reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json --require-complete --require-official-score-complete > reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation-audit.json)",
+      "executed": false
+    },
+    {
+      "id": "explicit-zero-counter-and-denominator-gate",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; for audit in reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v7-control/evaluation-audit.json reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/v13-first/evaluation-audit.json; do jq -e '.complete == true and .official_harness_score_complete == true and .evaluated_questions == 42 and .frozen_questions == 42 and .cutoffs == [\"top_20\",\"top_50\"] and .metrics.top_20.total == 42 and .metrics.top_50.total == 42 and (.validation.empty_answers|length) == 0 and (.validation.empty_judges|length) == 0 and (.validation.frozen_payload_mismatches|length) == 0 and (.validation.missing_evaluated_ids|length) == 0 and (.validation.extra_evaluated_ids|length) == 0 and (.validation.missing_cutoffs|length) == 0 and (.validation.invalid_scores|length) == 0 and (.validation.inconsistent_verdicts|length) == 0 and .usage.unknown_cost_attempts == 0 and .usage.invalid_completion_identities == 0 and .usage.publication_ready == true' \"$audit\" >/dev/null || exit 1; done",
+      "executed": false
+    },
+    {
+      "id": "verify-staged-inputs-unchanged",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-20260716/verify_staged_copy.py --manifest reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/frozen-copy-manifest.json --expected-manifest-sha256 fbb21b8a00502b762874c0a2a24aa6db5a6c9a0185d0b36189b62f958cc123d6 --require-read-only && env -u OPENROUTER_API_KEY -u ANTHROPIC_API_KEY -u GOOGLE_API_KEY -u GEMINI_API_KEY PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-20260716/verify_staged_copy.py --manifest reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/frozen-copy-manifest.json --expected-manifest-sha256 0ec08135fa114b4903eaa0a7d004d5ec82d22a2c55d313ef270d87d2595d71fa --require-read-only",
+      "executed": false
+    }
+  ],
+  "score_release_after_every_gate": [
+    {
+      "id": "write-paired-result",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; env -i PATH=\"$PATH\" HOME=\"$HOME\" TMPDIR=\"${TMPDIR:-/tmp}\" LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I -S -B benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/verify_dynamic_admission.py build-paired-result --repository-root . --requirements benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json --published-precommit-sha256 \"$NARRATORDB_PAID_PRECOMMIT_SHA256\" --output reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/paired-result.json",
+      "executed": false
+    },
+    {
+      "id": "seal-paired-result",
+      "command": "unset OPENROUTER_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY GEMINI_API_KEY OPENAI_API_KEY; (umask 222; set -o noclobber; shasum -a 256 reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/paired-result.json > reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/PAIRED_RESULT_SHA256SUMS)",
+      "executed": false
+    }
+  ],
+  "failure_policy": "Any nonzero command, missing or stale authorization, incomplete variant, failed identity/spend/result assertion, or route/cost mismatch terminates attempt1. Preserve every artifact. Do not rerun, resume, overwrite, delete, selectively repair, or combine it with a later attempt."
+}

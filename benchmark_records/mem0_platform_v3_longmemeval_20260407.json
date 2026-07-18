@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-07-14",
+  "status": "published-reference",
+  "run_id": "mem0-platform-v3-longmemeval-published-20260407",
+  "system": "Mem0 Platform v3",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit_observed": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_main_verified_at": "2026-07-14",
+    "questions": 500,
+    "all_questions": true,
+    "published_cutoffs": [50, 200]
+  },
+  "sources": {
+    "repository": "https://github.com/mem0ai/memory-benchmarks",
+    "commit": "https://github.com/mem0ai/memory-benchmarks/tree/4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "research_page": "https://mem0.ai/research",
+    "data_last_updated_claim": "May 2026"
+  },
+  "published_scores": {
+    "source": "README table at the pinned harness commit",
+    "top_50": {
+      "correct": 474,
+      "total": 500,
+      "accuracy_percent": 94.8,
+      "by_question_type": {
+        "knowledge-update": "73/78",
+        "multi-session": "124/133",
+        "single-session-assistant": "55/56",
+        "single-session-preference": "28/30",
+        "single-session-user": "69/70",
+        "temporal-reasoning": "125/133"
+      }
+    },
+    "top_200": {
+      "correct": 472,
+      "total": 500,
+      "accuracy_percent": 94.4,
+      "by_question_type": {
+        "knowledge-update": "73/78",
+        "multi-session": "117/133",
+        "single-session-assistant": "55/56",
+        "single-session-preference": "29/30",
+        "single-session-user": "69/70",
+        "temporal-reasoning": "129/133"
+      }
+    }
+  },
+  "bundled_artifacts": {
+    "top_50": {
+      "path_in_source": "results/platform/longmemeval_top50_results.json",
+      "bytes": 669321,
+      "sha256": "8bbf06e4205dce1df9c2dff9a9ddf99074865ca40019e1c5a10f0d3a37b4275c",
+      "run_id": "eaeb3ddf",
+      "timestamp": "20260407_094447",
+      "answerer_model": "gpt-5",
+      "judge_model": "gpt-5",
+      "provider": "azure",
+      "recomputed_from_cutoff_results": {
+        "correct": 452,
+        "total": 500,
+        "accuracy_percent": 90.4
+      },
+      "retrieval_latency_ms": {
+        "samples": 500,
+        "mean": 2381.8756,
+        "median": 2468.1,
+        "p95_nearest_rank": 3353.5,
+        "min": 1063.3,
+        "max": 5826.4
+      }
+    },
+    "top_200": {
+      "path_in_source": "results/platform/longmemeval_results.json",
+      "bytes": 446141,
+      "sha256": "58bd6d8934a54d8cd568ef481bbd3e37270c2c74a5d59713b661d4c3ddb332a1",
+      "timestamp": "20260406_101243",
+      "answerer_model": "gpt-5",
+      "judge_model": "gpt-5",
+      "provider": "not recorded in this older artifact schema",
+      "recomputed_from_cutoff_results": {
+        "correct": 467,
+        "total": 500,
+        "accuracy_percent": 93.4
+      },
+      "retrieval_latency_ms": "not populated in this artifact"
+    }
+  },
+  "source_consistency_audit": {
+    "status": "unresolved upstream discrepancy",
+    "finding": "The pinned README publishes 474/500 at top 50 and 472/500 at top 200, while the JSON artifacts committed beside it contain 452 PASS judgments at top 50 and 467 PASS judgments at top 200.",
+    "policy": "NarratorDB records both values and does not silently substitute one for the other. Published headline comparisons use the README values and explicitly label them as vendor-published; artifact-level reproductions use the recomputed JSON values."
+  },
+  "comparability": {
+    "same_dataset_claimed": true,
+    "same_harness_family": true,
+    "same_answerer_and_judge_as_v4_flash_run": false,
+    "same_memory_backend_access_available": false,
+    "valid_use": "Published reference only; not an exact same-model head-to-head until Mem0 access and the same pinned answerer/judge are used."
+  }
+}
