@@ -1,0 +1,20 @@
+{
+  "schema_version": "narratordb.provider-key-telemetry.v1",
+  "observed_at_utc": "2026-07-16T01:20:37Z",
+  "source_endpoint": "https://openrouter.ai/api/v1/key",
+  "request_class": "authenticated content-free account telemetry; no model request",
+  "currency": "USD",
+  "provider_limit_usd": 250.0,
+  "provider_usage_usd": 119.973401214,
+  "provider_remaining_usd": 130.026598786,
+  "provider_usage_daily_usd": 0.0,
+  "provider_usage_weekly_usd": 119.973401214,
+  "provider_usage_monthly_usd": 119.973401214,
+  "is_free_tier": false,
+  "campaign_audit_observed_spend_usd": 106.92098393791,
+  "campaign_declaration_headroom_usd": 143.07901606209,
+  "admission_headroom_usd": 130.026598786,
+  "admission_rule": "Use the lesser of provider-reported remaining credit and declared campaign headroom.",
+  "scope_note": "Provider usage includes account spend outside the declared NarratorDB 95% campaign boundary.",
+  "credential_policy": "Runtime authorization only; no key, label, account identifier, prompt, or model content is recorded."
+}

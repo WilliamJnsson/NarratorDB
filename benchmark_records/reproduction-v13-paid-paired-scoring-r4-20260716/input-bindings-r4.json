@@ -1,0 +1,152 @@
+{
+  "schema_version": "narratordb.v13-paid-paired-input-bindings.v4",
+  "created_at_utc": "2026-07-16T11:05:00Z",
+  "status": "R4 mechanical frozen-local-input replacement only; R3 is terminal failed pre-network; no R4 paid or remote evaluator call has started",
+  "repository_root": "/Users/william/Desktop/narratorDB",
+  "supersession_boundary": {
+    "failed_precommit_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r3-20260716",
+    "failed_precommit_seal_sha256": "90f66a881b8bb17079ed39f9bd4cd843e118b2a4febba290f5d0815c11a5e364",
+    "failed_preflight_record_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r3-90f6-failed-preflight-20260716.json",
+    "failed_preflight_record_sha256": "798d44009f6013c93d3d62c7bf0b2e8c96ba1191ebf1713944e94efaabfa7a0c",
+    "failed_preflight_record_seal_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r3-90f6-failed-preflight-20260716.SHA256SUMS",
+    "failed_preflight_record_seal_sha256": "189566c2c83cdbab7653a7ddeb9643df9f6563fda67b05ddbdfe44c7f5dd4bf1",
+    "reused_failed_revision_members": {
+      "input-bindings-r3.json": "frozen staged-input metadata",
+      "BOUND_INPUTS_SHA256SUMS": "read-only verification evidence for frozen staged inputs; never an R3 execution authorization"
+    },
+    "reused_input_bindings_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r3-20260716/input-bindings-r3.json",
+    "reused_input_bindings_sha256": "f6e7dec45e25818b34b52e8f7c6be8f7eec3a3fafdc4411eec3d45f95d946167",
+    "reused_bound_inputs_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r3-20260716/BOUND_INPUTS_SHA256SUMS",
+    "reused_bound_inputs_manifest_sha256": "6b7161170f3feebdcb054e91d2e882f3a0aa3a266259f629b9a2272a0066b0dc",
+    "old_wrapper_protocol_commands_authorization_or_preflight_reused": false
+  },
+  "fair_baseline": {
+    "protocol_path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/paired-evaluation-protocol.json",
+    "protocol_sha256": "2ca59bd60ff0229f23d07845ad0e1afbd32150c713989ffae2e54501db18aa8f",
+    "paired_result_seal_path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/PAIRED_RESULT_SHA256SUMS",
+    "paired_result_seal_sha256": "89d2995b32a9f1d07cbf44cb4663ecaaee2e935f20d225618c8b81c30afc8b5b"
+  },
+  "dataset_scope": {
+    "dataset_path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids_path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "questions": 42,
+    "cutoffs": [
+      20,
+      50
+    ]
+  },
+  "staged_inputs": [
+    {
+      "label": "v7-control",
+      "source_prediction_manifest_path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/PREDICTION_SHA256SUMS",
+      "source_prediction_manifest_sha256": "e0f54d6879f46d76a51c2b785b67b5ae45c790a591263bab4d73a0b7211b8cac",
+      "staged_copy_manifest_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/frozen-copy-manifest.json",
+      "staged_copy_manifest_sha256": "fbb21b8a00502b762874c0a2a24aa6db5a6c9a0185d0b36189b62f958cc123d6",
+      "files": 84,
+      "predictions": 42,
+      "ingestion_checkpoints": 42,
+      "content_read_only": true
+    },
+    {
+      "label": "v13-first",
+      "source_prediction_manifest_path": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/PREDICTION_SHA256SUMS",
+      "source_prediction_manifest_sha256": "347e5db630bfc5b6a2725d137bccb2ec90130c534edda259fda70d90fa610c74",
+      "source_prediction_freeze_manifest_path": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/PREDICTION_FREEZE_SHA256SUMS",
+      "source_prediction_freeze_manifest_sha256": "6c3ab41516aea642d0fdd7b9f04ffae175ddb704644cbbe4710696838341d03f",
+      "repeat_success_seal_path": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/REPEAT1_SUCCESS_SHA256SUMS",
+      "repeat_success_seal_sha256": "263093f333b853cabb5fb3a124009e4debfd9a3cdaaf62e28dd0a987b93c9b23",
+      "staged_copy_manifest_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/frozen-copy-manifest.json",
+      "staged_copy_manifest_sha256": "0ec08135fa114b4903eaa0a7d004d5ec82d22a2c55d313ef270d87d2595d71fa",
+      "files": 84,
+      "predictions": 42,
+      "ingestion_checkpoints": 42,
+      "content_read_only": true
+    }
+  ],
+  "frozen_execution_sources": {
+    "transport_archive_path": "reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz",
+    "transport_archive_sha256": "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+    "transport_execution_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source",
+    "paired_copy_helper_sha256": "4fccaad20a2560f2fe06fc194fe48e8e6ad78239a006204beaf4b2781accdb7a",
+    "paired_copy_helper_execution_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source/narratordb/benchmarks/paired_evaluation.py",
+    "proxy_sha256": "16b8f9118ca5df8342271f6b988f53af8776a4efcb323bc550dd7d668c57e3a1",
+    "evaluation_auditor_sha256": "011708f614bee9cfc15209986bc68969f3c70191a06f540d3a86a2d7f74aeefc",
+    "evaluation_auditor_execution_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/v11-source/narratordb/benchmarks/evaluation_audit.py",
+    "preparation_and_auditing_use_archive_verified_attempt_local_source": true,
+    "budget_auditor_sha256": "e25bfaf8a6fa56051af0c694a3925036b5c487176dcb94e275dcaeb1daeb1a65",
+    "budget_auditor_history_path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source/narratordb/benchmarks/history.py",
+    "budget_auditor_history_sha256": "d1a8bf39a60c34f4abcec5877b2c3538dd754ecb8b54610b58b49cd9273ab574",
+    "harness_archive_path": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/harness-source.tar",
+    "harness_archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_llm_client_sha256": "b0dc8f4172ed11f7f4161df47c77ca83dd5996b075494cc39bd6a4d0a1f93701",
+    "harness_python": "3.12.13",
+    "harness_python_cache_tag": "cpython-312",
+    "harness_python_executable_symlink_target": "/Users/william/.local/share/uv/python/cpython-3.12-macos-aarch64-none/bin/python3.12",
+    "harness_python_executable_resolved_path": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/bin/python3.12",
+    "harness_python_executable_sha256": "7b05d803bbc1bbfc81644af4faf2b88f0a37b8de96b9f42c1e08033e2cd0848a",
+    "harness_pyvenv_config_sha256": "65734425804832eb2ee6637f908377ac4ff3d76874e55ea0847d0b24a610123b",
+    "harness_stdlib_path": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12",
+    "harness_stdlib_file_count": 1482,
+    "harness_stdlib_directory_count": 159,
+    "harness_stdlib_total_bytes": 26337639,
+    "harness_stdlib_inventory_sha256": "eb332e487b2140ef0e67b5684d300c670029de7e6835ccf72f397a4c3a8c0884",
+    "openai_sdk": "2.45.0",
+    "attempt_local_harness_site_packages_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1/tools/harness-site-packages",
+    "harness_site_packages_file_count": 4822,
+    "harness_site_packages_directory_count": 347,
+    "harness_site_packages_total_bytes": 33425397,
+    "harness_site_packages_inventory_sha256": "b7c7a5d52b81610d26f2109edeffd5c786eaf763ad74b036931b28124683b2f2"
+  },
+  "replacement_execution_controls": {
+    "execution_authorization_requirements_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/execution-authorization-requirements.json",
+    "execution_authorization_requirements_sha256": "05aeb9a5d645d698a0a50bad194be7c777d9bc40e15bec405ce9a303292280d9",
+    "dynamic_admission_verifier_sha256": "ba12bad0940f872630b8134c82a0e7958617857bf65faf9c4c442f7e31976bf5",
+    "dynamic_admission_schema_sha256": "88eb85632ea8903afa5b70fad31e19ffdc525ecfa3aaf30224f11537e12f33fc",
+    "provider_telemetry_capture_sha256": "4e11ab31200bf82612dcd68f3d6ce9c4c548b10d3128180165ca07b3682fccaf",
+    "ecb_fx_capture_sha256": "bb7b301e855167c488c073ff5bbd8e3e02522b54f293491d86b873013592ed61",
+    "paid_variant_wrapper_sha256": "ae3a41210f0608488f8203b83096bf597984ae717b5c1ba0373a1096d1fe85b5",
+    "guarded_harness_runner_sha256": "2c7f70cc30f4c4f8453116fc0a9ae0fecfb5e4fef256faed9222c56a2975543e",
+    "direct_ledger_verifier_sha256": "cd9fbcc47dba6606aaf0e8215257eb6dc356971715329221243a039b42771f08",
+    "dynamic_admission_tests_sha256": "cd3748d6eb1b226f27687ef5a1007a516e01e590b9d70c2b0799505ccfc4f821",
+    "direct_ledger_tests_sha256": "5e28dbf0707199ee2757d6ffd9fa047e1eb22227dcb1af3035aec06ff0259422",
+    "focused_tests_passed": 78,
+    "full_relevant_tests_passed": 112,
+    "credential_launcher_sha256": "b3d12887935b3b11ff9b871d2f6a4f6bd0a7f945171995d7a8665e4191d00e65",
+    "dynamic_admission_tests_path": "tests/test_v13_paid_admission_r4.py",
+    "credential_transport_tests_path": "tests/test_v13_paid_credential_transport_r4.py",
+    "credential_transport_tests_sha256": "5fe8634f02b64991c8f76e24c74007f8bb091522011db1e87524bd184ea2f923",
+    "operator_pty_commands_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r4-20260716/commands-r4.json",
+    "operator_pty_commands_sha256": "f1dbf90751052364ad63b16b371925bdf093c1b177935f9e33498294ceb3b265"
+  },
+  "campaign_declaration": {
+    "path": "benchmark_records/budgets/narratordb_95_campaign_v13_paid_pair_r4_20260716.json",
+    "sha256": "861e013ca604ef0c31c3aa77f205c4de71c56a1ee938a41902d31f037c095039",
+    "seal_path": "benchmark_records/budgets/narratordb_95_campaign_v13_paid_pair_r4_20260716.SHA256SUMS",
+    "seal_sha256": "4ed4e2262d266f8adc145e6c98f1df7f94240e1f20721e80da58c02c67dc4097",
+    "baseline_audit_path": "benchmark_records/budgets/narratordb_95_campaign_20260716.audit.json",
+    "baseline_audit_sha256": "04ecff276d87f5a6963d42833061dfec90eef66c47ded348c335610f8359d759",
+    "future_ledger_paths_predeclared": 2
+  },
+  "dynamic_state_at_precommit": {
+    "attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r4-20260716/attempt1",
+    "attempt_root_present": false,
+    "usage_ledgers_present": 0,
+    "dynamic_campaign_audits_present": 0,
+    "provider_telemetry_records_present": 0,
+    "ecb_fx_records_present": 0,
+    "post_pair_reconciliation_records_present": 0,
+    "execution_authorization_present": false,
+    "answerer_calls": 0,
+    "judge_calls": 0,
+    "scoring_calls": 0,
+    "external_model_network_calls": 0,
+    "paid_cost_usd": "0"
+  },
+  "credentials": {
+    "stored": false,
+    "runtime_environment_only": true
+  }
+}

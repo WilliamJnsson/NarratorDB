@@ -1,0 +1,233 @@
+{
+  "schema_version": "narratordb.paired-evaluation-protocol.v1",
+  "created_at_utc": "2026-07-15T22:22:17Z",
+  "status": "precommitted-before-first-v7-or-v8-judged-score",
+  "classification": "inspected LongMemEval-S dev42 development comparison; not a sealed heldout claim",
+  "purpose": "Evaluate frozen V7 and V8 retrieval predictions under one identical answerer/judge protocol without mutating either frozen prediction archive.",
+  "scope": {
+    "dataset": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "questions": 42,
+    "selection": "all questions in the frozen 42-question dataset; no score-dependent exclusions",
+    "run_id": "v7m42a1"
+  },
+  "harness": {
+    "repository": "vendor/memory-benchmarks",
+    "commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "tracked_worktree_clean_when_protocol_was_written": true,
+    "module": "benchmarks.longmemeval.run",
+    "mode": "answerer",
+    "evaluate_only": true,
+    "force_fresh_answer_and_judge_for_every_prediction": true,
+    "all_questions": true,
+    "top_k": 200,
+    "top_k_cutoffs": [20, 50],
+    "max_workers": 10,
+    "rpm_per_llm_client": 60,
+    "seed": 42,
+    "temperature_owned_by_unmodified_harness": 0,
+    "retry_policy_owned_by_unmodified_harness": "five attempts per generation"
+  },
+  "evaluator": {
+    "transport": "OpenRouter through NarratorDB content-free local proxy",
+    "answerer_model": "z-ai/glm-5.2",
+    "answerer_provider_interface": "openai",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_interface": "openai",
+    "reasoning_effort": "high",
+    "provider_allowlist": [
+      "DeepInfra",
+      "StreamLake",
+      "GMICloud",
+      "Baidu",
+      "AtlasCloud"
+    ],
+    "allow_fallbacks_within_allowlist": true,
+    "proxy_upstream_timeout_seconds": 180,
+    "soft_usage_fuse_usd_per_variant": 1.25,
+    "credentials": "runtime environment only; never stored in protocol, commands, logs, or artifacts"
+  },
+  "variants": [
+    {
+      "label": "v7",
+      "project_name": "narratordb-intelligence-dev42-v7-gpt54mini",
+      "frozen_prediction_directory": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini",
+      "evaluation_output_root": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/evaluation/official-harness",
+      "evaluated_prediction_directory": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini",
+      "usage_ledger": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/evaluation/openrouter-usage.jsonl",
+      "proxy_log": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/evaluation/proxy.log",
+      "evaluator_log": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/evaluation/evaluate.log",
+      "evaluation_audit": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/evaluation/evaluation-audit.json"
+    },
+    {
+      "label": "v8",
+      "project_name": "narratordb-intelligence-dev42-v8-replay-v7gpt54mini",
+      "frozen_prediction_directory": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v8-replay-v7gpt54mini",
+      "evaluation_output_root": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/evaluation/official-harness",
+      "evaluated_prediction_directory": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v8-replay-v7gpt54mini",
+      "usage_ledger": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/evaluation/openrouter-usage.jsonl",
+      "proxy_log": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/evaluation/proxy.log",
+      "evaluator_log": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/evaluation/evaluate.log",
+      "evaluation_audit": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/evaluation/evaluation-audit.json"
+    }
+  ],
+  "execution_order": [
+    "Verify dataset, question-ID, harness commit, frozen prediction audit, and frozen prediction manifest before either evaluation.",
+    "Prepare both fresh byte-identical evaluation copies before exposing either copy to the paid evaluator.",
+    "Run V7 and V8 sequentially, each with a fresh proxy process and a separate usage ledger under the same proxy settings.",
+    "Stop each proxy, preserve all retry/error events, verify its frozen source is unchanged, and run the evaluation auditor against that source.",
+    "Require a 42-question official-harness-complete result at both cutoffs for both variants before comparing aggregate scores. Never drop or selectively retry failed questions after seeing scores."
+  ],
+  "commands": {
+    "shared_preflight": [
+      [
+        "shasum",
+        "-a",
+        "256",
+        "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+        "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json"
+      ],
+      [
+        "git",
+        "-C",
+        "vendor/memory-benchmarks",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "vendor/memory-benchmarks",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ]
+    ],
+    "prepare_template": [
+      ".venv/bin/python",
+      "-m",
+      "narratordb.benchmarks.paired_evaluation",
+      "prepare",
+      "--frozen-directory",
+      "{frozen_prediction_directory}",
+      "--evaluation-output-root",
+      "{evaluation_output_root}",
+      "--project-name",
+      "{project_name}",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--expected-questions",
+      "42",
+      "--expected-question-ids-sha256",
+      "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff"
+    ],
+    "proxy_template": [
+      ".venv/bin/python",
+      "-m",
+      "narratordb.benchmarks.openrouter_proxy",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "8890",
+      "--provider-allow",
+      "DeepInfra,StreamLake,GMICloud,Baidu,AtlasCloud",
+      "--reasoning-effort",
+      "high",
+      "--usage-log",
+      "{usage_ledger}",
+      "--max-cost-usd",
+      "1.25",
+      "--timeout",
+      "180"
+    ],
+    "proxy_required_environment": [
+      "OPENROUTER_API_KEY"
+    ],
+    "evaluate_template": [
+      "vendor/memory-benchmarks/.venv/bin/python",
+      "-m",
+      "benchmarks.longmemeval.run",
+      "--project-name",
+      "{project_name}",
+      "--dataset-path",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "--all-questions",
+      "--evaluate-only",
+      "--rejudge",
+      "--run-id",
+      "v7m42a1",
+      "--mode",
+      "answerer",
+      "--provider",
+      "openai",
+      "--judge-provider",
+      "openai",
+      "--answerer-model",
+      "z-ai/glm-5.2",
+      "--judge-model",
+      "deepseek/deepseek-v4-flash-20260423",
+      "--top-k",
+      "200",
+      "--top-k-cutoffs",
+      "20,50",
+      "--max-workers",
+      "10",
+      "--rpm",
+      "60",
+      "--seed",
+      "42",
+      "--output-dir",
+      "{evaluation_output_root}"
+    ],
+    "evaluate_environment": {
+      "OPENAI_API_KEY": "local-transport",
+      "OPENAI_BASE_URL": "http://127.0.0.1:8890/v1",
+      "PYTHONPATH": "vendor/memory-benchmarks"
+    },
+    "verify_frozen_template": [
+      ".venv/bin/python",
+      "-m",
+      "narratordb.benchmarks.paired_evaluation",
+      "verify-frozen",
+      "--manifest",
+      "{evaluation_output_root}/frozen-copy-manifest.json"
+    ],
+    "audit_template": [
+      ".venv/bin/python",
+      "-m",
+      "narratordb.benchmarks.evaluation_audit",
+      "--evaluated-directory",
+      "{evaluated_prediction_directory}",
+      "--frozen-directory",
+      "{frozen_prediction_directory}",
+      "--usage-log",
+      "{usage_ledger}",
+      "--evaluator-log",
+      "{evaluator_log}",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--expected-questions",
+      "42",
+      "--cutoffs",
+      "20,50",
+      "--require-official-score-complete",
+      "--output",
+      "{evaluation_audit}"
+    ]
+  },
+  "integrity_requirements": {
+    "prediction_archives_are_never_evaluated_in_place": true,
+    "copy_tool_parses_prediction_payloads": false,
+    "copy_source_must_be_stable_and_byte_identical_to_destination": true,
+    "evaluation_output_root_must_be_absent_before_copy": true,
+    "same_dataset_scope_run_id_models_prompts_cutoffs_workers_rpm_and_routing": true,
+    "variant_specific_project_names_are_required_to_match_harness_directory_names": true,
+    "separate_usage_ledgers": true,
+    "no_selective_retries_after_score_inspection": true,
+    "preserve_upstream_errors_malformed_responses_and_all_paid_attempts": true,
+    "official_score_completeness_required_before_comparison": true,
+    "frozen_payload_equality_checked_by_evaluation_audit": true
+  }
+}

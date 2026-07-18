@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "protocol_id": "narratordb-v12-existing-derived-dev42-replay-repeat1-20260716",
+  "frozen_at_utc": "2026-07-16T03:36:16Z",
+  "status": "frozen before repeat1 replay database creation or prediction",
+  "classification": "zero-model deterministic reproducibility repeat of the first V12 local retrieval/render replay on consumed LongMemEval-S dev42; not a score, fresh compiler run, untouched result, third-party result, or publishable claim",
+  "purpose": "independently recreate the first frozen V12 local retrieval payloads from a second fresh V7 database clone and require exact latency-stripped canonical identity",
+  "content_review_policy": {
+    "dev42_consumed_before_v12": true,
+    "prior_v6_through_v11_scores_known": true,
+    "automated_tools_may_process_content": true,
+    "human_tuning_from_failures": "allowed only as explicitly labeled consumed-development analysis and must remain generic",
+    "publishable_95_percent_claim_permitted": false
+  },
+  "fixed_bindings": {
+    "v12_source_archive": "reports/intelligence-v12-source-20260716T031031Z/narratordb-v12-source.tar.gz",
+    "v12_source_archive_sha256": "23eb843761bcb50aa4e36c0c517ebd2b26d9244cc63f368101a512e84977564e",
+    "v12_source_metadata": "reports/intelligence-v12-source-20260716T031031Z/source-metadata.json",
+    "v12_source_metadata_sha256": "096a0b5ff85afc7520bc30e6302de618d1c84db055df03e70d8edfdc17c3eb55",
+    "v12_source_sha256s": "reports/intelligence-v12-source-20260716T031031Z/SHA256SUMS",
+    "v12_source_sha256s_sha256": "106bfac06ea4d273d7add53fd2ebc48df3500dc0f4905de7b9a3aa1ad82dc318",
+    "v12_source_archive_entries": 84,
+    "v12_source_archive_member_list_sha256": "d90f675b655727a763854d61e5309f216923c57e70741ab927b5e616ab28a9cf",
+    "predecessor_v11_source_archive_sha256": "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+    "predecessor_v11_prediction_manifest_sha256": "1c5f074fbf0d11caa12650e97e7de27d878f43bcc4296cc0be1a7edede956783",
+    "predecessor_v11_prediction_audit_sha256": "f2f44e87c39c6f7e9bdc79d35e3e1f1f37d04270eab2eca1be1d61ecc73ce59b",
+    "predecessor_v11_prediction_freeze_metadata_sha256": "ebf98166c5a9a9388eedb1494b2c360bacdffb33be07c03f31fc5eac47761bdb",
+    "v7_source_archive_sha256": "181df314f0b68ac1bbd3eb3b6363dd2a6b195f7c9beb5fd0d8deec043034c85d",
+    "v7_input_manifest_sha256": "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+    "v7_database_sha256_before_copy": "b7c56832ef37ab98b4778403cf329e9338194dd581e6bdcdb7fee43b08960c6c",
+    "v7_prediction_manifest_sha256": "e0f54d6879f46d76a51c2b785b67b5ae45c790a591263bab4d73a0b7211b8cac",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "question_membership_sha256": "bf32b519cfe22e0b029171de48a455ca24c86f92b7b655a78b2f6b9ae7e2d65f",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "replay_control_sha256": "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d",
+    "replay_control_schema_disclosure": "The byte-frozen generic replay helper retains its historical v8-named output schema. Its operations and SHA are disclosed; the new run record supplies V12 lineage.",
+    "run_id": "v7m42a1",
+    "project_name": "narratordb-intelligence-dev42-v12-replay-v7gpt54mini-repeat1",
+    "backend_port": 8892,
+    "v7_compiler_fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+    "producer_terminal_jobs": {
+      "complete": 1976,
+      "partial": 3,
+      "nonterminal": 0,
+      "partial_reason": "provider_content_filter with canonical raw-source fallback"
+    },
+    "first_v12_reproducibility_baseline": {
+      "first_v12_run_root": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716",
+      "first_v12_prediction_freeze_sha256s": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/PREDICTION_FREEZE_SHA256SUMS",
+      "first_v12_prediction_freeze_sha256s_sha256": "9180689c5516880c0b7aea797bb6183027a2f2e5fbfbb3c6085cd5926d9ccb41",
+      "first_v12_prediction_manifest_sha256": "ab85f9469e4e7a3fd9218399fda416a6050b883b31b42d283cd8387f01e9933b",
+      "first_v12_prediction_audit_sha256": "2e7ae326811fb60492449dcd7b9c037baae3119e84406809355b502d33d96354",
+      "first_v12_prediction_freeze_metadata_sha256": "0864c5a2f63f75bc4f7c4cd5f1e0b930b9ecb4a1f899d2f8ccaf9a3e9c24bb16",
+      "first_v12_offline_comparison": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/v7-v11-v12-comparison.json",
+      "first_v12_offline_comparison_sha256": "7f1d3dd530b5675452c13bda660767dcc754689d8d098c8eafb297fd773ccf73",
+      "expected_canonical_aggregate_sha256": {
+        "top20": "b176d8f589931c39a11a304b68db4f29d99cb0a02512ab7cd9956c48504832a2",
+        "top50": "9948ecb74e4ab4b154207787cad3faa8c0f48e53e4a9fd71aed51a9422c2f8bc",
+        "full": "044047b23bbee20bd069d3ec397034cd799972732ac5c036d604270f31b49ea5"
+      },
+      "comparator": {
+        "path": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/compare_predictions.py",
+        "sha256": "9c9cef64d916e77e9916528cec3bc4b73881e0ee7f35fd91f7031daa233e7543",
+        "test_path": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/test_compare_predictions.py",
+        "test_sha256": "b22a5c50a0e867d12230f4877ca1dc763a9f9f4f745128e503ed01bfa011602f",
+        "readme_path": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/README.md",
+        "readme_sha256": "edf02a8a478c7417207bea49037082e2dc7af540e9d4e2681ab888750d9c5f28",
+        "canonicalization": "remove only retrieval.search_latency_ms; slice only retrieval.search_results for top20/top50; sorted compact UTF-8 JSON"
+      }
+    }
+  },
+  "namespace_rules": {
+    "project_name": "new repeat1 project name used only to isolate output files",
+    "run_id": "exact V7 producer run ID v7m42a1",
+    "user_id": "longmemeval_<question_id>_v7m42a1",
+    "ingestion_checkpoints": "copy exactly 42 V7 _ingestion_*.json files",
+    "prediction_files": "copy none and require zero before start",
+    "risk": "a new run ID selects empty database scopes; a project-name change alone does not isolate database state"
+  },
+  "runtime_guards": {
+    "backend_flag": "--existing-derived-replay-fingerprint",
+    "compiler_constructed": false,
+    "compiler_cache_constructed": false,
+    "hosted_credentials_available_to_backend": false,
+    "mutations": "add, finalize, and delete rejected; no update or backfill route exists",
+    "search_precondition": "every registered current source in the requested scope has a complete or disclosed partial job under the exact V7 fingerprint",
+    "empty_or_nonterminal_scope": "rejected",
+    "predict_only_external_network": "closed proxy on port 9 with localhost exempted; comparator is local and model-free",
+    "model_calls": 0,
+    "answerer_calls": 0,
+    "judge_calls": 0
+  },
+  "retrieval_and_harness": {
+    "dataset": "hash-pinned local dev42 materialization; no download",
+    "questions": 42,
+    "all_questions": true,
+    "predict_only": true,
+    "backend": "oss",
+    "mode": "answerer",
+    "top_k": 200,
+    "top_k_cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "context_token_budget": 6000,
+    "merge_adjacent": true,
+    "merge_gap": 1,
+    "merge_max_chars": 1200,
+    "coalesce_timestamp_sessions": true,
+    "claim_render_format": 3,
+    "memory_key_format": 2,
+    "aggregation_evidence_pack_format": 2,
+    "query_time_hosted_model": false
+  },
+  "execution_rules": [
+    "assert the repeat1 output root and every database/cache/ledger path are absent before execution",
+    "verify every frozen V12 source, V7 producer, harness, first-run freeze, first comparison, and comparator hash before copying anything",
+    "extract only the same frozen V12 source and pinned harness archive used by the first replay",
+    "clone the V7 database with SQLite backup and never mutate the V7 producer or first V12 replay",
+    "copy exactly the same 42 V7 ingestion checkpoints and zero prediction files",
+    "run one credential-free migration/readiness backend, checkpoint it, and bind post-migration database hash and counts",
+    "probe all 42 scopes for exact-fingerprint readiness before prediction",
+    "run one full all-42 predict-only replay with no selective retry",
+    "require database counts and checkpointed database hash unchanged across prediction and no compiler cache or usage sidecar",
+    "run prediction audit from the frozen V12 runtime source",
+    "freeze all 42 repeat predictions and 42 inherited checkpoints before comparison",
+    "run only the hash-pinned offline comparator against the first frozen V12 predictions",
+    "require 42 of 42 canonical payloads identical at top20, top50, and full, and require the repeat canonical aggregate hashes to equal the three precommitted first-run hashes",
+    "preserve any failed or superseded attempt rather than overwrite it"
+  ],
+  "success_rule": {
+    "prediction_phase": "exactly 42 fresh prediction files, all cutoffs present, all audit gates true, database counts and checkpointed hash unchanged, and zero model/network calls",
+    "deterministic_comparison_phase": {
+      "first_v12_vs_repeat1_identical_questions": {
+        "top20": 42,
+        "top50": 42,
+        "full": 42
+      },
+      "repeat1_expected_canonical_aggregate_sha256": {
+        "top20": "b176d8f589931c39a11a304b68db4f29d99cb0a02512ab7cd9956c48504832a2",
+        "top50": "9948ecb74e4ab4b154207787cad3faa8c0f48e53e4a9fd71aed51a9422c2f8bc",
+        "full": "044047b23bbee20bd069d3ec397034cd799972732ac5c036d604270f31b49ea5"
+      },
+      "latency_field_excluded": "retrieval.search_latency_ms",
+      "all_other_fields_preserved": true
+    },
+    "permitted_label": "V12 zero-model deterministic offline reproducibility repeat over reused V7 compiler artifacts on consumed LongMemEval-S dev42",
+    "score_claim_permitted": false,
+    "cannot_establish": [
+      "answer correctness or a benchmark percentage",
+      "fresh compiler quality",
+      "untouched generalization",
+      "third-party reproducibility",
+      "a publishable 95 percent claim"
+    ]
+  }
+}

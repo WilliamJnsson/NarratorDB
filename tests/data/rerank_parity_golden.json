@@ -1,0 +1,240 @@
+{
+  "money_current": {
+    "direct": [
+      "Pricing update: the pro plan now costs $18 per month."
+    ],
+    "context": [
+      "I paid the invoice yesterday and the charge cleared.",
+      "The aquarium currently has nine fish after the two new tetras.",
+      "After the reorg, Deniz took over as the current release approver.",
+      "I have visited the climbing gym six times so far this year.",
+      "The starter plan price was 12 dollars per month last spring.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "We started with four fish in the aquarium.",
+      "Marta was the release approver before the reorg."
+    ]
+  },
+  "money_past": {
+    "direct": [
+      "The starter plan price was 12 dollars per month last spring."
+    ],
+    "context": [
+      "I paid the invoice yesterday and the charge cleared.",
+      "Pricing update: the pro plan now costs $18 per month.",
+      "We started with four fish in the aquarium.",
+      "I have visited the climbing gym six times so far this year.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The audit flagged a risk in the token refresh flow.",
+      "Security review verdict: approved with two minor issues to track.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "The aquarium currently has nine fish after the two new tetras.",
+      "After the reorg, Deniz took over as the current release approver.",
+      "Marta was the release approver before the reorg."
+    ]
+  },
+  "quantity_state": {
+    "direct": [
+      "The aquarium currently has nine fish after the two new tetras.",
+      "We started with four fish in the aquarium."
+    ],
+    "context": [
+      "I have visited the climbing gym six times so far this year.",
+      "Pricing update: the pro plan now costs $18 per month.",
+      "After the reorg, Deniz took over as the current release approver.",
+      "I paid the invoice yesterday and the charge cleared.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The audit flagged a risk in the token refresh flow.",
+      "Security review verdict: approved with two minor issues to track.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "Marta was the release approver before the reorg.",
+      "The starter plan price was 12 dollars per month last spring."
+    ]
+  },
+  "quantity_times": {
+    "direct": [
+      "I have visited the climbing gym six times so far this year."
+    ],
+    "context": [
+      "The aquarium currently has nine fish after the two new tetras.",
+      "Pricing update: the pro plan now costs $18 per month.",
+      "I paid the invoice yesterday and the charge cleared.",
+      "After the reorg, Deniz took over as the current release approver.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The audit flagged a risk in the token refresh flow.",
+      "Security review verdict: approved with two minor issues to track.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "The backup restore took 30 minutes during the last drill.",
+      "Marta was the release approver before the reorg.",
+      "We started with four fish in the aquarium.",
+      "The starter plan price was 12 dollars per month last spring."
+    ]
+  },
+  "current_state": {
+    "direct": [
+      "After the reorg, Deniz took over as the current release approver.",
+      "Marta was the release approver before the reorg."
+    ],
+    "context": [
+      "Pricing update: the pro plan now costs $18 per month.",
+      "I have visited the climbing gym six times so far this year.",
+      "Security review verdict: approved with two minor issues to track.",
+      "The aquarium currently has nine fish after the two new tetras.",
+      "I paid the invoice yesterday and the charge cleared.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The audit flagged a risk in the token refresh flow.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "Routine diary note 0: weather log, lunch order, and commute status entry.",
+      "Routine diary note 1: weather log, lunch order, and commute status entry.",
+      "Routine diary note 2: weather log, lunch order, and commute status entry.",
+      "Routine diary note 3: weather log, lunch order, and commute status entry.",
+      "The backup restore took 30 minutes during the last drill.",
+      "We started with four fish in the aquarium.",
+      "The starter plan price was 12 dollars per month last spring."
+    ]
+  },
+  "before_state": {
+    "direct": [
+      "Marta was the release approver before the reorg."
+    ],
+    "context": [
+      "After the reorg, Deniz took over as the current release approver.",
+      "Security review verdict: approved with two minor issues to track.",
+      "I paid the invoice yesterday and the charge cleared.",
+      "Pricing update: the pro plan now costs $18 per month.",
+      "I have visited the climbing gym six times so far this year.",
+      "The audit flagged a risk in the token refresh flow.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "Routine diary note 0: weather log, lunch order, and commute status entry.",
+      "Routine diary note 1: weather log, lunch order, and commute status entry.",
+      "Routine diary note 2: weather log, lunch order, and commute status entry.",
+      "Routine diary note 3: weather log, lunch order, and commute status entry.",
+      "The backup restore took 30 minutes during the last drill.",
+      "The aquarium currently has nine fish after the two new tetras.",
+      "We started with four fish in the aquarium."
+    ]
+  },
+  "code_locator": {
+    "direct": [
+      "The renderComparePopout function in provider-service.ts handles the popout dialog."
+    ],
+    "context": [
+      "I paid the invoice yesterday and the charge cleared.",
+      "Pricing update: the pro plan now costs $18 per month.",
+      "The aquarium currently has nine fish after the two new tetras.",
+      "After the reorg, Deniz took over as the current release approver.",
+      "I have visited the climbing gym six times so far this year.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The audit flagged a risk in the token refresh flow.",
+      "Security review verdict: approved with two minor issues to track.",
+      "We patched the viewport module to fix the clipping issue.",
+      "Routine diary note 0: weather log, lunch order, and commute status entry.",
+      "Routine diary note 1: weather log, lunch order, and commute status entry.",
+      "Routine diary note 2: weather log, lunch order, and commute status entry.",
+      "The backup restore took 30 minutes during the last drill.",
+      "Marta was the release approver before the reorg.",
+      "We started with four fish in the aquarium.",
+      "The starter plan price was 12 dollars per month last spring."
+    ]
+  },
+  "audit": {
+    "direct": [
+      "Security review verdict: approved with two minor issues to track."
+    ],
+    "context": [
+      "I paid the invoice yesterday and the charge cleared.",
+      "The aquarium currently has nine fish after the two new tetras.",
+      "After the reorg, Deniz took over as the current release approver.",
+      "I have visited the climbing gym six times so far this year.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The audit flagged a risk in the token refresh flow.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "Routine diary note 0: weather log, lunch order, and commute status entry.",
+      "Routine diary note 1: weather log, lunch order, and commute status entry.",
+      "Routine diary note 2: weather log, lunch order, and commute status entry.",
+      "Routine diary note 3: weather log, lunch order, and commute status entry.",
+      "Routine diary note 4: weather log, lunch order, and commute status entry.",
+      "The backup restore took 30 minutes during the last drill.",
+      "Marta was the release approver before the reorg.",
+      "We started with four fish in the aquarium."
+    ]
+  },
+  "measurement": {
+    "direct": [
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The backup restore took 30 minutes during the last drill."
+    ],
+    "context": [
+      "After the reorg, Deniz took over as the current release approver.",
+      "I have visited the climbing gym six times so far this year.",
+      "The audit flagged a risk in the token refresh flow.",
+      "Security review verdict: approved with two minor issues to track.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "Routine diary note 0: weather log, lunch order, and commute status entry.",
+      "Routine diary note 1: weather log, lunch order, and commute status entry.",
+      "Routine diary note 2: weather log, lunch order, and commute status entry.",
+      "Routine diary note 3: weather log, lunch order, and commute status entry.",
+      "Routine diary note 4: weather log, lunch order, and commute status entry.",
+      "Routine diary note 5: weather log, lunch order, and commute status entry.",
+      "Routine diary note 6: weather log, lunch order, and commute status entry.",
+      "Routine diary note 7: weather log, lunch order, and commute status entry.",
+      "Marta was the release approver before the reorg.",
+      "We started with four fish in the aquarium."
+    ]
+  },
+  "plain": {
+    "direct": [
+      "The aquarium currently has nine fish after the two new tetras.",
+      "We started with four fish in the aquarium."
+    ],
+    "context": [
+      "I paid the invoice yesterday and the charge cleared.",
+      "Pricing update: the pro plan now costs $18 per month.",
+      "After the reorg, Deniz took over as the current release approver.",
+      "I have visited the climbing gym six times so far this year.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The audit flagged a risk in the token refresh flow.",
+      "Security review verdict: approved with two minor issues to track.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "Marta was the release approver before the reorg.",
+      "The starter plan price was 12 dollars per month last spring."
+    ]
+  },
+  "vague_or_fallback": {
+    "direct": [
+      "The backup restore took 30 minutes during the last drill."
+    ],
+    "context": [
+      "I paid the invoice yesterday and the charge cleared.",
+      "Pricing update: the pro plan now costs $18 per month.",
+      "The aquarium currently has nine fish after the two new tetras.",
+      "After the reorg, Deniz took over as the current release approver.",
+      "The durability suite ran for 45 minutes on the release candidate.",
+      "The audit flagged a risk in the token refresh flow.",
+      "Security review verdict: approved with two minor issues to track.",
+      "I have visited the climbing gym six times so far this year.",
+      "We patched the viewport module to fix the clipping issue.",
+      "The renderComparePopout function in provider-service.ts handles the popout dialog.",
+      "Routine diary note 0: weather log, lunch order, and commute status entry.",
+      "Routine diary note 1: weather log, lunch order, and commute status entry.",
+      "Routine diary note 2: weather log, lunch order, and commute status entry.",
+      "Routine diary note 3: weather log, lunch order, and commute status entry.",
+      "Routine diary note 4: weather log, lunch order, and commute status entry.",
+      "Routine diary note 5: weather log, lunch order, and commute status entry.",
+      "Routine diary note 6: weather log, lunch order, and commute status entry.",
+      "Routine diary note 7: weather log, lunch order, and commute status entry.",
+      "Marta was the release approver before the reorg.",
+      "We started with four fish in the aquarium.",
+      "The starter plan price was 12 dollars per month last spring."
+    ]
+  }
+}

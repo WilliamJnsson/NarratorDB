@@ -1,0 +1,72 @@
+{
+  "schema_version": "narratordb.v13-repeat-first-run-bindings.v1",
+  "created_at_utc": "2026-07-16T05:09:20Z",
+  "status": "frozen after complete first-run prediction freeze and self-comparison, before repeat1 output root, database, cache, ledger, or prediction existed",
+  "classification": "content-agnostic zero-model reproducibility binding over consumed LongMemEval-S dev42; not a score or publishable claim",
+  "protocol": {
+    "path": "benchmark_records/profiles/v13_dual_existing_derived_replay_protocol_20260716.json",
+    "sha256": "738325365c89a1e06f51a2e642da6dd9bc913d91f235a049d641f1ab1afeb1cf",
+    "sha_manifest_sha256": "12efaf3681ed3c5a7552f51bcbeb22b84258c6122fa1df504d0b03b994ddf005"
+  },
+  "first_run": {
+    "root": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716",
+    "project_name": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+    "prediction_manifest_sha256": "347e5db630bfc5b6a2725d137bccb2ec90130c534edda259fda70d90fa610c74",
+    "prediction_audit_sha256": "d1c92ab49921f76aebd1967f9366d5281827062917edf84d0d9b7d531373557f",
+    "prediction_freeze_metadata_sha256": "22466e48c56c5ad0fd467b92de7226c17df19ce87f156d7a87ed973383f8a1ff",
+    "prediction_freeze_manifest_sha256": "6c3ab41516aea642d0fdd7b9f04ffae175ddb704644cbbe4710696838341d03f",
+    "self_comparison_manifest_sha256": "fc48bc78b90c967ece226905edaa6e97e06a0fb1be4eaf1d93c150a105b698d0",
+    "self_comparison_file_sha256": "eba30d39ce5ef039b40b9abb1a7472d8c178b670b3c2c6f1699415e6df37ff47",
+    "self_comparison_report_content_sha256": "7b8b090f9cc9db624df70b3e0e97c7f454e7039a7e107b791c117166d07cb6ef",
+    "self_comparison_final_report_sha256": "46726692f31c7b9327c102877ff22e5c18dd72a80006d8e1b2ef4be9b814c91e",
+    "canonical_aggregate_sha256": {
+      "top20": "b176d8f589931c39a11a304b68db4f29d99cb0a02512ab7cd9956c48504832a2",
+      "top50": "9948ecb74e4ab4b154207787cad3faa8c0f48e53e4a9fd71aed51a9422c2f8bc",
+      "full": "84b7ddcf255c2df929de886b3885a946159acea960d78cd7f70cc4bb87b69880"
+    },
+    "identical_questions_in_self_comparison": {
+      "top20": 42,
+      "top50": 42,
+      "full": 42
+    },
+    "database_post_migration_sha256": "c24f2503566fafe2b604631dd7fc2921685ef216c0d120fe2efb7cea0d67d429",
+    "database_post_prediction_sha256": "c24f2503566fafe2b604631dd7fc2921685ef216c0d120fe2efb7cea0d67d429",
+    "database_count_comparison_sha256": "f8c8f14d9ed869c41669f2584022d69e17f1ae300edd20c021cbfbfa38429bc9",
+    "database_counts_unchanged": true,
+    "database_bytes_unchanged": true,
+    "prediction_files": 42,
+    "ingestion_checkpoints": 42,
+    "prediction_retries": 0,
+    "compiler_cache_sidecar_present": false,
+    "compiler_usage_sidecar_present": false,
+    "compiler_calls": 0,
+    "answerer_calls": 0,
+    "judge_calls": 0,
+    "scoring_calls": 0,
+    "external_model_network_calls": 0,
+    "cost_usd": 0.0
+  },
+  "comparator": {
+    "path": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/compare_predictions.py",
+    "sha256": "9c9cef64d916e77e9916528cec3bc4b73881e0ee7f35fd91f7031daa233e7543",
+    "test_path": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/test_compare_predictions.py",
+    "test_sha256": "b22a5c50a0e867d12230f4877ca1dc763a9f9f4f745128e503ed01bfa011602f",
+    "readme_path": "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/README.md",
+    "readme_sha256": "edf02a8a478c7417207bea49037082e2dc7af540e9d4e2681ab888750d9c5f28",
+    "verification_sha256": "5bc7c78025f33839d1866d960ebed2dddac8dacb1e933f4333b7f95c42539776",
+    "test_verification_sha256": "72a0c318ea74841064f958de281560bf44e122f788f98ac59bea8953a8db833e",
+    "readme_verification_sha256": "fdbaff902d31bdcca1a83c726784bf937fce6777579d8530f0351582b5139f2a",
+    "test_log_sha256": "db8e1924acadcfe8013875392dcfbab4fc704540faf382acb6b4b19a61fbc415"
+  },
+  "repeat1_freshness_at_binding": {
+    "output_root": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716",
+    "project_name": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1",
+    "backend_port": 8894,
+    "output_root_absent": true,
+    "database_absent": true,
+    "compiler_cache_absent": true,
+    "usage_ledger_absent": true,
+    "port_listener_absent": true
+  },
+  "success_rule": "The repeat must independently produce 42 predictions and match the frozen first run for all 42 questions at top20, top50, and full, with repeat aggregate hashes exactly equal to the three values above. Any mismatch is preserved and blocks scoring; no selective retry is permitted."
+}

@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+      - name: Lint and compile
+        run: |
+          python -m ruff check narratordb tests scripts
+          python -m compileall -q narratordb tests
+      - name: Unit and protocol tests
+        run: python -m unittest discover -v
+      - name: Build distributions
+        run: |
+          python -m build
+          python scripts/wheel_boundary.py dist/narratordb_memory-2.2.0-py3-none-any.whl
+
+  stress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+          cache: pip
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+      - name: Standalone stress and retrieval regressions
+        run: |
+          python -m tests.stress.provenance
+          python -m tests.stress.advanced_system
+          python -m tests.stress.code_retrieval
+          python -m tests.stress.typed_memory
+          python -m tests.stress.every_angle
+          python -m tests.stress.complex_retrieval

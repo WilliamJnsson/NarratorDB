@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "record": "narratordb_intelligence_dev42_v7_v8_paired_20260716",
+  "recorded_at": "2026-07-16",
+  "status": "development",
+  "run_id": "v7-v8-dev42-paired-20260716",
+  "system": "NarratorDB Intelligence",
+  "classification": "paired official-harness evaluation on inspected LongMemEval-S dev42; V8 is a consumed-development replay over reused V7 compiler artifacts, not a fresh end-to-end, heldout, or competitor score",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_worktree_clean": true,
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_id_scope_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "questions": 42,
+    "scope": "inspected consumed dev42",
+    "run_id": "v7m42a1",
+    "all_questions": true,
+    "top_k": 200,
+    "top_k_cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm_per_llm_client": 60,
+    "seed": 42,
+    "temperature": 0,
+    "retry_policy": "unchanged official harness; five attempts per generation"
+  },
+  "paired_protocol": {
+    "status": "precommitted before the first V7 or V8 judged score",
+    "path": "benchmark_records/profiles/v7_v8_paired_evaluation_protocol_20260716.json",
+    "sha256": "c72d9d8aec59700a29211d5154d4673d10b26a82c5ba9750dc2934fdb2cffe50",
+    "prediction_archives_evaluated_in_place": false,
+    "fresh_byte_identical_evaluation_copies": true,
+    "same_answerer_judge_harness_scope_cutoffs_workers_rpm_and_routing": true
+  },
+  "evaluator": {
+    "answerer_model": "z-ai/glm-5.2",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "reasoning_effort": "high",
+    "provider_allowlist": [
+      "DeepInfra",
+      "StreamLake",
+      "GMICloud",
+      "Baidu",
+      "AtlasCloud"
+    ],
+    "transport": "NarratorDB content-free OpenRouter proxy",
+    "soft_usage_fuse_usd_per_variant": "1.25"
+  },
+  "variants": {
+    "v7_fresh_prediction": {
+      "classification": "fresh V7 compiler and retrieval execution on inspected dev42; evaluation ran only after predictions were frozen",
+      "compiler": {
+        "model": "openai/gpt-5.4-mini",
+        "provider": "Azure",
+        "reasoning_effort": "minimal",
+        "jobs_complete": 1976,
+        "jobs_partial": 3,
+        "partial_reason": "provider content filter; canonical raw fallback retained",
+        "ledger_events": 1983,
+        "route_mismatches": 0,
+        "cost_usd": "33.14190525"
+      },
+      "prediction": {
+        "questions": 42,
+        "pairs_processed": 10375,
+        "pairs_failed": 0,
+        "questions_dropped": 0,
+        "selective_retries": false,
+        "score_seen_before_freeze": false,
+        "manifest_sha256": "e0f54d6879f46d76a51c2b785b67b5ae45c790a591263bab4d73a0b7211b8cac",
+        "audit_sha256": "6d860867d3dc42cbbda5622fba29f31336de58b41a0d572537e26de5b0349e29"
+      },
+      "evaluation": {
+        "official_harness_score_complete": true,
+        "evaluated_questions": 42,
+        "ledger_events": 176,
+        "malformed_http_200_responses_retried_by_unchanged_harness": 8,
+        "attempt_five_failures": 0,
+        "final_empty_answers": 0,
+        "final_empty_judges": 0,
+        "frozen_payload_mismatches": 0,
+        "cost_usd": "0.52975236451",
+        "usage_ledger_sha256": "e373f484aff40b7f501851aca1b16b916c404e0dfa06627971ce70526e6c0abc",
+        "audit_sha256": "f5194386e7a1c895b93f05e047ec3a84f02737a573969398dd4530f418517d45",
+        "official_result_sha256": "10f3b5c0569c17d878d4106a95de38a4e305e8122e8181cc7177ed325ec2415d"
+      },
+      "scores": {
+        "top_20": {
+          "correct": 36,
+          "total": 42,
+          "accuracy_percent": 85.7143
+        },
+        "top_50": {
+          "correct": 38,
+          "total": 42,
+          "accuracy_percent": 90.4762
+        }
+      },
+      "new_run_cost_usd": "33.67165761451"
+    },
+    "v8_existing_derived_replay": {
+      "classification": "V8 local retrieval/render over reused V7 compiler artifacts on consumed dev42; not a fresh end-to-end, untouched, heldout, or third-party score",
+      "compiler": {
+        "reused_v7_artifacts": true,
+        "compiler_constructed_in_replay": false,
+        "compiler_cache_constructed_in_replay": false,
+        "hosted_compiler_calls": 0,
+        "new_compiler_cost_usd": "0",
+        "inherited_complete_jobs": 1976,
+        "inherited_partial_jobs": 3
+      },
+      "prediction": {
+        "questions": 42,
+        "pairs_processed": 10375,
+        "pairs_failed": 0,
+        "questions_dropped": 0,
+        "selective_retries": false,
+        "score_seen_before_freeze": false,
+        "database_unchanged_during_prediction": true,
+        "manifest_sha256": "aea3a5faa9f366546f71d7bb133b591d1e70a0b69c491780fc116beab6bfce4c",
+        "audit_sha256": "74342b23dfe33199079ffb02a74743b7cd4b3861537b6241fb2ff4dcc0c207dc",
+        "replay_audit_sha256": "1ea4af9524aa0bd1eac6aefd41f8a10976386f3486f13ad3acec03442f3e5787"
+      },
+      "evaluation": {
+        "official_harness_score_complete": true,
+        "evaluated_questions": 42,
+        "ledger_events": 174,
+        "malformed_http_200_responses_retried_by_unchanged_harness": 6,
+        "attempt_five_failures": 0,
+        "final_empty_answers": 0,
+        "final_empty_judges": 0,
+        "frozen_payload_mismatches": 0,
+        "cost_usd": "0.46747280219",
+        "usage_ledger_sha256": "dffe67793975281f5de726f02ea3374a068bcfcf55e2b7e2c9c942ef2df8848c",
+        "audit_sha256": "b7aeac0a5637deaeceaf6a60c91c6e0663d98a377ec8aacb175febfa31fbe6a8",
+        "official_result_sha256": "ebe7e8392b9d51b2d1972c7c0f9b10bec57537a59e04233d118bb8233b53d948"
+      },
+      "scores": {
+        "top_20": {
+          "correct": 34,
+          "total": 42,
+          "accuracy_percent": 80.9524
+        },
+        "top_50": {
+          "correct": 34,
+          "total": 42,
+          "accuracy_percent": 80.9524
+        }
+      },
+      "new_run_cost_usd": "0.46747280219",
+      "reused_v7_compiler_cost_recharged": false
+    }
+  },
+  "paired_difference_v8_minus_v7_percentage_points": {
+    "top_20": -4.7619,
+    "top_50": -9.5238
+  },
+  "replay_preflight_provenance": {
+    "first_attempt": {
+      "status": "superseded_before_execution",
+      "path": "benchmark_records/reproduction-v8-replay-20260716/preflight.json",
+      "file_sha256": "690d65a2dea8a4e436e50829523c40f81333d6c809dddecd878be6572d905c6b",
+      "document_sha256": "b8124be4206bdd249f09771b5f3061d3ad0062cf6677184b09ea724658c4ee47",
+      "superseded_note": "benchmark_records/reproduction-v8-replay-20260716/SUPERSEDED.md",
+      "superseded_note_sha256": "6a8b37ac33014996e129141b95ba61577c1b524e663c68f0fa97ddaba08fa0ba",
+      "reason": "review caught a relative git-archive output-path defect",
+      "run_root_created": false,
+      "replay_command_executed": false
+    },
+    "executed_attempt": {
+      "attempt": 2,
+      "path": "benchmark_records/reproduction-v8-replay-20260716-attempt2/preflight.json",
+      "file_sha256": "734f1c976f9aaba262fcc981fdefacfcdec2d91abe3da46061b82ee2ea9acd12",
+      "document_sha256": "d2c8f5fce1ab0c8fe812cc76393132a6f7abc694bc44c42daa4ebffa4a8626ee",
+      "run_copy_path": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/reproduction-preflight.json",
+      "run_copy_sha256": "734f1c976f9aaba262fcc981fdefacfcdec2d91abe3da46061b82ee2ea9acd12"
+    }
+  },
+  "cost": {
+    "paired_evaluator_total_usd": "0.99722516670",
+    "v7_compiler_plus_evaluator_usd": "33.67165761451",
+    "v8_replay_new_hosted_cost_usd": "0.46747280219",
+    "campaign_total_after_both_evaluations_usd": "106.91285798791"
+  },
+  "comparability": {
+    "controlled_local_retrieval_render_ablation": true,
+    "v8_is_fresh_end_to_end": false,
+    "development_set_inspected": true,
+    "untouched_holdout": false,
+    "third_party_score": false,
+    "claim_beats_mem0_accuracy": false,
+    "claim_v8_improves_v7_on_this_pair": false,
+    "notes": [
+      "V7 and V8 used the same frozen 42-question scope and the precommitted identical answerer/judge protocol.",
+      "V8 changed local retrieval/render behavior while reusing V7's paid compiler artifacts, so it is not an end-to-end V8 benchmark or a compiler comparison.",
+      "Both malformed-response counts remain in their paid usage ledgers and were retried only by the unchanged official harness before any final score was inspected.",
+      "Every declared question has a final nonempty answer and judge result at both cutoffs; no question was removed from either denominator."
+    ]
+  },
+  "artifacts": {
+    "v7_root": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716",
+    "v8_root": "reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716",
+    "v8_pre_evaluation_manifest_sha256": "6baac0be742747ca159ae447a8009b08a1a3c41da9bfa67bdde21b28e281670c"
+  }
+}

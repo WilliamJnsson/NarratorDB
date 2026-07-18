@@ -1,0 +1,248 @@
+{
+  "schema_version": "narratordb.benchmark-cost-estimate.v1",
+  "estimate_id": "original-author-suite-cost-estimate-20260717",
+  "recorded_at": "2026-07-17",
+  "classification": "planning_estimate",
+  "currency": "USD",
+  "authorization_to_spend": false,
+  "benchmark_result": false,
+  "source_snapshots": [
+    {
+      "benchmark": "LoCoMo",
+      "url": "https://github.com/snap-research/locomo",
+      "revision": "3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376",
+      "dataset_sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4"
+    },
+    {
+      "benchmark": "LongMemEval",
+      "url": "https://github.com/xiaowu0162/LongMemEval",
+      "revision": "9e0b455f4ef0e2ab8f2e582289761153549043fc",
+      "dataset_revision": "98d7416c24c778c2fee6e6f3006e7a073259d48f",
+      "s_dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+      "m_dataset_sha256": "9d79e5524794a2e6900a3aa9cb7d9152c5a3e8319c9a87c25494ba1eacee495f"
+    },
+    {
+      "benchmark": "BEAM",
+      "url": "https://github.com/mohammadtavakoli78/BEAM",
+      "revision": "3e12035532eb85768f1a7cd779832b650c4b2ef9",
+      "dataset_revision_main": "3205395e897e7318c7b094ef4e6047b9b82dbb03",
+      "dataset_revision_10m": "9b2096193fe74e2837e4713e483351e19817773c"
+    }
+  ],
+  "pricing_checked_at": "2026-07-17",
+  "pricing_usd_per_million_tokens": {
+    "gpt-5.6-luna": {
+      "route": "first-party OpenAI API",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+      "input": 1.0,
+      "cached_input": 0.1,
+      "output": 6.0,
+      "long_context_threshold_input_tokens": 272000,
+      "above_threshold_multipliers": {
+        "input": 2.0,
+        "cached_input": 2.0,
+        "output": 1.5
+      }
+    },
+    "gpt-4o-2024-08-06": {
+      "role": "LongMemEval author-prescribed judge snapshot",
+      "url": "https://developers.openai.com/api/docs/models/gpt-4o",
+      "input": 2.5,
+      "cached_input": 1.25,
+      "output": 10.0,
+      "availability_must_be_rechecked_before_run": true
+    },
+    "gpt-4.1-mini": {
+      "role": "BEAM author evaluator",
+      "url": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+      "input": 0.4,
+      "cached_input": 0.1,
+      "output": 1.6
+    }
+  },
+  "cost_formula": "((input_tokens - cached_input_tokens) * input_rate + cached_input_tokens * cached_input_rate + output_tokens * output_rate) / 1000000",
+  "pricing_mode": {
+    "processing": "standard, not Batch API",
+    "luna_reasoning_effort": "low",
+    "cached_input_tokens_assumed": 0
+  },
+  "declared_call_scope": {
+    "locomo": {
+      "questions": 1986,
+      "answer_calls": 1986,
+      "judge_calls": 0,
+      "note": "NarratorDB declares one query-specific answer call per question. The author script can batch up to 20 questions, so 1,986 calls are an implementation choice rather than an author mandate."
+    },
+    "longmemeval_s": {
+      "questions": 500,
+      "answer_calls": 500,
+      "judge_calls": 500
+    },
+    "beam_all_tiers": {
+      "conversations": 100,
+      "questions": 2000,
+      "answer_calls": 2000,
+      "rubric_calls": 6046,
+      "event_fact_extraction_calls": 200,
+      "event_alignment_calls_symbol": "C",
+      "event_alignment_calls_midpoint_assumption": 700,
+      "tier_question_counts": {
+        "128k_100k_files": 400,
+        "500k": 700,
+        "1m": 700,
+        "10m": 200
+      }
+    },
+    "primary_s_track_formula": {
+      "answer_calls": 4486,
+      "known_non_answer_model_calls": 6746,
+      "known_logical_calls": 11232,
+      "total_logical_calls": "11232 + C",
+      "midpoint_total_logical_calls_with_c_700": 11932
+    }
+  },
+  "observed_and_scaled_inputs": {
+    "locomo": {
+      "full_scope_sessions": 272,
+      "full_scope_raw_o200k_tokens": 207253,
+      "observed_short_compiler_calls": 19,
+      "observed_short_compiler_input_tokens": 60522,
+      "observed_short_compiler_output_tokens": 71036,
+      "observed_short_gpt5_cost_usd": 0.7860125,
+      "same_tokens_repriced_as_luna_usd": 0.486738,
+      "estimated_full_compiler_input_tokens_from_original_transcript": 830704,
+      "estimated_full_compiler_output_tokens_formula": "(71036 / 19) * 272",
+      "estimated_full_compiler_output_tokens": 1016936.421052632,
+      "raw_token_inventory_note": "The transcript's 830704 input estimate corresponds to about 207119.72 raw tokens under the later decomposition, slightly below the 207253-token inventory because tokenization/formatting accounting differed.",
+      "answer_mean_input_tokens": 11455.375,
+      "answer_assumed_output_tokens": 775.625,
+      "answer_output_assumption": "25.625 visible plus 750 reasoning tokens per answer"
+    },
+    "longmemeval_s": {
+      "session_references": 23867,
+      "raw_tokens": 50785539,
+      "compiler_input_formula": "1.05 * 50785539 + 2254.515789 * 23867",
+      "compiler_input_tokens": 107133344.297368,
+      "compiler_output_formula": "(71036 / 19) * 23867",
+      "compiler_output_tokens": 89232432.210526
+    },
+    "longmemeval_m": {
+      "assumed_sessions": 250000,
+      "raw_token_scale_formula": "50785539 * (2737100077 / 277383467)",
+      "estimated_raw_tokens": 501129732.823573,
+      "compiler_input_formula": "1.05 * 501129732.823573 + 2254.515789 * 250000",
+      "compiler_input_tokens": 1089815166.83317,
+      "compiler_output_formula": "(71036 / 19) * 250000",
+      "compiler_output_tokens": 934684210.526316,
+      "classification": "official scale track; oracle control excluded"
+    },
+    "beam": {
+      "raw_tokens": 164400927,
+      "sessions": 1702,
+      "compiler_input_formula": "164400927 * (140298 / 115957)",
+      "compiler_output_formula": "(14391 / 3) * 1702",
+      "answer_mean_input_tokens": 40004.2,
+      "answer_assumed_output_tokens": 1438.6,
+      "answer_output_assumption": "438.6 visible plus 1000 reasoning tokens per answer"
+    },
+    "additional_compiler_ledger_cross_check": {
+      "run": "Intelligence dev42 V7",
+      "ledger_events": 1983,
+      "cost_usd": 33.14190525,
+      "purpose": "compiler scaling cross-check; not directly summed into this estimate"
+    }
+  },
+  "midpoint_components_usd": {
+    "locomo": {
+      "compiler_repriced_from_gpt5_usage": 6.93232252631579,
+      "compiler_formula": "(830704 * 1 + 1016936.421052632 * 6) / 1000000",
+      "answers": 31.99272225,
+      "answer_formula": "(1986 * 11455.375 * 1 + 1986 * 775.625 * 6) / 1000000",
+      "total": 38.92504477631579,
+      "display_rounded": 39
+    },
+    "longmemeval_s": {
+      "compiler_repriced_from_gpt5_usage": 642.5279375605264,
+      "answer_and_judge_residual_projection": 28.4720624394736,
+      "answer_and_judge_projection_status": "reported_unreconstructed",
+      "total": 671.0,
+      "display_rounded": 671
+    },
+    "beam_all_tiers": {
+      "compiler_repriced_from_gpt5_usage": 247.897950454,
+      "answers": 97.2716,
+      "answer_formula": "(2000 * 40004.2 * 1 + 2000 * 1438.6 * 6) / 1000000",
+      "author_evaluation_pipeline": 3.7829025358,
+      "author_evaluation_projection_status": "reported_unreconstructed",
+      "total": 348.9524529898,
+      "display_rounded": 349
+    },
+    "longmemeval_m_additional_track": {
+      "compiler_repriced_from_gpt5_usage": 6697.92042999107,
+      "answer_and_judge_residual_projection": 29.07957000893,
+      "answer_and_judge_projection_status": "reported_unreconstructed",
+      "total": 6727.0,
+      "display_rounded": 6727
+    }
+  },
+  "suite_estimates_usd": {
+    "intelligence_primary_s_track": {
+      "members": [
+        "locomo",
+        "longmemeval_s",
+        "beam_all_tiers"
+      ],
+      "midpoint_unrounded": 1058.8774977661158,
+      "midpoint_display_rounded": 1059,
+      "formula": "38.92504477631579 + 671 + 348.9524529898",
+      "reported_planning_band": {
+        "low": 801,
+        "high": 1504,
+        "status": "reported_unreconstructed",
+        "limitation": "The original low/high scenario multipliers and component token assumptions were not preserved; this band is not independently auditable."
+      }
+    },
+    "intelligence_qa_s_plus_m_oracle_excluded": {
+      "midpoint_unrounded": 7785.877497766116,
+      "midpoint_display_rounded": 7786,
+      "formula": "1058.8774977661158 + 6727",
+      "reported_planning_band": {
+        "low": 5577,
+        "high": 11749,
+        "status": "reported_unreconstructed"
+      }
+    },
+    "private_primary_s_track": {
+      "paid_compiler": false,
+      "midpoint_unrounded": 161.5192872252736,
+      "display_rounded_to_nearest_ten": 160,
+      "formula": "31.99272225 + 28.4720624394736 + 97.2716 + 3.7829025358"
+    },
+    "private_qa_s_plus_m_oracle_excluded": {
+      "paid_compiler": false,
+      "midpoint_unrounded": 190.5988572342036,
+      "display_rounded_to_nearest_ten": 190,
+      "formula": "161.5192872252736 + 29.07957000893"
+    }
+  },
+  "operational_reserve": {
+    "rate": 0.15,
+    "intelligence_primary_exact_from_display_midpoint": 1217.85,
+    "intelligence_primary_display_rounded": 1220,
+    "intelligence_s_plus_m_exact_from_display_midpoint": 8953.9,
+    "intelligence_s_plus_m_display_rounded": 8950,
+    "formula": "midpoint_display_rounded * 1.15"
+  },
+  "limitations_and_assumptions": [
+    "Every run starts from an empty database and compiler cache; compilation is charged once per fresh database.",
+    "The answer context uses the frozen top-200 diagnostic prompt shape; no multiple seeds or repeated runs are included.",
+    "Cached input is assumed to be zero unless a provider ledger proves otherwise.",
+    "All compiler token volumes were extrapolated from returned gpt-5-2025-08-07 canary usage and repriced at GPT-5.6 Luna rates; no Luna compiler run measured those projected volumes.",
+    "The midpoint assumes no individual compiler request exceeds 272K input tokens because compilation is session-bounded. The projected per-call distribution was not retained, so a preflight must verify that assumption and apply the surcharge before funding a full run.",
+    "LongMemEval answer/judge and BEAM evaluator residual projections are not reconstructable from per-call token worksheets and are explicitly marked reported_unreconstructed.",
+    "BEAM midpoint evaluation cost assumes 700 answer-dependent event-alignment calls; actual C must be reported.",
+    "Ranges are legacy planning bands, not confidence intervals and not auditable bounds.",
+    "Local CPU/GPU, storage, taxes, foreign exchange, provider minimums, model-price changes, unavailable snapshots, pathological retries, and external platform fees are excluded.",
+    "This estimate must be replaced by a predeclared token-exact budget after representative preflights and must never be treated as provider billing or permission to run."
+  ]
+}

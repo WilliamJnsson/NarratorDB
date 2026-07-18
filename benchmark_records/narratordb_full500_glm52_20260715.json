@@ -1,0 +1,111 @@
+{
+  "record": "narratordb_full500_glm52_20260715",
+  "status": "final-frozen",
+  "date": "2026-07-15",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+    "questions": 500,
+    "all_questions": true,
+    "seed": 42,
+    "top_k": 200,
+    "top_k_cutoffs": [20, 50],
+    "cutoff_note": "Cutoffs 20 and 50 were pre-declared before the run to halve answerer input cost; the evaluation_audit strict flag official_harness_score_complete refers to the legacy four-cutoff family (10/20/50/200) and is expected to be false for this record."
+  },
+  "engine": {
+    "version": "1.3.0",
+    "git_commit": "bf4a6b1d752ff333933a032ecc21fe5654e1428b",
+    "engine_py_sha256": "7bbd152ac4f554a795d817ab50afc7dd592223f81420a73c910986e23f910123",
+    "benchmark_server_py_sha256": "93bf5bd5abcf6a4b32fd4fcac7f5f28d67ee28239dec9624fd434ed58d30bab8",
+    "database_sha256": "539a997023e54722ec81b078a233d1cdc86f0f9840021dcf583582d9263dcc78",
+    "post_freeze_engine_tuning": false,
+    "adapter_config": {
+      "merge_adjacent": true,
+      "merge_gap": 1,
+      "merge_max_chars": 1200
+    },
+    "shaping_defaults": {
+      "search_dedup_jaccard": 0.9,
+      "session_cap": 4,
+      "diversify_top_n": 20,
+      "temporal_cluster_select": true,
+      "score_floor_ratio": 0.25,
+      "score_floor_min_results": 20
+    }
+  },
+  "models": {
+    "answerer": "z-ai/glm-5.2",
+    "judge": "deepseek/deepseek-v4-flash-20260423",
+    "transport": "narratordb.benchmarks.openrouter_proxy",
+    "provider_allowlist": ["DeepInfra", "StreamLake", "GMICloud", "Baidu", "AtlasCloud"],
+    "reasoning_effort": "high",
+    "max_workers": 10,
+    "rpm": 60
+  },
+  "official_scores": {
+    "top_20": {"correct": 408, "total": 500, "accuracy_percent": 81.6},
+    "top_50": {"correct": 414, "total": 500, "accuracy_percent": 82.8},
+    "by_question_type_top50_percent": {
+      "knowledge-update": 91.0,
+      "multi-session": 65.4,
+      "single-session-assistant": 96.4,
+      "single-session-preference": 83.3,
+      "single-session-user": 97.1,
+      "temporal-reasoning": 82.0
+    },
+    "denominator_policy": "all 500 questions retained, including any failed samples"
+  },
+  "ingestion": {
+    "pairs_processed": 124345,
+    "pairs_failed": 0,
+    "messages": 245780,
+    "scopes": 500
+  },
+  "performance": {
+    "official_http_search_latency_ms_all500": {
+      "mean": 30.5712, "median": 19.05, "p95": 86.1, "min": 1.6, "max": 283.8, "samples": 500
+    },
+    "previous_1_2_reference_ms": {"mean": 769.6972, "median": 790.45, "p95": 1458.8},
+    "mem0_platform_reference_ms": {"mean": 2381.88, "median": 2468.1, "p95": 3353.5},
+    "result_counts": {"mean": 32.142, "median": 27.0, "min": 1, "max": 132}
+  },
+  "cost": {
+    "evaluation_usd": 9.3426,
+    "preflight_30q_usd": 0.6419,
+    "total_usd": 9.9845,
+    "llm_calls": 2084
+  },
+  "preflight": {
+    "questions": 30,
+    "note": "development data (previously inspected calibration set); run before freeze to validate cost and formatting",
+    "top_20": {"correct": 29, "total": 30},
+    "top_50": {"correct": 28, "total": 30}
+  },
+  "comparability": {
+    "claim_beats_mem0_accuracy": false,
+    "mem0_published_reference": {"top_50_percent": 94.8, "answerer_judge": "gpt-5"},
+    "narratordb_1_2_reference": {"top_20_percent": 78.0, "top_50_percent": 76.0, "answerer_judge": "deepseek-v4-flash-20260423"},
+    "notes": [
+      "The Mem0 94.8% reference used GPT-5 as answerer and judge; this run used GLM 5.2 answering with a DeepSeek V4 Flash judge, so accuracy is not a controlled head-to-head.",
+      "Latency compares a local NarratorDB deployment against Mem0's managed platform: operational evidence, not a controlled infrastructure comparison.",
+      "Versus the 1.2 all-500 record (same judge model family), the answerer changed from V4 Flash to GLM 5.2 and cutoffs narrowed to 20/50; the +4.8pp top-50 gain reflects reader change plus retrieval shaping and cannot be attributed to either alone.",
+      "The adapter merges position-adjacent same-session hits into single memory blocks; this is backend response formatting and is documented as part of the tested system."
+    ]
+  },
+  "leakage_control": {
+    "tuning_data": "LoCoMo diagnostic (tests/data/locomo10.json), golden-ordering parity corpus, and full-500 aggregate coverage counts only; no per-question answers, labels, or judge outputs were inspected",
+    "known_development_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "untouched_holdout_ids_sha256": "b2ebe3d023e65369cba071afd622384ce5cc4217e67ed492cd66c7b6a62c6207",
+    "dev42_ids_unavailable_note": "the dev-42 ID list (gitignored reports/ archive) was not present on the machine used for this cycle; per-scope dev-42 and holdout-458 score views are therefore not part of this record"
+  },
+  "regression_gates": {
+    "unit_tests": "pass",
+    "stress_suites": "pass",
+    "locomo_answers_in_context": 1301,
+    "locomo_questions": 1540,
+    "noise_scale_hit_rate": 1.0,
+    "parity_golden": "unchanged from 1.2 rerank behavior"
+  }
+}

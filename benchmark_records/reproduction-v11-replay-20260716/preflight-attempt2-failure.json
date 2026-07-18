@@ -1,0 +1,12 @@
+{
+  "schema_version": "narratordb.failed-reproduction-preflight.v1",
+  "attempted_at_utc": "2026-07-16T02:10:10Z",
+  "status": "failed before preflight output or run-root creation",
+  "failure_type": "ValueError",
+  "failure_code": "required_actor_config_missing",
+  "failure_location": "config.compiler",
+  "disposition": "preserved; no replay database, prediction, benchmark question, model call, or cost was created",
+  "repair": "add the schema-required top-level compiler, answerer, judge, top-k, and cutoff declarations without changing the frozen replay protocol",
+  "run_root_absent_after_failure": true,
+  "preflight_output_absent_after_failure": true
+}

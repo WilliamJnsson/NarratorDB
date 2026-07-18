@@ -1,0 +1,136 @@
+{
+  "schema_version": "narratordb.v11-existing-derived-replay-run.v1",
+  "created_at_utc": "2026-07-16T02:06:54Z",
+  "status": "precommitted before V11 replay database creation or prediction",
+  "benchmark": "LongMemEval-S consumed development42 existing-derived replay",
+  "run_id": "v7m42a1",
+  "project_name": "narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+  "mode": "intelligence-existing-derived-read-only-replay",
+  "classification": "V11 local retrieval/render over reused V7 compiler artifacts on consumed dev42; not a fresh end-to-end, heldout, publishable 95%, or third-party score",
+  "purpose": "Measure generic V11 local retrieval, rendering, and aggregation changes without paying for or resampling compiler output.",
+  "compiler": {
+    "model": "openai/gpt-5.4-mini",
+    "provider": "Azure",
+    "reasoning": "minimal",
+    "execution": "reused frozen V7 derived artifacts; no compiler call in replay",
+    "fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400"
+  },
+  "answerer": {
+    "model": "no-call",
+    "provider": "closed-network-sentinel",
+    "reasoning": "not-applicable",
+    "execution": "not called during predict-only replay"
+  },
+  "judge": {
+    "model": "no-call",
+    "provider": "closed-network-sentinel",
+    "reasoning": "not-applicable",
+    "execution": "not called during predict-only replay"
+  },
+  "source": {
+    "archive": "reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz",
+    "archive_sha256": "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+    "metadata_sha256": "07413b012294a9e6f35702e4c5180dcb7eeca544c3224b16c60ed3fd096db6b8",
+    "canary_precommit_sha256": "b942a042dc0c5fd28073063035504e0f4848ded8b6504a1644a4c37630616b18",
+    "passed_canary_report_sha256": "d79c9971b1d91a4e8ebbecc81daa2e313bb489b03c8bad636ac408626c8cba54",
+    "archive_entries": 84,
+    "full_extracted_release_suite_passed": true,
+    "unit_and_integration_tests_passed": 250
+  },
+  "producer": {
+    "version": "V7",
+    "source_archive": "reports/intelligence-v7-source-20260716T201147Z/narratordb-v7-source.tar.gz",
+    "source_archive_sha256": "181df314f0b68ac1bbd3eb3b6363dd2a6b195f7c9beb5fd0d8deec043034c85d",
+    "database": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/intelligence.db",
+    "database_sha256": "b7c56832ef37ab98b4778403cf329e9338194dd581e6bdcdb7fee43b08960c6c",
+    "input_manifest_sha256": "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+    "prediction_manifest_sha256": "e0f54d6879f46d76a51c2b785b67b5ae45c790a591263bab4d73a0b7211b8cac",
+    "compiler_model": "openai/gpt-5.4-mini",
+    "compiler_provider": "Azure",
+    "compiler_reasoning": "minimal",
+    "compiler_prompt_version": "narratordb.memory-compiler.v7",
+    "compiler_fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+    "complete_jobs": 1976,
+    "partial_jobs": 3,
+    "partial_reason": "provider content filter with raw-source fallback",
+    "execution": "reuse frozen terminal V7 derived artifacts; no compiler call in replay"
+  },
+  "scope": {
+    "dataset": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "questions": 42,
+    "selection": "every question in the frozen consumed development split; no score-dependent exclusion"
+  },
+  "harness": {
+    "repository": "vendor/memory-benchmarks",
+    "commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "expected_archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "module": "benchmarks.longmemeval.run",
+    "all_questions": true,
+    "predict_only": true,
+    "backend": "oss",
+    "mode": "answerer",
+    "top_k": 200,
+    "top_k_cutoffs": [20, 50],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "answerer_model": "no-call",
+    "judge_model": "no-call",
+    "predict_only_placeholder": {
+      "environment_name": "OPENAI_API_KEY",
+      "value_class": "fixed non-sensitive no-call sentinel excluded from the secret-safe command manifest"
+    }
+  },
+  "retrieval": {
+    "top_k": 200,
+    "cutoffs": [20, 50],
+    "context_token_budget": 6000,
+    "merge_adjacent": true,
+    "merge_gap": 1,
+    "merge_max_chars": 1200,
+    "coalesce_timestamp_sessions": true,
+    "claim_render_format": 3,
+    "memory_key_format": 2,
+    "aggregation_evidence_pack_format": 1,
+    "query_time_hosted_model": false
+  },
+  "runtime_guards": {
+    "replay_control": "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+    "replay_control_sha256": "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d",
+    "compiler_constructed": false,
+    "compiler_cache_constructed": false,
+    "model_environment_variables_unset_for_backend": true,
+    "mutations_rejected": true,
+    "empty_or_nonterminal_scope_rejected": true,
+    "external_network_closed_during_predict_only": true,
+    "compiler_usage_sidecar_must_remain_absent": true,
+    "compiler_cache_sidecar_must_remain_absent": true
+  },
+  "fresh_outputs": {
+    "root": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716",
+    "database": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/intelligence.db",
+    "runtime_source": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source",
+    "harness_source": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/harness-source",
+    "prediction_directory": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v11-replay-v7gpt54mini"
+  },
+  "fairness": {
+    "dev42_is_consumed_and_prior_scores_are_known": true,
+    "human_tuning_from_v6_v7_v8_failures_occurred": true,
+    "questions_dropped": 0,
+    "selective_retries": false,
+    "v7_prediction_files_to_copy": 0,
+    "ingestion_checkpoints_to_copy": 42,
+    "prediction_manifest_frozen_before_answerer_or_judge": true,
+    "permitted_claim": "consumed-development diagnostic only",
+    "forbidden_claims": [
+      "fresh V11 end-to-end compiler score",
+      "unseen or untouched holdout score",
+      "independent third-party reproduction",
+      "publishable 95 percent result"
+    ]
+  },
+  "model_access_policy": "No hosted-model access value is available to the replay backend. The predict-only harness receives only a fixed non-sensitive constructor sentinel. No hosted model call is permitted in this phase."
+}

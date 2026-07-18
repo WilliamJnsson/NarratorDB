@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T19:55:31Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "fresh GPT-5.4-Mini V13/V14 paid pair after exact-model API compatibility correction",
+  "inherits_frozen_arms_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v13_v14_paid_pair_precommit_20260717.json",
+    "sha256": "16019db3eb7bef0fadb1027af6f9e6fc3698e428a06f7b848f676d6cfb665cb5"
+  },
+  "supersedes_launch": {
+    "precommit_path": "benchmark_records/precommits/longmemeval_dev42_v13_v14_gpt54mini_paid_pair_r2_precommit_20260717.json",
+    "precommit_sha256": "669281f1ba7f1f7b89999e409c2eb704fe2365d56411153c63ecaea9dd480ffd",
+    "artifact_root": "reports/longmemeval-intelligence-dev42-v13-v14-gpt54mini-paid-pair-r2-20260717",
+    "status": "terminal_incomplete_no_score",
+    "cause": "the official client sent temperature=0 because the OpenRouter model slug did not satisfy its GPT-prefix compatibility check; the Azure GPT endpoint rejected that unsupported parameter"
+  },
+  "model_specific_rationale": {
+    "prediction_payloads_changed": false,
+    "benchmark_prompts_or_judge_rules_changed": false,
+    "reporting_rule": "report as a GPT-5.4-Mini-specific development score, not as interchangeable with GLM or competitor model scores"
+  },
+  "route_canary": {
+    "usage_log_path": "reports/gpt54mini-azure-route-canary-r4-20260717.jsonl",
+    "usage_log_sha256": "6146e48d5acf6d72f417b206e3bd2fa42be988e298593275b3439011b820bbe2",
+    "payload_shape": "official-harness max_tokens=4096 and temperature=0",
+    "gpt_5_4_mini_provider": "Azure",
+    "gpt_5_4_mini_nonempty": true,
+    "deepseek_v4_flash_provider": "DeepInfra",
+    "deepseek_v4_flash_nonempty": true,
+    "completion_calls": 2,
+    "unknown_cost_attempts": 0,
+    "malformed_responses": 0,
+    "cost_usd": 0.000065484
+  },
+  "evaluation_order": [
+    "v13-control",
+    "v14-treatment"
+  ],
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "openai/gpt-5.4-mini",
+    "answerer_provider_only": "Azure",
+    "answerer_output_token_parameter": "max_completion_tokens",
+    "answerer_temperature_omitted": true,
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_allow": [
+      "DeepInfra",
+      "StreamLake",
+      "GMICloud",
+      "Baidu",
+      "AtlasCloud"
+    ],
+    "provider_policy": "public-benchmark",
+    "reasoning_parameter_injected": false,
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "rejudge": true,
+    "proxy_path": "narratordb/benchmarks/openrouter_proxy.py",
+    "proxy_sha256": "a143e97d96e8109eb6421aa1a9427178f6178b2284cf74a9b72208bc2ecbad73",
+    "wrapper_path": "scripts/run_paired_evaluation_variant.sh",
+    "wrapper_sha256": "7a56e4c712b64c9117087570e61f23cf3422f0e1bf8fcafacc725e5763d743ad"
+  },
+  "compatibility_adapter": {
+    "scope": "exact model openai/gpt-5.4-mini only",
+    "behaviors": [
+      "rename max_tokens to max_completion_tokens while preserving its positive integer value",
+      "omit the unsupported temperature field"
+    ],
+    "prompt_changed": false,
+    "token_limit_changed": false,
+    "unmatched_models_unchanged": true
+  },
+  "budget": {
+    "pair_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "prediction_payloads_unchanged_from_v14_freeze": true,
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "score_fields_present_in_precommit": false
+  }
+}

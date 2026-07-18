@@ -1,0 +1,64 @@
+{
+  "schema_version": "narratordb.v13-paid-precommit-failed-preflight.v1",
+  "recorded_at_utc": "2026-07-16T06:33:11Z",
+  "status": "terminal failed preflight; superseded; never execute",
+  "failed_precommit": {
+    "path": "benchmark_records/reproduction-v13-paid-paired-scoring-20260716",
+    "seal_path": "benchmark_records/reproduction-v13-paid-paired-scoring-20260716/SHA256SUMS",
+    "seal_sha256": "c291095f321ab72bf151fcf9c025548828bc1bdef0f795e2729223786d5e215e",
+    "bound_inputs_manifest_sha256": "740957898cc8c272b1965dea3bc3583b5dd745b1de88544c5fa99a5ff1f4e6bc",
+    "sealed_members_still_verify": true,
+    "bound_inputs_still_verify": true,
+    "sealed_members_modified_after_failure": false
+  },
+  "terminal_findings": [
+    {
+      "code": "authorization-admission-bypass",
+      "finding": "The execution wrapper did not mechanically validate the frozen authorization schema, its bound hashes, or the exact variant argument tuple before starting a proxy."
+    },
+    {
+      "code": "between-variant-gate-not-closed-world",
+      "finding": "The recorded between-variant command trusted selected booleans and numeric fields without closed-schema validation, observed-time derivation, USD arithmetic validation, or bound artifact hashes."
+    },
+    {
+      "code": "campaign-ledgers-not-predeclared",
+      "finding": "The campaign declaration bound by this revision ended at the V11 pair and did not intentionally declare the two fixed V13 paid-pair evaluator ledger paths."
+    },
+    {
+      "code": "fx-policy-under-specified",
+      "finding": "The EUR gate did not freeze an official source URL, raw-response hash, latest-business-date rule, adverse buffer, or upward-cent rounding rule."
+    },
+    {
+      "code": "judge-response-identity-ambiguous",
+      "finding": "The protocol declared only the canonical undated judge response while the frozen transport could also accept the exact dated response; the accepted identity set was therefore not explicit and closed."
+    },
+    {
+      "code": "closed-world-inventory-missing",
+      "finding": "The revision had no fail-closed inventory that rejected undeclared files before seal or execution."
+    }
+  ],
+  "controls_that_did_pass": {
+    "both_evaluation_audit_completeness_flags_declared": true,
+    "explicit_zero-counter_score_gates_declared": true,
+    "real_provider_key_scoped_to_proxy_and_removed_from_harness_environment": true,
+    "max_output_tokens_4096_bound": true,
+    "staged_prediction_copies_remain_read_only_and_byte_identical": true
+  },
+  "call_and_cost_state": {
+    "attempt1_present": false,
+    "compiler_calls": 0,
+    "answerer_calls": 0,
+    "judge_calls": 0,
+    "scoring_calls": 0,
+    "external_model_network_calls": 0,
+    "paid_cost_usd": "0"
+  },
+  "disposition": {
+    "execute_failed_precommit": false,
+    "repair_in_place": false,
+    "preserve_as_evidence": true,
+    "replacement_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716",
+    "replacement_must_receive_new_seal_and_independent_audit": true
+  },
+  "credential_material_recorded": false
+}

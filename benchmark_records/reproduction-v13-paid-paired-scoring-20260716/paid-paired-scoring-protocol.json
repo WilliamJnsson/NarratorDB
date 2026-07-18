@@ -1,0 +1,221 @@
+{
+  "schema_version": "narratordb.paid-paired-evaluation-protocol.v3",
+  "created_at_utc": "2026-07-16T06:00:55Z",
+  "status": "precommitted after content-free byte-identical input staging and before any paid or remote evaluator call",
+  "classification": "paired official-harness evaluation on inspected and consumed LongMemEval-S dev42; V13 is a zero-model local retrieval replay over reused V7 compiler artifacts, not a fresh end-to-end, untouched, heldout, third-party, competitor, or publishable 95 percent score",
+  "purpose": "Evaluate frozen V7-control and V13-first predictions contemporaneously under the same frozen answerer, judge, routing, transport, cutoff, denominator, retry, and failure-preservation policy.",
+  "baseline_protocol": {
+    "name": "V11 fair paired development protocol",
+    "path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/paired-evaluation-protocol.json",
+    "sha256": "2ca59bd60ff0229f23d07845ad0e1afbd32150c713989ffae2e54501db18aa8f",
+    "changes_for_v13": [
+      "replace V11 replay prediction input with the frozen V13 first replay input",
+      "retain V7 as a newly evaluated contemporaneous control",
+      "stage and seal both input copies before execution",
+      "require fresh provider, campaign, and EUR-governance admission evidence before any paid call"
+    ]
+  },
+  "scope": {
+    "dataset": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "questions": 42,
+    "selection": "all 42 questions exactly once per variant; no score-dependent inclusion or exclusion",
+    "run_id": "v7m42a1",
+    "denominator_policy": "42 questions at each cutoff for each variant; missing, failed, empty, or unauditable output makes the attempt incomplete and cannot be silently removed"
+  },
+  "official_harness": {
+    "archive": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/harness-source.tar",
+    "archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "module": "benchmarks.longmemeval.run",
+    "mode": "answerer",
+    "evaluate_only": true,
+    "rejudge": true,
+    "all_questions": true,
+    "top_k": 200,
+    "top_k_cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm_per_llm_client": 60,
+    "seed": 42,
+    "temperature": 0,
+    "max_output_tokens": 4096,
+    "max_output_tokens_cli_override_supported": false,
+    "max_output_tokens_binding": "LLMClient.generate and LLMClient.generate_structured both default max_tokens to 4096; answerer and judge call sites do not override it",
+    "llm_client_source": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/harness-source/benchmarks/common/llm_client.py",
+    "llm_client_source_sha256": "b0dc8f4172ed11f7f4161df47c77ca83dd5996b075494cc39bd6a4d0a1f93701",
+    "prompts_modified": false,
+    "generation_retry_policy": "exact frozen harness policy: at most five automatic attempts inside the single invocation for one generation",
+    "harness_request_timeout_seconds": 120,
+    "harness_connect_timeout_seconds": 10,
+    "harness_retry_backoff_seconds": [
+      2,
+      4,
+      6,
+      8
+    ],
+    "openai_sdk": {
+      "version": "2.45.0",
+      "python": "3.12.13",
+      "default_internal_retries": 2,
+      "initial_retry_delay_seconds": 0.5,
+      "maximum_retry_delay_seconds": 8,
+      "backoff": "exponential with 0.75-to-1.0 multiplicative jitter unless a Retry-After value in (0,60] is supplied",
+      "base_client_sha256": "de8a3777d353122a242dd7376bf814668d7557675b81fe36b994d3f65a598c83",
+      "constants_sha256": "5a60b0813e2d1a616c4ab96d6f6e9fddb33c7ed532158933877d8dcb9ca5f92a"
+    },
+    "selective_question_retry": false,
+    "post_score_retry_or_resume": false,
+    "retry_disclosure": "automatic pre-result transport/generation retries are not selective question reruns; every attempt must remain in the content-free ledger and logs"
+  },
+  "evaluator": {
+    "transport": "frozen V11 content-free OpenRouter proxy",
+    "execution_wrapper": "benchmark_records/reproduction-v13-paid-paired-scoring-20260716/run_paid_variant_hardened.sh",
+    "execution_wrapper_sha256": "172ef577a2634d8d6badef55fb781f1aed3a0665ed10961c35aaf4e4918fb7f3",
+    "legacy_v11_wrapper_permitted": false,
+    "credential_isolation": "the real OpenRouter key is inherited only by the proxy subprocess, immediately unset in orchestration, and explicitly removed from the official harness environment",
+    "transport_source_archive": "reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz",
+    "transport_source_archive_sha256": "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+    "upstream": "https://openrouter.ai/api/v1/chat/completions",
+    "answerer_model": "z-ai/glm-5.2",
+    "answerer_provider_interface": "openai",
+    "answerer_expected_response_model": "z-ai/glm-5.2",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_interface": "openai",
+    "judge_expected_response_model": "deepseek/deepseek-v4-flash",
+    "reasoning_effort": "high",
+    "temperature": 0,
+    "provider_allowlist_in_order": [
+      "DeepInfra",
+      "StreamLake",
+      "GMICloud",
+      "Baidu",
+      "AtlasCloud"
+    ],
+    "allow_fallbacks_within_allowlist": true,
+    "require_parameters": true,
+    "data_collection": "deny",
+    "zero_data_retention": true,
+    "exact_response_model_and_final_provider_required": true,
+    "observed_route_identity_fail_closed": true,
+    "proxy_upstream_timeout_seconds": 180,
+    "proxy_port": 8890,
+    "runtime_authorization": "OPENROUTER_API_KEY environment only; never accepted in argv, JSON, logs, manifests, or source"
+  },
+  "variants": [
+    {
+      "order": 1,
+      "label": "v7-control",
+      "project_name": "narratordb-intelligence-dev42-v7-gpt54mini",
+      "classification": "frozen V7 predictions newly evaluated as the contemporaneous control",
+      "source_prediction_manifest_sha256": "e0f54d6879f46d76a51c2b785b67b5ae45c790a591263bab4d73a0b7211b8cac",
+      "staged_copy_manifest_sha256": "fbb21b8a00502b762874c0a2a24aa6db5a6c9a0185d0b36189b62f958cc123d6",
+      "staged_prediction_directory": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini",
+      "attempt_output_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/official-harness",
+      "usage_ledger": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl",
+      "proxy_log": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/proxy.log",
+      "evaluator_log": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation/evaluate.log",
+      "evaluation_audit": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v7-control/evaluation-audit.json",
+      "soft_usage_fuse_usd": "1.25"
+    },
+    {
+      "order": 2,
+      "label": "v13-first",
+      "project_name": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+      "classification": "V13 local retrieval/render over reused V7 compiler artifacts on consumed dev42",
+      "source_prediction_manifest_sha256": "347e5db630bfc5b6a2725d137bccb2ec90130c534edda259fda70d90fa610c74",
+      "source_prediction_freeze_manifest_sha256": "6c3ab41516aea642d0fdd7b9f04ffae175ddb704644cbbe4710696838341d03f",
+      "dual_replay_success_manifest_sha256": "263093f333b853cabb5fb3a124009e4debfd9a3cdaaf62e28dd0a987b93c9b23",
+      "staged_copy_manifest_sha256": "0ec08135fa114b4903eaa0a7d004d5ec82d22a2c55d313ef270d87d2595d71fa",
+      "staged_prediction_directory": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+      "attempt_output_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/official-harness",
+      "usage_ledger": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl",
+      "proxy_log": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/proxy.log",
+      "evaluator_log": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation/evaluate.log",
+      "evaluation_audit": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/attempt1/v13-first/evaluation-audit.json",
+      "soft_usage_fuse_usd": "1.25"
+    }
+  ],
+  "budget_governance": {
+    "fuse_enforcement": "frozen proxy soft fuse with a USD 0.05 in-flight reservation per request and USD 0.01 safety reserve",
+    "per_variant_soft_fuse_usd": "1.25",
+    "projected_maximum_new_spend_usd": "2.50",
+    "projection_qualification": "the combined configured soft fuses are the campaign projection; provider-reported request cost can arrive after an in-flight reservation, so this is not represented as a cryptographic absolute billing bound",
+    "campaign_baseline_observed_usd": "108.31010877191",
+    "campaign_projected_after_both_fuses_usd": "110.81010877191",
+    "campaign_provider_cap_usd": "250",
+    "campaign_projected_headroom_usd": "139.18989122809",
+    "provider_baseline_usage_usd": "121.362526048",
+    "provider_baseline_remaining_usd": "128.637473952",
+    "provider_projected_after_both_fuses_usd": "123.862526048",
+    "provider_projected_remaining_usd": "126.137473952",
+    "governance_ceiling_eur": "300",
+    "cross_currency_conversion_frozen_at_precommit": false,
+    "historical_baseline_admitted_under_usd_caps": true,
+    "execution_admission": {
+      "fresh_campaign_audit_required": true,
+      "fresh_provider_key_telemetry_required": true,
+      "provider_telemetry_max_age_before_each_variant_minutes": 15,
+      "provider_remaining_must_cover_all_unspent_variant_fuses": true,
+      "trusted_usd_to_eur_snapshot_required": true,
+      "eur_formula": "(fresh campaign observed USD + 2.50 USD) * frozen USD-to-EUR rate <= 300 EUR",
+      "authorization_record_must_be_frozen_before_first_model_call": true,
+      "admission_fail_closed": true
+    }
+  },
+  "execution_order": [
+    "verify the externally published precommit SHA, every bound source seal, both staged-copy manifests, and the absence of attempt1",
+    "recompute the campaign audit and capture fresh content-free provider telemetry and a trusted USD-to-EUR snapshot",
+    "prepare fresh byte-identical writable attempt1 copies from both sealed read-only staged copies before any model request",
+    "freeze an execution-authorization record binding both working-copy manifests and proving provider, campaign, and EUR headroom before any model request",
+    "run V7-control once with a fresh proxy and a separate new ledger",
+    "freeze and verify content-free between-variant provider telemetry before starting V13-first",
+    "run V13-first once with a fresh proxy and a separate new ledger",
+    "audit each 42-question result, verify staged and original inputs stayed unchanged, and seal success or the complete failure state"
+  ],
+  "success_rule": {
+    "variants_complete": 2,
+    "questions_per_variant": 42,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "questions_dropped": 0,
+    "empty_answers": 0,
+    "empty_judges": 0,
+    "unknown_cost_attempts": 0,
+    "invalid_completion_identities": 0,
+    "frozen_prediction_payload_mismatches": 0,
+    "all_failed_and_retry_attempts_preserved": true,
+    "both_scores_use_fixed_denominator_42": true
+  },
+  "failure_rule": {
+    "preserve": "all staged inputs, working copies, authorization records, ledgers, health records, proxy logs, evaluator logs, partial outputs, audits, exit statuses, and provider telemetry",
+    "forbid": [
+      "deleting or overwriting the attempt",
+      "dropping a question or failed result",
+      "selectively rerunning or resuming a question after any score is visible",
+      "changing models, providers, routing, prompts, reasoning, temperature, cutoffs, denominator, or order",
+      "combining a later retry with this attempt"
+    ],
+    "disposition": "seal the attempt as failed or incomplete; any later campaign requires a new precommit and a new attempt root"
+  },
+  "compiler_calls_in_evaluation": 0,
+  "answerer_calls_before_precommit": 0,
+  "judge_calls_before_precommit": 0,
+  "scoring_calls_before_precommit": 0,
+  "external_model_network_calls_before_precommit": 0,
+  "cost_before_precommit_usd": "0",
+  "permitted_claim": "paired consumed-development V7-control versus V13-local-replay result",
+  "forbidden_claims": [
+    "fresh V13 compiler score",
+    "untouched holdout score",
+    "independent third-party reproduction",
+    "competitor benchmark result",
+    "publishable 95 percent result"
+  ]
+}

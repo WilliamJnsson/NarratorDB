@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "audit": "LongMemEval-S untouched held-out eligibility",
+  "created_at": "2026-07-16T06:33:16+09:00",
+  "repository_head": "4fe10683ed4e4ecb85482c7a7a71dc08a84d4a83",
+  "policy": {
+    "eligible_question_must_be_disjoint_from": [
+      "longmemeval_s_dev42_question_ids.json",
+      "every prior locally scored LongMemEval-S question scope"
+    ],
+    "content_inspection_prohibited": true,
+    "metadata_used": [
+      "question IDs",
+      "question types declared by the split manifest",
+      "dataset hashes",
+      "question counts",
+      "all_questions flags",
+      "record status"
+    ]
+  },
+  "dataset": {
+    "name": "LongMemEval_S",
+    "questions": 500,
+    "sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442"
+  },
+  "existing_split": {
+    "manifest": {
+      "filename": "longmemeval_s_split_manifest.json",
+      "sha256": "636e95fd06ec2bc9a21633a2d964dc10e165c0f963e45ffb83ba7ae582d8f8c4"
+    },
+    "development": {
+      "filename": "longmemeval_s_dev42_question_ids.json",
+      "questions": 42,
+      "sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff"
+    },
+    "holdout_candidate": {
+      "filename": "longmemeval_s_holdout458_question_ids.json",
+      "questions": 458,
+      "sha256": "b2ebe3d023e65369cba071afd622384ce5cc4217e67ed492cd66c7b6a62c6207"
+    },
+    "development_holdout_overlap": 0,
+    "union_questions": 500
+  },
+  "prior_scored_all_dataset_records": [
+    {
+      "filename": "../narratordb_full500_v4flash_20260714.json",
+      "file_sha256": "4bd38bba5ac212bdfcde9c909e4a70fb3eacea12e5dbcadc99f3bdfa0ea2d05e",
+      "introduced_by_commit": "f631e6e2db51cb93c716e7548526d4ec79d97f98",
+      "status": "final-frozen",
+      "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+      "questions": 500,
+      "all_questions": true,
+      "official_score_denominator": 500
+    },
+    {
+      "filename": "../narratordb_full500_glm52_20260715.json",
+      "file_sha256": "df24667f4a5bf6ee0fde9c97a23040f4503a563be9a16d48bd36cd5cc6387962",
+      "introduced_by_commit": "419e3519bf187fda468a483dbe21801dcbfb63b6",
+      "status": "final-frozen",
+      "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+      "questions": 500,
+      "all_questions": true,
+      "official_score_denominator": 500
+    }
+  ],
+  "set_audit": {
+    "holdout_candidate_overlap_with_development": 0,
+    "holdout_candidate_overlap_with_prior_scored_union": 458,
+    "dataset_questions_outside_prior_scored_union": 0,
+    "eligible_untouched_questions": 0
+  },
+  "conclusion": {
+    "status": "no_eligible_scope",
+    "genuinely_untouched_longmemeval_s_scope_exists": false,
+    "reason": "A prior final-frozen run scored all 500 questions of the same dataset hash, so every possible LongMemEval-S subset overlaps prior scored IDs.",
+    "existing_holdout458_valid_label": "reserved protocol split previously scored by older systems",
+    "existing_holdout458_invalid_label": "never-scored held-out benchmark",
+    "required_for_new_untouched_claim": "Use a benchmark dataset or newly released dataset version whose question-ID universe has no overlap with prior scored scopes."
+  }
+}

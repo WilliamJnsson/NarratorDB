@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-07-14",
+  "status": "final-frozen",
+  "run_id": "narratordb-full500-v4flash-5af42210",
+  "system": "NarratorDB",
+  "classification": "Frozen official-harness all-500 LongMemEval_S evaluate-only score with dated DeepSeek V4 Flash answerer and judge; known development and untouched holdout scopes reported separately",
+  "implementation": {
+    "release": "1.2.0",
+    "retrieval_base_git_commit": "4c6c10f54b761d4eaedca28ac52688a6653a6245",
+    "engine_sha256": "3e76515b93f4082df7571fc70ec9f97d7a0bb102cf1f5fc0710075e5455a212e",
+    "benchmark_server_sha256": "2a3290ebbb948c8dfebedcd71a6334eb8b104da068e5c7e75fa11b6b112a2628",
+    "schema_version": 2,
+    "normalized_terms_version": 1,
+    "benchmark_answer_constants_in_engine": false,
+    "retrieval_payload_changed_after_freeze": false,
+    "post_full500_engine_tuning": false
+  },
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_remote_head_at_source_check": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_worktree_clean": true,
+    "harness_run_id": "5af42210",
+    "project_name": "narratordb-frozen-full500-20260714",
+    "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+    "questions": 500,
+    "mode": "evaluate-only over immutable predict-only retrieval",
+    "all_questions": true,
+    "top_k": 200,
+    "cutoffs": [10, 20, 50, 200],
+    "max_workers": 10,
+    "answerer_rpm": 60,
+    "judge_rpm": 60,
+    "upstream_default_rpm": 200,
+    "seed": 42,
+    "temperature": 0,
+    "official_harness_unmodified": true,
+    "official_prompts_and_aggregation_unmodified": true,
+    "official_five_attempt_retry_policy": true,
+    "failed_samples_retained_in_denominator": true,
+    "scheduling_deviation": "The declared 60-RPM cap per answerer and judge client is below the harness default to respect provider limits. It changes request scheduling, not benchmark prompts, contexts, verdict rules, or aggregation."
+  },
+  "source_verification": {
+    "checked_at": "2026-07-14T13:32:55+02:00",
+    "longmemeval_run_py_sha256": "99bd3d6d9a69072f9125550a0409f0de0aeaec66309416060db3daf12e137861",
+    "llm_client_py_sha256": "b0dc8f4172ed11f7f4161df47c77ca83dd5996b075494cc39bd6a4d0a1f93701",
+    "source_verification_sha256": "3e1162a8194c7ef31f0c782d61b483231d377cce729da763bcba091357970fbb"
+  },
+  "models": {
+    "answerer_request_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_request_model": "deepseek/deepseek-v4-flash-20260423",
+    "request_model_count": 4043,
+    "response_model_metadata_counts": {
+      "deepseek/deepseek-v4-flash": 4030,
+      "missing_metadata": 13
+    },
+    "reasoning_effort": "high",
+    "temperature": 0,
+    "transport": "Content-free local OpenAI-compatible proxy to OpenRouter",
+    "provider_allowlist": ["DeepInfra", "StreamLake", "GMICloud", "Baidu"],
+    "provider_fallbacks_allowed_within_allowlist": true,
+    "provider_response_counts": {
+      "Baidu": 11,
+      "DeepInfra": 414,
+      "GMICloud": 3309,
+      "StreamLake": 296,
+      "missing_metadata": 13
+    },
+    "retrieval_embedding_role": "Local retrieval encoder only; never answerer or judge",
+    "retrieval_embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "retrieval_embedding_snapshot": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    "retrieval_embedding_api_calls": 0
+  },
+  "leakage_control": {
+    "official_all500_status": "final-frozen; includes known development questions",
+    "known_development_questions": 42,
+    "untouched_holdout_questions": 458,
+    "known_development_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "untouched_holdout_ids_sha256": "b2ebe3d023e65369cba071afd622384ce5cc4217e67ed492cd66c7b6a62c6207",
+    "labels_or_answers_passed_to_retrieval": false,
+    "question_scope_passed_to_retrieval": false,
+    "derivation": "The development set is the union of questions seen in the earlier 30-question V4 calibration, six-question smoke, and deterministic 12-question adapter sample. The holdout is the exact dataset complement."
+  },
+  "official_scores": {
+    "all500": {
+      "questions": 500,
+      "top_10": {"correct": 368, "total": 500, "accuracy": 0.736},
+      "top_20": {"correct": 390, "total": 500, "accuracy": 0.78},
+      "top_50": {"correct": 380, "total": 500, "accuracy": 0.76},
+      "top_200": {"correct": 383, "total": 500, "accuracy": 0.766},
+      "best_declared_cutoff": 20
+    },
+    "known_development42": {
+      "questions": 42,
+      "top_10": {"correct": 36, "total": 42, "accuracy": 0.857143},
+      "top_20": {"correct": 34, "total": 42, "accuracy": 0.809524},
+      "top_50": {"correct": 34, "total": 42, "accuracy": 0.809524},
+      "top_200": {"correct": 35, "total": 42, "accuracy": 0.833333}
+    },
+    "untouched_holdout458": {
+      "questions": 458,
+      "top_10": {"correct": 332, "total": 458, "accuracy": 0.724891},
+      "top_20": {"correct": 356, "total": 458, "accuracy": 0.777293},
+      "top_50": {"correct": 346, "total": 458, "accuracy": 0.755459},
+      "top_200": {"correct": 348, "total": 458, "accuracy": 0.759825},
+      "best_declared_cutoff": 20
+    },
+    "all500_by_question_type": {
+      "knowledge-update": {
+        "questions": 78,
+        "top_10": 67,
+        "top_20": 69,
+        "top_50": 66,
+        "top_200": 67
+      },
+      "multi-session": {
+        "questions": 133,
+        "top_10": 68,
+        "top_20": 83,
+        "top_50": 81,
+        "top_200": 82
+      },
+      "single-session-assistant": {
+        "questions": 56,
+        "top_10": 53,
+        "top_20": 51,
+        "top_50": 53,
+        "top_200": 51
+      },
+      "single-session-preference": {
+        "questions": 30,
+        "top_10": 18,
+        "top_20": 22,
+        "top_50": 20,
+        "top_200": 19
+      },
+      "single-session-user": {
+        "questions": 70,
+        "top_10": 66,
+        "top_20": 64,
+        "top_50": 62,
+        "top_200": 65
+      },
+      "temporal-reasoning": {
+        "questions": 133,
+        "top_10": 96,
+        "top_20": 101,
+        "top_50": 98,
+        "top_200": 99
+      }
+    }
+  },
+  "output_integrity": {
+    "official_harness_score_complete_all500": true,
+    "official_harness_score_complete_development42": true,
+    "official_harness_score_complete_holdout458": true,
+    "strict_no_empty_output_complete_all500": false,
+    "strict_no_empty_output_complete_development42": true,
+    "strict_no_empty_output_complete_holdout458": false,
+    "evaluated_question_files": 500,
+    "unique_question_ids": 500,
+    "valid_scored_cutoff_items": 2000,
+    "missing_question_ids": 0,
+    "missing_cutoffs": 0,
+    "invalid_scores": 0,
+    "inconsistent_verdicts": 0,
+    "empty_judges": 0,
+    "frozen_payload_mismatches": 0,
+    "empty_generated_answers": [
+      {"question_id": "gpt4_7abb270c", "cutoff": "top_50", "score": 0, "judge_output_nonempty": true},
+      {"question_id": "gpt4_7abb270c", "cutoff": "top_200", "score": 0, "judge_output_nonempty": true}
+    ],
+    "policy": "The two empty generated answers received valid FAIL judgments and remain score-zero items. They were not replaced, rerun, or removed."
+  },
+  "usage_and_cost": {
+    "completion_http_200_responses": 4043,
+    "upstream_http_errors": 0,
+    "malformed_http_200_responses_retried_by_harness": 13,
+    "prompt_tokens": 27063907,
+    "cached_prompt_tokens": 3751365,
+    "completion_tokens": 1549943,
+    "reasoning_tokens": 1424814,
+    "finish_reason_counts": {
+      "stop": 3999,
+      "length": 14,
+      "error": 7,
+      "unknown": 23
+    },
+    "response_cost_usd": 2.61591663084,
+    "response_cost_per_question_usd": 0.00523183326168,
+    "dedicated_key_all_attempt_account_usage_usd": 2.645443064,
+    "dedicated_key_limit_remaining_at_check_usd": 77.354556936,
+    "excluded_preliminary_response_cost_usd": {
+      "deepinfra_aborted": 0.004945968,
+      "routing_canary": 0.0245736414
+    },
+    "account_minus_all_recorded_response_ledgers_usd": 0.00000682376,
+    "cost_policy": "The published cost is final-run response metadata only. Dedicated-key account usage is separately disclosed and includes archived preliminary attempts."
+  },
+  "retries": {
+    "failed_generation_attempt_counts": {"1": 13},
+    "timed_out_generation_attempt_counts": {"1": 8, "2": 1, "4": 1, "5": 1},
+    "returned_none_responses": 21,
+    "attempt_five_failures_or_timeouts": 1,
+    "final_denominator_reduced": false
+  },
+  "performance": {
+    "started_at": "2026-07-14T13:11:35+02:00",
+    "completed_at": "2026-07-14T14:20:39+02:00",
+    "wall_seconds": 4144,
+    "wall": "69m04s",
+    "questions_per_minute": 7.239382,
+    "completion_http_200_responses_per_minute": 58.537645,
+    "frozen_retrieval_official_http_search_latency_ms_all500": {
+      "samples": 500,
+      "mean": 769.6972,
+      "median": 790.45,
+      "p95_nearest_rank": 1458.8,
+      "min": 24.7,
+      "max": 1938.4
+    },
+    "mem0_platform_v3_artifact_search_latency_reference_ms": {
+      "samples": 500,
+      "mean": 2381.8756,
+      "median": 2468.1,
+      "p95": 3353.5
+    },
+    "narratordb_observed_lower_latency_ratio": {
+      "mean": 3.094562,
+      "median": 3.122399,
+      "p95": 2.298807
+    },
+    "controlled_latency_head_to_head": false,
+    "latency_caveat": "The latency field has the same benchmark meaning, but NarratorDB ran locally on declared hardware while the reference Mem0 platform ran remotely on undisclosed managed infrastructure."
+  },
+  "retrieval_and_answer_attribution": {
+    "metric_definition": "Official V4 Flash PASS rate conditioned on exact labeled evidence-session presence; diagnostic correlation, not a rescore",
+    "top_10": {
+      "retrieval_any": {"questions": 476, "passed": 365, "pass_rate": 0.766807},
+      "retrieval_all": {"questions": 405, "passed": 346, "pass_rate": 0.854321},
+      "no_labeled_session": {"questions": 24, "passed": 3, "pass_rate": 0.125}
+    },
+    "top_20": {
+      "retrieval_any": {"questions": 484, "passed": 389, "pass_rate": 0.803719},
+      "retrieval_all": {"questions": 434, "passed": 371, "pass_rate": 0.854839},
+      "no_labeled_session": {"questions": 16, "passed": 1, "pass_rate": 0.0625}
+    },
+    "top_50": {
+      "retrieval_any": {"questions": 489, "passed": 379, "pass_rate": 0.775051},
+      "retrieval_all": {"questions": 449, "passed": 368, "pass_rate": 0.819599},
+      "no_labeled_session": {"questions": 11, "passed": 1, "pass_rate": 0.090909}
+    },
+    "top_200": {
+      "retrieval_any": {"questions": 489, "passed": 383, "pass_rate": 0.783231},
+      "retrieval_all": {"questions": 449, "passed": 372, "pass_rate": 0.828508},
+      "no_labeled_session": {"questions": 11, "passed": 0, "pass_rate": 0.0}
+    },
+    "interpretation": "Final accuracy is constrained by both remaining retrieval misses and V4 Flash answer/judge/context reasoning. Even complete labeled-session retrieval did not imply a PASS."
+  },
+  "mem0_accuracy_reference": {
+    "source": "Official Mem0 memory-benchmarks README at the pinned harness commit",
+    "answerer_and_judge": "GPT-5",
+    "published_top_50": {"correct": 474, "total": 500, "accuracy": 0.948},
+    "published_top_200": {"correct": 472, "total": 500, "accuracy": 0.944},
+    "bundled_artifact_top_50": {"correct": 452, "total": 500, "accuracy": 0.904},
+    "bundled_artifact_top_200": {"correct": 467, "total": 500, "accuracy": 0.934},
+    "upstream_published_vs_artifact_discrepancy_recorded": true,
+    "same_model_comparison": false,
+    "narratordb_beats_mem0_accuracy_claim": false
+  },
+  "regression_gates": {
+    "completed_at": "2026-07-14T14:30:42+02:00",
+    "exit_code": 0,
+    "release_validation_log_sha256": "1807fe750cda716a6f9417a087054547d917eb0ed6f0e1709835dccfafc4bdfc",
+    "compileall": "passed",
+    "ruff": "passed",
+    "sdist_and_wheel_build": "passed",
+    "installed_wheel_smoke": "passed",
+    "unit_tests": {"passed": 33, "failed": 0},
+    "stress_suites": {
+      "provenance": "passed",
+      "advanced_system": "passed",
+      "code_retrieval": "passed",
+      "typed_memory": "passed",
+      "every_angle": "passed",
+      "complex_retrieval": "passed"
+    },
+    "locomo_context_retrieval": {
+      "answers_in_context": 1301,
+      "questions": 1540,
+      "recall": 0.8448,
+      "mean_ms": 6.322,
+      "p95_ms": 12.677
+    },
+    "noise_scale": {
+      "noise_messages": 5000,
+      "fixed_queries": 6,
+      "hit_rate": 1.0,
+      "mean_ms": 1.383,
+      "p95_ms": 4.25
+    }
+  },
+  "artifact_hashes": {
+    "official_unified_result_sha256": "7b1e4ec3907a41d8dff73a2c0dd8333353c7bbf684d8d169ef678f8a3bc0f3b2",
+    "all500_evaluation_audit_sha256": "f8ec9f043944cd26e129dbac60e9521145d3b64a1ad2fd7aaeb9d5bd1b5ca9aa",
+    "development42_evaluation_audit_sha256": "a15430a2f715d64bd6c62bc9f7be535edf9d7e72d90677145cc19b632c208bec",
+    "holdout458_evaluation_audit_sha256": "5778c4e45282e95de1d1df0d0df6239290de1fad2cf9ce3ccfcd48df7d9287e5",
+    "answer_retrieval_attribution_sha256": "c4106289454e8d4e65aa4e4adb9d1c8190def913753dcd60ca43a1e7eb915b28",
+    "run_protocol_sha256": "c63ada3aadc21133b6d0b1314465757d05c3fe018df43db8ddc8da9bfbec6a78",
+    "account_usage_summary_sha256": "19fa7d246eca328f398db11306734c3f6430e85a729dfc545140ab3d3fea6d1c",
+    "evaluator_log_sha256": "126aa2bb82811200e8440f6bdc94c80a7ee69cc422968647790b63a78bfc1252",
+    "openrouter_usage_ledger_sha256": "0bd837382661ddc698227154a2ae89419be1b1f1fcd17810c2780dd32777702f"
+  },
+  "artifact_directory": "reports/longmemeval-full500-v4flash-20260714",
+  "publication": {
+    "raw_archive_location": "Local ignored reports directory with SHA-256 manifest",
+    "sanitized_record_tracked_in_private_repository": true,
+    "preliminary_runs_tracked_separately": true
+  },
+  "comparability": {
+    "exact_latest_official_mem0_harness_at_check": true,
+    "same_dataset_question_denominator_chunking_prompts_topk_cutoffs_and_scoring": true,
+    "same_harness_worker_concurrency": true,
+    "same_harness_default_rpm": false,
+    "same_answerer_and_judge_as_mem0_published_score": false,
+    "controlled_latency_head_to_head": false,
+    "claim_beats_mem0_accuracy": false,
+    "reason": "This is a complete official-harness V4 Flash score. Mem0's publication used GPT-5, and the observed latency comparison crosses local and managed infrastructure, so neither an identical GPT-5 reproduction nor a controlled latency head-to-head is claimed."
+  }
+}

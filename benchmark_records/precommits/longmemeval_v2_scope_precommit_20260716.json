@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "artifact_type": "benchmark_scope_precommit",
+  "precommit_id": "longmemeval-v2-blind-development-scope-20260716",
+  "created_at": "2026-07-16T06:51:27+09:00",
+  "repository_state": {
+    "head": "4fe10683ed4e4ecb85482c7a7a71dc08a84d4a83",
+    "working_tree_dirty": true,
+    "note": "This freezes the benchmark data scope while implementation work remains uncommitted. The evaluated implementation must be frozen separately before data access or scoring."
+  },
+  "state": {
+    "phase": "dataset_scope_frozen_protocol_unresolved",
+    "run_authorized": false,
+    "reason": "The adapter, implementation, reader, judge, provider, retry, cost, and final success rules are not frozen."
+  },
+  "claim_semantics": {
+    "allowed_label": "LongMemEval-V2 full scope precommitted before an answer-bearing local dataset download or NarratorDB adapter/run; public-answer and blind to this NarratorDB development process under the documented audit, not globally secret.",
+    "eligible_as": [
+      "a public-answer benchmark scope selected before NarratorDB development against it",
+      "a third-party-run blind evaluation if a custodian keeps answer-bearing files outside the NarratorDB process"
+    ],
+    "not_eligible_as": [
+      "an official hidden test",
+      "a globally unseen dataset",
+      "proof against exposure through model pretraining, browser caches, other machines, or people",
+      "an official leaderboard score before the exact official submission-compatible protocol is frozen and completed"
+    ]
+  },
+  "official_sources": {
+    "paper": {
+      "identifier": "arXiv:2605.12493",
+      "url": "https://arxiv.org/abs/2605.12493"
+    },
+    "repository": {
+      "url": "https://github.com/xiaowu0162/LongMemEval-V2",
+      "commit": "be15ea6e995462f3391c1a610892df3f67dfa7bd",
+      "license_spdx": "Apache-2.0"
+    },
+    "dataset": {
+      "url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-v2",
+      "revision": "f152293e235517d504809563c833d7190b8c713b",
+      "license_spdx": "Apache-2.0",
+      "public": true,
+      "gated": false,
+      "checksum_manifest_path": "checksums.sha256",
+      "checksum_manifest_sha256": "b17a18daa52873f915808502217c3c5fab39d20638544f986401155c9e8d67a6",
+      "metadata_url": "https://huggingface.co/api/datasets/xiaowu0162/longmemeval-v2/tree/f152293e235517d504809563c833d7190b8c713b?recursive=true&expand=true"
+    }
+  },
+  "dataset_scope": {
+    "questions": 451,
+    "question_selection": "all questions",
+    "sampling": "none",
+    "variants": [
+      "small",
+      "medium"
+    ],
+    "variant_reporting": "small and medium must be reported separately; neither may be silently substituted or omitted after results are observed",
+    "multimodal": true,
+    "public_reference_answers": true,
+    "core_files": [
+      {
+        "path": "questions.jsonl",
+        "size_bytes": 286186,
+        "sha256": "0a3ae5ebea938c24d7800e1e0b0828e08ae1646f939a53853b2b8cdc08e292b7"
+      },
+      {
+        "path": "trajectories.jsonl",
+        "size_bytes": 1195604539,
+        "sha256": "363cec9a8e87aa8d9101ce4e600aadbf7031d674056ebe4f969e8424abc5f3c6"
+      },
+      {
+        "path": "haystacks/lme_v2_small.json",
+        "size_bytes": 822632,
+        "sha256": "9b5301defb23a088a5f06e45ff8d5f35e569d78305a66d492046a9fff9b46593"
+      },
+      {
+        "path": "haystacks/lme_v2_medium.json",
+        "size_bytes": 4054244,
+        "sha256": "4756d5126347f0d18f045bb6c47b08cb3b23e9db24386cc48a9b2879e7969b59"
+      },
+      {
+        "path": "trajectory_screenshots/enterprise_screenshots_base.tar.gz",
+        "size_bytes": 3354163660,
+        "sha256": "5c4a67ae0856aa1ede9b040e7da7c7a2d0b76fdd6344ef87380bcdf9f4b6d7a3",
+        "sha256_provenance": "Official Hugging Face tree metadata lfs.oid."
+      },
+      {
+        "path": "trajectory_screenshots/web_screenshots.tar.gz",
+        "size_bytes": 2562302847,
+        "sha256": "68699c6842412e09a6f89d3c05c5ae8813275918002b52d82dec43ab24dd01fb",
+        "sha256_provenance": "Official Hugging Face tree metadata lfs.oid."
+      }
+    ],
+    "immutability_rule": "The full 451-question universe, both named variants, dataset revision, and official file hashes cannot be changed by a later amendment."
+  },
+  "access_attestation": {
+    "scope": "Actions in this research/precommit process plus repository-visible files; this is not an audit of browser caches, provider systems, other machines, model pretraining, or human memory.",
+    "answer_bearing_dataset_file_downloaded_locally": false,
+    "dataset_file_added_to_repository": false,
+    "local_answer_bearing_file_opened_or_parsed": false,
+    "deliberate_answer_inspection_or_use_for_development": false,
+    "automatic_public_web_preview_rendered_during_source_research": true,
+    "preview_content_copied_or_used": false,
+    "metadata_only_files_fetched": [
+      "official checksums.sha256"
+    ],
+    "metadata_inspected": [
+      "official README, schema, license, repository, and leaderboard documentation",
+      "official Hugging Face dataset-card, revision, file-size, Git LFS, and checksum metadata",
+      "local filenames, exact file sizes, binary-text matches, and reachable Git history"
+    ]
+  },
+  "prior_local_use_audit": {
+    "audit_scope": "Current repository tree including ignored and binary files plus reachable Git paths, content history, and blob sizes at precommit time.",
+    "matching_dataset_or_result_filename_found": false,
+    "matching_binary_or_text_content_files": [
+      "BENCHMARKS.md"
+    ],
+    "only_current_reference": "BENCHMARKS.md marks LongMemEval-V2 as planned and not scored.",
+    "reachable_git_commits_with_reference": [
+      "4c6c10f54b761d4eaedca28ac52688a6653a6245"
+    ],
+    "matching_historical_dataset_or_result_path_found": false,
+    "official_core_file_exact_size_found_in_current_tree": false,
+    "official_core_file_exact_size_found_in_reachable_git_blobs": false,
+    "official_revision_or_core_checksum_found_in_prior_history": false,
+    "narratordb_adapter_found": false,
+    "narratordb_run_record_found": false,
+    "conclusion": "No local LongMemEval-V2 dataset, adapter, output, or score was found. The only repository reference says planned and not scored. This supports blind-to-this-development-process, not globally hidden."
+  },
+  "official_evaluation_status": {
+    "official_harness_pinned": true,
+    "official_submission_is_server_side_hidden_evaluation": false,
+    "question_level_evaluation_declared_by_dataset": true,
+    "narratordb_adapter_verified": false,
+    "final_primary_metric_verified_for_this_precommit": false,
+    "success_threshold_verified_for_this_precommit": false,
+    "note": "The released questions contain public reference answers and evaluator declarations. The public leaderboard package is self-run; this artifact does not guess an adapter, aggregate metric, judge configuration, or 95% rule."
+  },
+  "unresolved_protocol": {
+    "narratordb_git_commit": null,
+    "narratordb_container_digest": null,
+    "official_backend_adapter_and_trajectory_ingestion": null,
+    "reader_model_and_provider": null,
+    "judge_model_and_provider": null,
+    "embedding_or_controller_model_and_provider": null,
+    "model_versions_and_routing_policy": null,
+    "prompts_and_prompt_hashes": null,
+    "temperature_seed_and_determinism": null,
+    "retry_timeout_and_failure_denominator_policy": null,
+    "primary_metric_and_aggregation": null,
+    "success_rule": null,
+    "third_party_custodian": null,
+    "maximum_run_budget": null
+  },
+  "amendment_policy": {
+    "required_before_data_access_or_run": true,
+    "requirements": [
+      "A later hash-stable protocol artifact must reference this artifact and its published SHA-256.",
+      "Every unresolved field must be frozen before an answer-bearing dataset download, adapter development against dataset rows, or scored run.",
+      "The later artifact may not change the frozen question universe, variants, revision, or hashes.",
+      "Any failed, timed-out, or malformed item must remain in the denominator under the frozen failure policy."
+    ]
+  },
+  "third_party_validation_requirements": [
+    "A neutral custodian fetches the pinned official dataset revision and verifies every official checksum before evaluation.",
+    "Reference answers and evaluator-only fields remain outside the NarratorDB process; NarratorDB receives only protocol-permitted trajectories and questions.",
+    "The custodian runs the frozen NarratorDB commit or container and the pinned official harness without post-result code changes.",
+    "The custodian records hashes for every input, system output, evaluator output, log, model identifier, provider request identifier, retry, failure, token count, and cost.",
+    "The signed result bundle includes all 451 question IDs and reports small and medium separately.",
+    "Released outputs can be re-scored deterministically; hosted-model generation variance is reported under the precommitted rerun policy."
+  ]
+}

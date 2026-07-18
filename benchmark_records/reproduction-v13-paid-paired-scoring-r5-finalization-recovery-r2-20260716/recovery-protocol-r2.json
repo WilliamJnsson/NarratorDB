@@ -1,0 +1,199 @@
+{
+  "attempt_preservation": {
+    "checks_required": [
+      "before-stage-a-computation",
+      "after-stage-a-computation-before-publication",
+      "before-stage-b-score-bearing-computation",
+      "after-stage-b-score-bearing-computation-before-atomic-publication"
+    ],
+    "directories": 404,
+    "files": 5185,
+    "hardlinked_regular_files": 0,
+    "inventory_algorithm": "NUL-sorted find stream; stat %N|%HT|%z|%Sp|%l record for every entry; standard shasum record immediately after every regular non-symlink file; SHA-256 of the concatenation",
+    "root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1",
+    "symlinks": 0,
+    "tree_fingerprint_sha256": "db0f54b46b3c24c6fac212e59a472365451dd88638f2b8274bf94538b804f804",
+    "writes_allowed": false
+  },
+  "created_at_utc": "2026-07-16T16:17:00Z",
+  "execution_environment": {
+    "allowed_environment_keys": [
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "PYTHONDONTWRITEBYTECODE",
+      "TMPDIR"
+    ],
+    "architecture": "arm64",
+    "credential_environment_allowed": false,
+    "darwin_system_query_permission": "sysctl-read only; system-info was tested and is insufficient for ctypes os.uname on macOS 26.5.2",
+    "launcher_executable_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/launcher-executables-r2.json",
+    "launcher_executable_manifest_sha256": "7b3fb86bcc53938fb453b3629a3c7bea111aa166b7865a36f4dbc7691868640b",
+    "macos_build": "25F84",
+    "macos_product_version": "26.5.2",
+    "network_allowed": false,
+    "python_entrypoint_path": "vendor/memory-benchmarks/.venv/bin/python",
+    "python_entrypoint_symlink_target": "/Users/william/.local/share/uv/python/cpython-3.12-macos-aarch64-none/bin/python3.12",
+    "python_real_path": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/bin/python3.12",
+    "python_real_sha256": "7b05d803bbc1bbfc81644af4faf2b88f0a37b8de96b9f42c1e08033e2cd0848a",
+    "realpath_codesign_identifier": "com.apple.realpath",
+    "realpath_path": "/bin/realpath",
+    "realpath_sha256": "22cd7804166170874dddd490e146936b6957dbbbb93d14eacd86b8d0de3e3989",
+    "sandbox_exec_path": "/usr/bin/sandbox-exec",
+    "sandbox_exec_sha256": "8290e4be7387a0df83cd1559e86afd880464f269450573d012795761fe298f16",
+    "sandbox_profile_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/offline-recovery.sb",
+    "scratch_directory_mode": "0700",
+    "seal_environment_handling": "the outer launcher consumes the public seal and passes it only as a worker argument; it is absent from the five-key sandbox environment",
+    "temporary_file_mode": "0600",
+    "umask": "0077"
+  },
+  "go_policy": {
+    "aggregate_exact_fields": [
+      "created_at_utc",
+      "credential_recorded",
+      "go",
+      "model_content_recorded",
+      "no_score_read",
+      "recovery_precommit_sha256",
+      "reviews",
+      "schema_version",
+      "score_blind",
+      "source_attempt_tree_fingerprint_sha256",
+      "stage_a_envelope_sha256",
+      "terminal_failure_record_sha256"
+    ],
+    "aggregate_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.RECOVERY_GO.json",
+    "aggregate_requirements": "canonical JSON; schema narratordb.v13-paid-r5-recovery-go.v1; go, score_blind, and no_score_read true; credential_recorded and model_content_recorded false; exact recovery seal, Stage-A envelope SHA, terminal record SHA, source attempt fingerprint, and ordered review path/reviewer/SHA records; created no earlier than either review; mtime no earlier than either review and Stage A; mode 0444; nlink 1",
+    "created_after_both_reviews": true,
+    "distinct_nonempty_reviewer_ids_required": true,
+    "freshness_seconds": 3600,
+    "minimum_independent_go_reviews": 2,
+    "process_independence_limitation": "reviewer identity and independence are exact process-attested protocol claims, not cryptographic human authentication",
+    "review_exact_fields": [
+      "created_at_utc",
+      "credential_recorded",
+      "decision",
+      "model_content_recorded",
+      "no_score_read",
+      "recovery_precommit_sha256",
+      "review_authority",
+      "reviewer_codename",
+      "reviewer_id",
+      "schema_version",
+      "score_blind",
+      "source_attempt_tree_fingerprint_sha256",
+      "stage_a_envelope_sha256",
+      "terminal_failure_record_sha256"
+    ],
+    "review_paths": [
+      "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.review-1.json",
+      "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.review-2.json"
+    ],
+    "review_requirements": "canonical JSON; schema narratordb.v13-paid-r5-recovery-go-review.v1; decision GO; score_blind and no_score_read true; credential_recorded and model_content_recorded false; exact recovery seal, Stage-A envelope SHA, terminal record SHA, source fingerprint, canonical reviewer identity/codename/authority; created_at and mtime strictly after Stage A; mode 0444; nlink 1",
+    "reviewers": [
+      {
+        "authority": "independent-read-only-transport-and-release-auditor",
+        "codename": "Goodall",
+        "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.review-1.json",
+        "reviewer_id": "/root/final_transport_fix"
+      },
+      {
+        "authority": "independent-read-only-fairness-budget-and-protocol-auditor",
+        "codename": "Mendel",
+        "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.review-2.json",
+        "reviewer_id": "/root/aggregation_regression"
+      }
+    ],
+    "score_blind": true,
+    "stage_a_envelope_hash_required": true
+  },
+  "historical_finalization": {
+    "authorization_created_at_utc": "2026-07-16T14:34:41Z",
+    "authorization_expires_at_utc": "2026-07-16T14:48:38Z",
+    "authorization_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/postrun/final-spend-authorization.json",
+    "authorization_sha256": "162fb57c142572c601e27fe15ab5e88ae90308e54d4553fa670e5f341441c035",
+    "independent_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/postrun/final-spend-authorization.audit.json",
+    "independent_audit_sha256": "e2a6479307c09e6a41ca70a05dc10d0499779c8e9d1dbc7c1d8ac4f0817712e0",
+    "present_time_freshness_asserted": false,
+    "semantic_scope": "historical reconstruction at the preserved valid review time only; this recovery never represents the captured provider or FX observations as current",
+    "verification_now_utc": "2026-07-16T14:34:45Z"
+  },
+  "input_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/BOUND_INPUTS_SHA256SUMS",
+  "output": {
+    "failed_status_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/recovery-terminal-status.json",
+    "output_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716",
+    "stage_a": {
+      "envelope_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/historical-finalization-verification-envelope.json",
+      "publication": "one hash-only score-blind historical envelope; exact reconstructed authorization, audit, and raw verifier payload remain in memory and are represented only by SHA-256"
+    },
+    "stage_b": {
+      "atomic_publication": "build a complete private 0700 release directory on the output filesystem; create all files O_EXCL, fsync, fchmod files 0444, fchmod directory 0555, fsync; publish the entire namespace once with renameatx_np RENAME_EXCL; no score-bearing flat-file publication is allowed; any later process strictly revalidates the closed immutable release and treats a valid namespace as irrevocably committed without terminalization",
+      "completion_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release/release-complete.json",
+      "go_copy_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release/recovery-go.json",
+      "release_directory_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release",
+      "result_checksum_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release/RECOVERED_PAIRED_RESULT_SHA256SUMS",
+      "result_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release/recovered-paired-result.json",
+      "review_1_copy_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release/recovery-review-1.json",
+      "review_2_copy_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release/recovery-review-2.json",
+      "v13_evaluation_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release/v13-evaluation-audit.json",
+      "v7_evaluation_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release/v7-evaluation-audit.json"
+    }
+  },
+  "prior_recovery_terminal": {
+    "checksum_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-43ed-terminal-20260716.SHA256SUMS",
+    "checksum_manifest_sha256": "5274cb68ee5ab1ad612638102be9e1c0ca6d896e0165c752884162f0a273b829",
+    "r1_bundle_root": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716",
+    "r1_seal_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-20260716/SHA256SUMS",
+    "r1_seal_manifest_sha256": "43edeb0561dd45586771af764d77d97c539df7b124f91938dfa552af2a3349a1",
+    "record_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r1-43ed-terminal-20260716.json",
+    "record_sha256": "74da98f221adc936c1ee39736ec9030bb6f4d9be2a34e823d2d7b1b94c24e0fe"
+  },
+  "r5_source": {
+    "requirements_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-20260716/execution-authorization-requirements.json",
+    "requirements_sha256": "7f2a9d083c8d2b3a158ac6959ca48d5debae4b51f13b8d59c1cc7381e05b1c67",
+    "seal_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-20260716/SHA256SUMS",
+    "seal_manifest_sha256": "3453d6a9a67512b5bbcd0bea749edb0db6588dacff8e154123d7069a0226982e",
+    "verifier_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-20260716/verify_dynamic_admission.py",
+    "verifier_sha256": "af85ea4bef1809054a7d88bc0b372e337983ca66aec9e666a2364e80b5948094"
+  },
+  "recovery_precommit": {
+    "bundle_inventory_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/closed-world-inventory.json",
+    "bundle_root": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716",
+    "preseal_file_count": 11,
+    "published_seal_environment_variable": "NARRATORDB_R5_RECOVERY_R2_PRECOMMIT_SHA256",
+    "seal_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/SHA256SUMS",
+    "sealed_physical_file_count": 12,
+    "status": "UNSEALED_CANDIDATE"
+  },
+  "release_classification": "offline-recovery-r2-from-terminal-r5-paid-pair-after-terminal-r1-preflight-never-original-r5-success",
+  "schema_version": "narratordb.v13-paid-r5-offline-finalization-recovery-protocol.v2",
+  "sole_source_policy": {
+    "cross_attempt_combination_allowed": false,
+    "external_result_or_score_input_allowed": false,
+    "sole_source_attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1"
+  },
+  "stage_policy": {
+    "committed_release_reentry_policy": "a release namespace surviving cross-process interruption is strictly revalidated against exact audits, result, checksum, completion, embedded GO/reviews, Stage-A envelope, source evidence, and recovery seal; valid means committed success; malformed means fail closed without creating a contradictory terminal status",
+    "stage_a": "historical exact finalization reconstruction only; no evaluation audit or paired result",
+    "stage_a_score_content_policy": "publish only a hash envelope; reject accuracy, correct-count, numerator, metric, verdict, answer, judge, by-question-type, and raw score-release fields recursively; GO binds the Stage-A envelope SHA",
+    "stage_b": "requires fresh immutable aggregate GO binding the two exact predeclared score-blind reviewers, exact recovery seal, and exact Stage-A envelope hash",
+    "stderr_policy": "the launcher redirects stderr to a sink; terminal records are generic and contain no exception message or score-bearing content",
+    "stdout_policy": "both stages emit zero bytes",
+    "terminal_failure_policy": "any precommit nonzero destroys unread private scratch, preserves all pre-existing and published evidence, writes a generic immutable terminal status when possible, and permanently closes recovery-r2; another attempt requires a separately sealed recovery-r3"
+  },
+  "terminal_failure_record": {
+    "checksum_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-3453-failed-finalization-20260716.SHA256SUMS",
+    "checksum_manifest_sha256": "39f31bfea26ba968f52e9c2ca0ccfc346021dba8c9a8b27e8ace0b96834ea2ed",
+    "record_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-3453-failed-finalization-20260716.json",
+    "record_sha256": "5b2f8963ec0e8fa7fbbfb8df99692e49407d535ea80761952afc5c303c44e869"
+  },
+  "zero_new_activity": {
+    "additional_spend_usd": "0",
+    "credential_calls": 0,
+    "fx_calls": 0,
+    "judge_calls": 0,
+    "model_calls": 0,
+    "network_calls": 0,
+    "provider_calls": 0
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "artifact_bindings": {
+    "finalization_evidence": {
+      "campaign_audit_after_pair_sha256": "982e4920ef520e2acdb6f36a75321d04766f6bacd8af6ff5ca131a601ff05503",
+      "ecb_daily_after_pair_sha256": "e5e9bd0b5134a7bff7eccc7f292a74715bed3cc0a35daef135d57e8eb55c73dd",
+      "ecb_usd_eur_after_pair_sha256": "44c23d1bd668096361b3350e9b1d829edbacc6500ddd68de5aad31b16d4671b1",
+      "final_spend_authorization_audit_sha256": "e2a6479307c09e6a41ca70a05dc10d0499779c8e9d1dbc7c1d8ac4f0817712e0",
+      "final_spend_authorization_sha256": "162fb57c142572c601e27fe15ab5e88ae90308e54d4553fa670e5f341441c035",
+      "provider_telemetry_after_pair_sha256": "b7a069fe6da63eb7063196f4731695d98bbed5d20894da042388af302f1a2530"
+    },
+    "phase_evidence": {
+      "before_v13_authorization_audit_sha256": "5626736c8f1f599787684fb3180c359d588ce5a577ab1b908b3a57061d30e183",
+      "before_v13_authorization_sha256": "679d0e651c449c414001d02de6f772c14b2da4d3521af6215b0136841429d89e",
+      "before_v13_provider_telemetry_sha256": "661f6484ba5f4bdb030a7ad0149da8884497349122d7b7d24d035eebc14e9f0f",
+      "before_v7_authorization_audit_sha256": "651b2f6ec7d227e45f7fdcbedb68411dee42d6e5816263c12cf86efce137953b",
+      "before_v7_authorization_sha256": "39d83ec8316f302973aedd4a680a4f1c04c15dc2c1bc551151488ae1a7912afe",
+      "before_v7_provider_telemetry_sha256": "016d8a44a356071cb09a7c6e0a9b845ccadd7c690601ed032b4bae94bdd64e09"
+    },
+    "r5_precommit": {
+      "bound_inputs_manifest_sha256": "c9a32926e2967f7015ad12efb56c60f6f49751b00d188fb4bef433616d8699a7",
+      "command_manifest_sha256": "08b43afc0c37d8ff13d1b260fc64796b9c40237bb6e8cc7b95b8fae28f5dc9be",
+      "dynamic_requirements_sha256": "7f2a9d083c8d2b3a158ac6959ca48d5debae4b51f13b8d59c1cc7381e05b1c67",
+      "paid_protocol_sha256": "1bbf539aca4f101c8fef40e1cbf8306b4f75d1276b14b029a34a3c1f6335f1e4",
+      "seal_manifest_sha256": "3453d6a9a67512b5bbcd0bea749edb0db6588dacff8e154123d7069a0226982e",
+      "verifier_sha256": "af85ea4bef1809054a7d88bc0b372e337983ca66aec9e666a2364e80b5948094"
+    },
+    "v13_first": {
+      "arm_gate_sha256": "2d67915e4140bb67dbd71971740866e7ac3149c836402edb4f5f078295450efb",
+      "attempt_status_sha256": "75180238ef62015ef2eb4fa00756665db662e70704ba92ab771e6c20e0369bcf",
+      "ledger_identity_audit_sha256": "ffcac02080eda5c6b744f28c32626de19983006683c3d6419a0f425987867ea9",
+      "ledger_sha256": "d921ff567e6a19071c3070d7f33325b0dd288f0aec10d437cac8ddc61b2fdcd4",
+      "proxy_health_sha256": "527e5ddb951694f252ff948ed0a4e076cfa88d75f16dc782208797bcf940032d",
+      "proxy_log_sha256": "3a7326073a5d0d080b4a2335b73543af24c2a52d4788acf43bc5e9e26783322b"
+    },
+    "v7_control": {
+      "arm_gate_sha256": "01feab14898c658e30c63ab1ea78a6c3fb0ca04bd6860c59a0a31e1d44a581e0",
+      "attempt_status_sha256": "a38c0f3b275e9b1e9f7a192b4d7c4f1bf7589df620216fc302c3f5060ab4cccd",
+      "ledger_identity_audit_sha256": "62873d481dada627b2fe4da74ca0f7f422b67468b9b16b8583bf76453b53d81b",
+      "ledger_sha256": "177e4f81dbb35d8c4840daaa490eab97853b44cadc83a1d50f4887fbe807ef27",
+      "proxy_health_sha256": "527e5ddb951694f252ff948ed0a4e076cfa88d75f16dc782208797bcf940032d",
+      "proxy_log_sha256": "8919813538dcdc47e56c7d6bac64a9a6b39beda86daebef85e0e2bdecdc577e2"
+    }
+  },
+  "attempt_inventory": {
+    "algorithm": {
+      "entry_order": "/usr/bin/find ROOT -print0 | LC_ALL=C sort -z",
+      "entry_record": "/usr/bin/stat -f '%N|%HT|%z|%Sp|%l' ENTRY followed by newline",
+      "file_record": "for each regular non-symlink file, immediately append the standard `/usr/bin/shasum -a 256 ENTRY` line",
+      "final_digest": "SHA-256 of the concatenated record stream",
+      "invocation_shell": "/bin/bash",
+      "path_basis": "repository-relative paths including the attempt root record"
+    },
+    "directories": 404,
+    "files": 5185,
+    "hardlinked_regular_files": 0,
+    "root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1",
+    "symlinks": 0,
+    "tree_path_type_size_mode_nlink_content_sha256": "db0f54b46b3c24c6fac212e59a472365451dd88638f2b8274bf94538b804f804"
+  },
+  "failure": {
+    "classification": "offline-orchestration-umask-tempdir-ordering",
+    "failed_command_id": "build-audit-and-verify-final-spend",
+    "mechanism": "the shell created the redirected output before starting verification; inherited umask 0222 changed a TemporaryDirectory request for mode 0700 into mode 0500, so historical campaign reconstruction could not create its private mirror subtree",
+    "paid_or_network_action_during_failure": false,
+    "preserved_output": {
+      "mode": "0444",
+      "nlink": 1,
+      "path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/postrun/score-release-verification.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "stdout_payload_bytes": 0
+  },
+  "finalization_window": {
+    "authorization_created_at_utc": "2026-07-16T14:34:41Z",
+    "authorization_expires_at_utc": "2026-07-16T14:48:38Z",
+    "independent_reviewed_at_utc": "2026-07-16T14:34:45Z"
+  },
+  "paid_pair": {
+    "campaign_observed_usd": "110.64901501391",
+    "pair_cost_usd": "1.416943372",
+    "provider_usage_usd": "123.70143229",
+    "status": "both-paid-arms-completed-and-immutable",
+    "v13_ledger_cost_usd": "0.72088467",
+    "v7_ledger_cost_usd": "0.696058702"
+  },
+  "publication_state": {
+    "absent_paths": [
+      "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/v7-control/evaluation-audit.json",
+      "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/v13-first/evaluation-audit.json",
+      "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/paired-result.json",
+      "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/PAIRED_RESULT_SHA256SUMS"
+    ],
+    "paired_result_published": false,
+    "score_bearing_content_released": false
+  },
+  "recorded_at_utc": "2026-07-16T14:46:55Z",
+  "recovery_policy": {
+    "allow_only_separately_precommitted_offline_recovery": true,
+    "current_r5_attempt_is_terminal": true,
+    "new_credential_call_allowed": false,
+    "new_fx_call_allowed": false,
+    "new_model_or_judge_call_allowed": false,
+    "new_provider_call_allowed": false,
+    "original_attempt_write_allowed": false,
+    "overwrite_delete_resume_or_rerun_allowed": false,
+    "recovered_result_may_claim_original_r5_success": false
+  },
+  "schema_version": "narratordb.v13-paid-r5-terminal-finalization-failure.v1",
+  "status": "terminal-paid-pair-complete-score-release-finalization-failed",
+  "sensitive_content": {
+    "credential_recorded": false,
+    "model_content_recorded": false
+  }
+}

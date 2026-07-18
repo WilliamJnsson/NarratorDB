@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T23:25:39Z",
+  "benchmark": "LongMemEval-S dev42",
+  "classification": "post-hoc consumed development set; not an untouched holdout, headline benchmark, or Mem0 head-to-head",
+  "purpose": "pre-score canary-only correction; V17 scoring arms remain byte-for-byte and configuration-identical to R1",
+  "score_fields_present": false,
+  "inherits_joint_scoring_precommit": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v17_gpt54mini_openai_high_baidu_paid_pair_r1_precommit_20260717.json",
+    "sha256": "ebb6e345610281bfafc9583bf93ff5b31e8c3066205bff02b4a264b32301e647"
+  },
+  "superseded_prelaunch_canary": {
+    "benchmark_answer_or_judge_calls_made": false,
+    "benchmark_score_observed": false,
+    "route_canary_calls": 2,
+    "usage_log_sha256": "a7de01335c6dad0eff5ffb8cee1e8d13857d538218eaaf6875705f3007532245",
+    "proxy_log_sha256": "f564cefaf62b2200f3850dadd50dc69b2c8542697c98ee7513d765721fa91e85",
+    "health_sha256": "4d58ac6abe4591b3c61c20f23ad85f961916d2c4711c46189bfc74a59dd22217",
+    "known_cost_usd": 0.000033932,
+    "unknown_cost_attempts": 0,
+    "answerer_route": "OpenAI; complete",
+    "judge_route": "Baidu; incomplete finish=length because all 16 output tokens were reasoning tokens",
+    "failure_preserved": true
+  },
+  "canary_only_change": {
+    "answerer_max_output_tokens": 128,
+    "judge_max_output_tokens": 1024,
+    "reason": "allow the exact DeepSeek judge route to finish its ordinary reasoning before emitting the short canary response",
+    "answerer_model_changed": false,
+    "answerer_provider_changed": false,
+    "answerer_reasoning_effort_changed": false,
+    "judge_model_changed": false,
+    "judge_provider_changed": false,
+    "judge_temperature_changed": false,
+    "scoring_prompt_changed": false,
+    "frozen_prediction_bytes_changed": false,
+    "scoring_arm_fuses_changed": false
+  },
+  "sealed_correction": {
+    "directory": "benchmark_records/reproduction-v17-gpt54mini-openai-high-baidu-paid-pair-r2-20260717",
+    "sealed_files_manifest_sha256": "60fa638214557e805842f742964880b58d394939b1dde0928802aa0a71eb26bb",
+    "bound_inputs_manifest_sha256": "420f161dae4517097e5f9aff7dd999aaeeecd8b18e346569d4fa91b6a4deafe3",
+    "seeded_cumulative_ledger_sha256": "a7de01335c6dad0eff5ffb8cee1e8d13857d538218eaaf6875705f3007532245"
+  },
+  "cumulative_budget_enforcement": {
+    "canary_attempts_share_one_seeded_ledger": true,
+    "cumulative_canary_hard_fuse_usd": 0.10,
+    "primary_hard_fuse_usd": 2.45,
+    "replication_hard_fuse_usd": 2.45,
+    "strict_global_new_work_allocation_usd": 5.00,
+    "provider_account_cap_usd": 250.00,
+    "user_governance_cap_eur": 300.00
+  },
+  "unchanged_scoring_arms": {
+    "source_prediction_manifest_sha256": "ebf154a1d679259219b47a802b210809f184f10ba0fcff2f90e01d477babb29d",
+    "primary_frozen_copy_manifest_sha256": "9555ecddfad70b0b07714d13ecbbef6f168ed4c115f7578ab24e6690f8a0fcd4",
+    "replication_frozen_copy_manifest_sha256": "a3635dbc866293934a7de7d77c64bff42b01f8063f96823685981a76c9b3cf21",
+    "model_routes": "GPT-5.4-mini high/OpenAI answerer plus DeepSeek-v4-flash/Baidu judge",
+    "execution": "full42, top_k=200, cutoffs=20,50, workers=2, rpm=30, seed=42, rejudge; primary then unconditional replication"
+  },
+  "fairness": {
+    "selective_benchmark_question_retries": false,
+    "benchmark_answer_hardcoding": false,
+    "benchmark_score_observed_before_this_correction": false,
+    "reporting_rule": "V17 post-hoc dev42 development score only; fresh holdout and third-party reproduction remain required"
+  }
+}

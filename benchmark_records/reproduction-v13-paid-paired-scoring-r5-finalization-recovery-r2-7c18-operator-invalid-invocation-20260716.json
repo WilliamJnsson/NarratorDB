@@ -1,0 +1,34 @@
+{
+  "classification": "outer-launcher-invocation-shape-rejection-not-r2-stage-a-attempt",
+  "exact_authorized_command_executed": false,
+  "exit_status": 65,
+  "observed_at_utc": "2026-07-16T16:42:51Z",
+  "obsolete_environment_variable_supplied": "NARRATORDB_R5_RECOVERY_PRECOMMIT_SHA256",
+  "output_state": {
+    "aggregate_go_absent": true,
+    "recovery_output_root_absent": true,
+    "reviews_absent": true,
+    "scratch_absent": true,
+    "score_content_accessed": false,
+    "stage_a_envelope_absent": true,
+    "worker_or_sandbox_started": false
+  },
+  "policy_ruling": {
+    "exact_stage_a_allowed_once": true,
+    "independent_reviewers_agree": true,
+    "next_exact_stage_a_nonzero_is_terminal": true,
+    "reason": "the clean outer launcher discarded the obsolete variable and rejected the empty required R2 seal variable before tool checks, scratch, seal verification, output creation, sandbox, or worker execution"
+  },
+  "required_environment_variable_absent": "NARRATORDB_R5_RECOVERY_R2_PRECOMMIT_SHA256",
+  "schema_version": "narratordb.r5-recovery-r2-operator-invalid-invocation.v1",
+  "sealed_r2_precommit_sha256": "7c186797b14b297bd4035dff81e1b49bbc830cb776896bae90a3275751e116d9",
+  "zero_new_activity": {
+    "credential_calls": 0,
+    "fx_calls": 0,
+    "judge_calls": 0,
+    "model_calls": 0,
+    "network_calls": 0,
+    "provider_calls": 0,
+    "spend_usd": "0"
+  }
+}

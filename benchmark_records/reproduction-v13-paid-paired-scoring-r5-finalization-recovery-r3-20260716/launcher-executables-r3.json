@@ -1,0 +1,132 @@
+{
+  "executables": [
+    {
+      "apple_codesign_required": true,
+      "mode": "0555",
+      "nlink": 1,
+      "path": "/bin/bash",
+      "sha256": "fde343ee184953c1fa1185abddeaa8be61c6acbebae4eb54db5d6b55b09a5755",
+      "size_bytes": 1293840
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/bin/chmod",
+      "sha256": "8146d61f2d2c100b512e8cefc190698133889317404563bfc93aba6ab5c148e1",
+      "size_bytes": 120656
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/bin/mkdir",
+      "sha256": "08a20adeeff9bea14bae05c0a7f3c77c638b2b83fc3ab37e1c646e047bac7002",
+      "size_bytes": 101472
+    },
+    {
+      "apple_codesign_identifier": "com.apple.realpath",
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/bin/realpath",
+      "sha256": "22cd7804166170874dddd490e146936b6957dbbbb93d14eacd86b8d0de3e3989",
+      "size_bytes": 101072
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 2,
+      "path": "/bin/rm",
+      "sha256": "0e7aa0987cecc8d8ca629e1c61857321e8e281a6c1d0711b21163a15e454dc9d",
+      "size_bytes": 119184
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/usr/bin/codesign",
+      "sha256": "214d455584d19abc0d74d02b9cbc7d3da6bdcb0596c235e6156dd9ed2f4e1ba7",
+      "size_bytes": 459824
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/usr/bin/env",
+      "sha256": "6e506aec3c0cff703ac1e66cedc6f1945354ad41339a38db4425c7c88227128f",
+      "size_bytes": 102368
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/usr/bin/mktemp",
+      "sha256": "7bb3299fdb41f16ea5d9f7748cb5cb654b93208e0a1d1d78360145dcbbfb21fe",
+      "size_bytes": 101728
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/usr/bin/perl",
+      "sha256": "abda2bfd23a6c9a8e57adf2291f0aea4abd8faf440558ee49fe4ced55e8d9ad0",
+      "size_bytes": 101840
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/usr/bin/sandbox-exec",
+      "sha256": "8290e4be7387a0df83cd1559e86afd880464f269450573d012795761fe298f16",
+      "size_bytes": 102560
+    },
+    {
+      "apple_codesign_required": false,
+      "interpreter_path": "/usr/bin/perl",
+      "mode": "0755",
+      "nlink": 2,
+      "path": "/usr/bin/shasum",
+      "sha256": "0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3",
+      "size_bytes": 9979
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 2,
+      "path": "/usr/bin/stat",
+      "sha256": "934656def5cfb8e85b2e4d983bb59ba97479cec49b63b4ea2fa42d067c569242",
+      "size_bytes": 118768
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/usr/bin/sw_vers",
+      "sha256": "f4704a35bc196e6dd101a7de40f9e9ce51dd17bdba7ef29ce465a00d123f2ec5",
+      "size_bytes": 135536
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/usr/bin/uname",
+      "sha256": "c189136263d277786f29a16eb3137de7bcf4512d2282d0036f440022f325bfc4",
+      "size_bytes": 101456
+    },
+    {
+      "apple_codesign_required": true,
+      "mode": "0755",
+      "nlink": 1,
+      "path": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/bin/python3.12",
+      "sha256": "7b05d803bbc1bbfc81644af4faf2b88f0a37b8de96b9f42c1e08033e2cd0848a",
+      "size_bytes": 18073888
+    }
+  ],
+  "host": {
+    "architecture": "arm64",
+    "macos_build": "25F84",
+    "macos_product_version": "26.5.2"
+  },
+  "schema_version": "narratordb.v13-paid-r5-recovery-r3-launcher-executables.v1"
+}

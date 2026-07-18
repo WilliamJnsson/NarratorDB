@@ -1,0 +1,15 @@
+{
+  "schema_version": "narratordb.failed-reproduction-preflight.v1",
+  "attempted_at_utc": "2026-07-16T03:23:28Z",
+  "status": "failed before preflight output or run-root creation",
+  "failure_type": "ValueError",
+  "failure_code": "credential_environment_assignment_rejected",
+  "failure_location": "commands.run_predict_only_replay",
+  "disposition": "preserved; no replay database, prediction, benchmark question, model call, network call, or cost was created",
+  "repair": "retain the fixed non-sensitive constructor-sentinel policy in run-config.json but inject the sentinel only at runtime, outside the secret-safe command manifest, matching the V11 procedure",
+  "run_root_absent_after_failure": true,
+  "preflight_output_absent_after_failure": true,
+  "model_calls": 0,
+  "network_calls": 0,
+  "cost_usd": 0.0
+}

@@ -1,0 +1,167 @@
+{
+  "schema_version": "narratordb.v13-paid-dynamic-admission-requirements.v2",
+  "predecessor": {
+    "manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-20260716/SHA256SUMS",
+    "manifest_sha256": "c291095f321ab72bf151fcf9c025548828bc1bdef0f795e2729223786d5e215e"
+  },
+  "revision": {
+    "manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716/SHA256SUMS",
+    "protocol_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716/paid-paired-scoring-protocol-r2.json",
+    "protocol_sha256": "ab4d1b053bfd87ae360fe92f14976556b2c8a9da58a25bd89ac5c66dcd35986f",
+    "ledger_verifier_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716/verify_evaluator_ledger.py",
+    "ledger_verifier_sha256": "cd9fbcc47dba6606aaf0e8215257eb6dc356971715329221243a039b42771f08",
+    "telemetry_capture_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716/capture_provider_telemetry.py",
+    "telemetry_capture_sha256": "4e11ab31200bf82612dcd68f3d6ce9c4c548b10d3128180165ca07b3682fccaf",
+    "fx_capture_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716/capture_ecb_fx.py",
+    "fx_capture_sha256": "bb7b301e855167c488c073ff5bbd8e3e02522b54f293491d86b873013592ed61",
+    "harness_guard_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r2-20260716/run_harness_guarded.py",
+    "harness_guard_sha256": "2c7f70cc30f4c4f8453116fc0a9ae0fecfb5e4fef256faed9222c56a2975543e"
+  },
+  "campaign": {
+    "declaration_path": "benchmark_records/budgets/narratordb_95_campaign_v13_paid_pair_20260716.json",
+    "declaration_sha256": "cf7c084285f62ea6c79ad4ba8a8952d4de1f2e7200a260a92d42bf6025ff3f04",
+    "frozen_runtime_source": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source",
+    "budget_auditor_path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source/narratordb/benchmarks/budget_audit.py",
+    "budget_auditor_sha256": "e25bfaf8a6fa56051af0c694a3925036b5c487176dcb94e275dcaeb1daeb1a65",
+    "budget_auditor_history_path": "reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/runtime-source/narratordb/benchmarks/history.py",
+    "budget_auditor_history_sha256": "d1a8bf39a60c34f4abcec5877b2c3538dd754ecb8b54610b58b49cd9273ab574",
+    "baseline_observed_usd": "108.31010877191",
+    "provider_cap_usd": "250",
+    "governance_ceiling_eur": "300"
+  },
+  "provider": {
+    "endpoint": "https://openrouter.ai/api/v1/key",
+    "currency": "USD",
+    "provider_limit_usd": "250",
+    "historical_usage_floor_usd": "121.362526048",
+    "maximum_age_seconds": 900,
+    "arithmetic_tolerance_usd": "0.000000001"
+  },
+  "fx": {
+    "source_url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml",
+    "publisher": "European Central Bank",
+    "maximum_capture_age_seconds": 900,
+    "maximum_reference_age_days": 7,
+    "buffer_basis_points": 1000,
+    "governance_ceiling_eur": "300",
+    "rounding": "ROUND_CEILING_TO_0.01_EUR"
+  },
+  "runtime_sources": {
+    "v11-source": {
+      "archive_path": "reports/intelligence-v11-source-20260716T014343Z/narratordb-v11-source.tar.gz",
+      "archive_sha256": "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+      "archive_format": "tar.gz",
+      "extracted_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/tools/v11-source",
+      "read_only_before_execution": true
+    },
+    "harness-source": {
+      "archive_path": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/harness-source.tar",
+      "archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+      "archive_format": "tar",
+      "extracted_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/tools/harness-source",
+      "read_only_before_execution": true
+    }
+  },
+  "vendor_environment": {
+    "python_executable_path": "vendor/memory-benchmarks/.venv/bin/python",
+    "python_executable_symlink_target": "/Users/william/.local/share/uv/python/cpython-3.12-macos-aarch64-none/bin/python3.12",
+    "python_executable_resolved_path": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/bin/python3.12",
+    "python_executable_sha256": "7b05d803bbc1bbfc81644af4faf2b88f0a37b8de96b9f42c1e08033e2cd0848a",
+    "python_version": "3.12.13",
+    "python_cache_tag": "cpython-312",
+    "python_prefix": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none",
+    "python_base_prefix": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none",
+    "pyvenv_config_path": "vendor/memory-benchmarks/.venv/pyvenv.cfg",
+    "pyvenv_config_sha256": "65734425804832eb2ee6637f908377ac4ff3d76874e55ea0847d0b24a610123b",
+    "stdlib_path": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12",
+    "stdlib_file_count": 1482,
+    "stdlib_directory_count": 159,
+    "stdlib_total_bytes": 26337639,
+    "stdlib_inventory_sha256": "eb332e487b2140ef0e67b5684d300c670029de7e6835ccf72f397a4c3a8c0884",
+    "source_site_packages_path": "vendor/memory-benchmarks/.venv/lib/python3.12/site-packages",
+    "execution_site_packages_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/tools/harness-site-packages",
+    "site_packages_file_count": 4822,
+    "site_packages_directory_count": 347,
+    "site_packages_total_bytes": 33425397,
+    "site_packages_inventory_sha256": "b7c7a5d52b81610d26f2109edeffd5c786eaf763ad74b036931b28124683b2f2",
+    "read_only_before_execution": true
+  },
+  "variants": [
+    {
+      "label": "v7-control",
+      "run_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v7-control",
+      "project_name": "narratordb-intelligence-dev42-v7-gpt54mini",
+      "dataset_path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+      "working_copy_manifest_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v7-control/evaluation/official-harness/frozen-copy-manifest.json",
+      "staged_copy_manifest_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/frozen-copy-manifest.json",
+      "staged_copy_manifest_sha256": "fbb21b8a00502b762874c0a2a24aa6db5a6c9a0185d0b36189b62f958cc123d6",
+      "staged_prediction_directory": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v7-control/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini",
+      "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+      "ledger_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v7-control/evaluation/openrouter-usage.jsonl",
+      "initial_ledger_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "initial_ledger_bytes_hex": "0a",
+      "soft_fuse_usd": "1.25"
+    },
+    {
+      "label": "v13-first",
+      "run_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v13-first",
+      "project_name": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+      "dataset_path": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+      "working_copy_manifest_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v13-first/evaluation/official-harness/frozen-copy-manifest.json",
+      "staged_copy_manifest_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/frozen-copy-manifest.json",
+      "staged_copy_manifest_sha256": "0ec08135fa114b4903eaa0a7d004d5ec82d22a2c55d313ef270d87d2595d71fa",
+      "staged_prediction_directory": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-20260716/paired-evaluation/v13-first/evaluation/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+      "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+      "ledger_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v13-first/evaluation/openrouter-usage.jsonl",
+      "initial_ledger_sha256": "75a11da44c802486bc6f65640aa48a730f0f684c5c07a42ba3cd1735eb3fb070",
+      "initial_ledger_bytes_hex": "0a0a",
+      "soft_fuse_usd": "1.25"
+    }
+  ],
+  "phases": {
+    "before-v7": {
+      "variant": "v7-control",
+      "unspent_fuses_usd": "2.50",
+      "campaign_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/campaign-audit-before-v7.json",
+      "provider_telemetry_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/provider-telemetry-before-v7.json",
+      "fx_metadata_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/ecb-usd-eur-before-v7.json",
+      "fx_raw_xml_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/ecb-daily-before-v7.xml",
+      "authorization_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/execution-authorization-before-v7.json",
+      "independent_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/execution-authorization-before-v7.audit.json",
+      "prior_ledger_identity_audit_path": null,
+      "prior_provider_telemetry_path": null
+    },
+    "before-v13": {
+      "variant": "v13-first",
+      "unspent_fuses_usd": "1.25",
+      "campaign_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/between/campaign-audit-before-v13.json",
+      "provider_telemetry_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/between/provider-telemetry-before-v13.json",
+      "fx_metadata_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/between/ecb-usd-eur-before-v13.json",
+      "fx_raw_xml_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/between/ecb-daily-before-v13.xml",
+      "authorization_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/between/execution-authorization-before-v13.json",
+      "independent_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/between/execution-authorization-before-v13.audit.json",
+      "prior_ledger_identity_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v7-control/evaluation/ledger-identity-audit.json",
+      "prior_provider_telemetry_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/provider-telemetry-before-v7.json"
+    }
+  },
+  "finalization": {
+    "campaign_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/postrun/campaign-audit-after-pair.json",
+    "provider_telemetry_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/postrun/provider-telemetry-after-pair.json",
+    "fx_metadata_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/postrun/ecb-usd-eur-after-pair.json",
+    "fx_raw_xml_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/postrun/ecb-daily-after-pair.xml",
+    "before_v7_provider_telemetry_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/provider-telemetry-before-v7.json",
+    "v7_ledger_identity_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v7-control/evaluation/ledger-identity-audit.json",
+    "v13_ledger_identity_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v13-first/evaluation/ledger-identity-audit.json",
+    "before_v7_authorization_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/execution-authorization-before-v7.json",
+    "before_v7_authorization_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/precall/execution-authorization-before-v7.audit.json",
+    "before_v13_authorization_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/between/execution-authorization-before-v13.json",
+    "before_v13_authorization_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/between/execution-authorization-before-v13.audit.json",
+    "authorization_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/postrun/final-spend-authorization.json",
+    "independent_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/postrun/final-spend-authorization.audit.json",
+    "v7_evaluation_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v7-control/evaluation-audit.json",
+    "v13_evaluation_audit_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/v13-first/evaluation-audit.json",
+    "paired_result_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r2-20260716/attempt1/paired-result.json"
+  }
+}

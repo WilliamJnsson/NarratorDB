@@ -1,0 +1,32 @@
+{
+  "name": "narratordb-plugins",
+  "interface": {
+    "displayName": "NarratorDB Plugins"
+  },
+  "plugins": [
+    {
+      "name": "narratordb",
+      "source": {
+        "source": "local",
+        "path": "./plugins/narratordb"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "narratordb-service",
+      "source": {
+        "source": "local",
+        "path": "./plugins/narratordb-service"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

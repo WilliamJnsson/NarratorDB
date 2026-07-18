@@ -1,0 +1,66 @@
+{
+  "schema_version": "narratordb.compiler-transport-repair-precommit.v1",
+  "created_at_utc": "2026-07-15T22:57:06Z",
+  "status": "precommitted-before-repair-canary",
+  "classification": "transport-only development canary; no benchmark score or question content",
+  "purpose": "Test the generic output-token parameter correction without discarding or rewriting the failed GLM-5.2 canary.",
+  "predecessor": {
+    "profile": "benchmark_records/profiles/glm52_compiler_dev42_profile_20260716.json",
+    "profile_sha256": "5996e8d2664a96d22fb1373fc1e92092348fa9eebdd0a322c633a57ee831f65f",
+    "failed_report": "reports/intelligence-glm52-canaries-20260716/v8-glm52-synthetic-canary.json",
+    "failed_report_sha256": "6cbd1f66fe4e2693c40c3134feb56c00a4052c637c51a65d591bd19244bda1a2",
+    "failure_code": "http_404",
+    "cost_usd": 0.0,
+    "preservation": "immutable"
+  },
+  "evidence": {
+    "source": "https://openrouter.ai/api/v1/endpoints/zdr",
+    "observed_at_utc": "2026-07-15T22:55:00Z",
+    "model_id": "z-ai/glm-5.2",
+    "provider_name": "DeepInfra",
+    "provider_tag": "deepinfra/fp4",
+    "endpoint_status": 0,
+    "zdr_listed": true,
+    "advertised_output_parameter": "max_tokens",
+    "advertised_max_completion_tokens": 32768,
+    "inference": "The prior adapter sent max_completion_tokens while requiring every parameter; the pinned endpoint advertises max_tokens, making parameter ineligibility the leading explanation for the zero-cost 404."
+  },
+  "repair": {
+    "design": "persisted explicit output-token parameter with a strict allowlist and no model-name branching",
+    "default_for_existing_configs": "max_completion_tokens",
+    "canary_override": "max_tokens",
+    "fingerprint_includes_parameter": true,
+    "serialized_project_config_includes_parameter": true,
+    "no_prompt_change": true,
+    "no_memory_schema_change": true,
+    "no_retrieval_change": true
+  },
+  "canary": {
+    "model": "z-ai/glm-5.2",
+    "provider_only": "DeepInfra",
+    "allow_fallbacks": false,
+    "reasoning_effort": "high",
+    "max_output_tokens": 8192,
+    "output_token_parameter": "max_tokens",
+    "seed": 0,
+    "zero_data_retention": true,
+    "data_collection": "deny",
+    "require_parameters": true,
+    "max_cost_usd": 1.0,
+    "fresh_database_cache_and_usage_ledger": true,
+    "all_synthetic_checks_required": true,
+    "exact_route_observation_required": true
+  },
+  "promotion_rule": {
+    "passed_canary_required": true,
+    "failed_canary_is_preserved": true,
+    "no_selective_retry": true,
+    "next_benchmark_source_must_be_frozen_before_paid_ingestion": true,
+    "development_scores_cannot_support_the_final_95_percent_claim": true
+  },
+  "budget_governance": {
+    "provider_account_cap_usd": 250.0,
+    "overall_experiment_ceiling_eur": 300.0,
+    "all_attempts_count_toward_campaign_spend": true
+  }
+}

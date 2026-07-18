@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "protocol_id": "narratordb-v11-existing-derived-dev42-replay-20260716",
+  "frozen_at_utc": "2026-07-16T02:06:54Z",
+  "status": "frozen before V11 replay database creation or prediction",
+  "classification": "V11 local retrieval/render over reused V7 compiler artifacts on consumed LongMemEval-S dev42; not fresh end-to-end, untouched, heldout, third-party, or publishable",
+  "purpose": "isolate generic V11 local retrieval, rendering, and aggregation behavior from already-paid V7 compiler output",
+  "content_review_policy": {
+    "dev42_consumed_before_v11": true,
+    "prior_v6_v7_v8_scores_known": true,
+    "automated_tools_may_process_content": true,
+    "human_tuning_from_failures": "allowed only as explicitly labeled consumed-development analysis and must remain generic",
+    "publishable_95_percent_claim_permitted": false
+  },
+  "fixed_bindings": {
+    "v11_source_archive_sha256": "bf0ad80f343e8621bcec47533617424831e7621c1264a66b20dc63ee738ffe97",
+    "v11_source_metadata_sha256": "07413b012294a9e6f35702e4c5180dcb7eeca544c3224b16c60ed3fd096db6b8",
+    "v7_source_archive_sha256": "181df314f0b68ac1bbd3eb3b6363dd2a6b195f7c9beb5fd0d8deec043034c85d",
+    "v7_input_manifest_sha256": "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+    "v7_database_sha256_before_copy": "b7c56832ef37ab98b4778403cf329e9338194dd581e6bdcdb7fee43b08960c6c",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "question_membership_sha256": "bf32b519cfe22e0b029171de48a455ca24c86f92b7b655a78b2f6b9ae7e2d65f",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "harness_archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "replay_control_sha256": "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d",
+    "replay_control_schema_disclosure": "The byte-frozen generic replay helper retains its historical v8-named output schema. Its operations and SHA are disclosed; the new run record supplies V11 lineage.",
+    "run_id": "v7m42a1",
+    "project_name": "narratordb-intelligence-dev42-v11-replay-v7gpt54mini",
+    "v7_compiler_fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+    "producer_terminal_jobs": {
+      "complete": 1976,
+      "partial": 3,
+      "nonterminal": 0,
+      "partial_reason": "provider_content_filter with canonical raw-source fallback"
+    }
+  },
+  "namespace_rules": {
+    "project_name": "new and used only to isolate output files",
+    "run_id": "exact V7 producer run ID v7m42a1",
+    "user_id": "longmemeval_<question_id>_v7m42a1",
+    "ingestion_checkpoints": "copy exactly 42 V7 _ingestion_*.json files",
+    "prediction_files": "copy none and require zero before start",
+    "risk": "a new run ID selects empty database scopes; a project-name change alone does not isolate database state"
+  },
+  "runtime_guards": {
+    "backend_flag": "--existing-derived-replay-fingerprint",
+    "compiler_constructed": false,
+    "compiler_cache_constructed": false,
+    "hosted_credentials_available_to_backend": false,
+    "mutations": "add, finalize, and delete rejected; no update or backfill route exists",
+    "search_precondition": "every registered current source in the requested scope has a complete or disclosed partial job under the exact V7 fingerprint",
+    "empty_or_nonterminal_scope": "rejected",
+    "predict_only_external_network": "closed proxy on port 9 with localhost exempted",
+    "model_calls": 0,
+    "answerer_calls": 0,
+    "judge_calls": 0
+  },
+  "retrieval_and_harness": {
+    "dataset": "hash-pinned local dev42 materialization; no download",
+    "questions": 42,
+    "all_questions": true,
+    "predict_only": true,
+    "backend": "oss",
+    "mode": "answerer",
+    "top_k": 200,
+    "top_k_cutoffs": [20, 50],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "context_token_budget": 6000,
+    "merge_adjacent": true,
+    "merge_gap": 1,
+    "merge_max_chars": 1200,
+    "coalesce_timestamp_sessions": true,
+    "claim_render_format": 3,
+    "memory_key_format": 2,
+    "aggregation_evidence_pack_format": 1,
+    "query_time_hosted_model": false
+  },
+  "execution_rules": [
+    "assert the output root and every database/cache/ledger path are absent before execution",
+    "verify every fixed input hash and the clean harness commit before copying anything",
+    "extract only the frozen V11 source and pinned harness archive",
+    "clone the V7 database with SQLite backup and never mutate the V7 producer database",
+    "run one credential-free migration/readiness backend, checkpoint it, and bind post-migration database hash and counts",
+    "probe all 42 scopes for exact-fingerprint readiness before prediction",
+    "run one full all-42 predict-only replay with no selective retry",
+    "require database counts unchanged across prediction and no compiler cache or usage sidecar",
+    "run prediction audit from the frozen V11 runtime source",
+    "freeze all 42 predictions and 42 inherited checkpoints before any answerer or judge",
+    "preserve any failed or superseded attempt rather than overwrite it"
+  ],
+  "promotion_rule": {
+    "prediction_phase": "exactly 42 fresh prediction files, all cutoffs present, all audit gates true, database counts unchanged, and zero model calls",
+    "evaluation_phase": "requires a separately frozen paired evaluation protocol and immutable prediction copy",
+    "permitted_label": "V11 local retrieval/render over reused V7 compiler artifacts on consumed LongMemEval-S dev42",
+    "cannot_establish": [
+      "fresh compiler quality",
+      "untouched generalization",
+      "third-party reproducibility",
+      "a publishable 95 percent claim"
+    ]
+  }
+}

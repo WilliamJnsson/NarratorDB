@@ -1,0 +1,316 @@
+{
+  "aggregation_policy": {
+    "basis": "declared immutable costs plus allowlisted usage metadata",
+    "compiler_and_evaluator_identity_policy": "declared_closed_world",
+    "currency_conversion_performed": false,
+    "prompt_or_response_content_permitted": false
+  },
+  "campaign_id": "narratordb-95-dev-20260715",
+  "complete": true,
+  "declaration_sha256": "a446b5cccb9e3e6cdff5a7f388efbdab92eebacefc44d70cbcaa791f82c1e794",
+  "governance_limit": {
+    "ceiling_eur": "300",
+    "currency": "EUR",
+    "observed_eur": null,
+    "reason": "no FX conversion was declared or performed",
+    "remaining_headroom_eur": null,
+    "status": "recorded_not_cross_currency_evaluated"
+  },
+  "invalid_completion_identities": 0,
+  "observed_spend_usd": "108.31010877191",
+  "provider_limit": {
+    "cap_source": "cli_override",
+    "currency": "USD",
+    "declared_cap_usd": "250",
+    "enforced_cap_usd": "250",
+    "overage_usd": "0",
+    "remaining_headroom_usd": "141.68989122809",
+    "within_cap": true
+  },
+  "publication_readiness": {
+    "ready": true,
+    "successful_completion_identities_verified": true,
+    "unknown_cost_policy": "conservative request reservations remain incomplete until reconciled to provider billing",
+    "unknown_costs_reconciled": true
+  },
+  "schema": "narratordb.campaign-budget-audit.v1",
+  "sources": [
+    {
+      "cost_usd": "24.90064606428",
+      "path": "../narratordb_intelligence_dev42_gpt54mini_20260716.json",
+      "sha256": "dcb407554ce44e027f95a036b8ec06d399ea990fc94f05db569f356e318acf27",
+      "snapshot_bytes": 6804,
+      "source_id": "v6-dev42-benchmark-record",
+      "source_type": "prior_immutable_record"
+    },
+    {
+      "cost_usd": "0.01470225",
+      "path": "../../reports/intelligence-v7-canaries-20260716/gpt54mini-v7-synthetic-canary.json",
+      "sha256": "b324180fa9ec24fab09094112c933ffe3e82e8a6b97e8136fcaea923800171bb",
+      "snapshot_bytes": 2340,
+      "source_id": "v7-synthetic-canary",
+      "source_type": "prior_immutable_record"
+    },
+    {
+      "cost_usd": "0.01371975",
+      "path": "../../reports/intelligence-v7-canaries-20260716/gpt54mini-v7-synthetic-canary-rerun.json",
+      "sha256": "fb73f82d32884f07a22ac54dce61a766c56da700521cbe352d438d17a5851c4f",
+      "snapshot_bytes": 2337,
+      "source_id": "v7-synthetic-canary-rerun",
+      "source_type": "prior_immutable_record"
+    },
+    {
+      "cost_usd": "0",
+      "path": "../../reports/intelligence-glm52-canaries-20260716/v8-glm52-synthetic-canary.json",
+      "sha256": "6cbd1f66fe4e2693c40c3134feb56c00a4052c637c51a65d591bd19244bda1a2",
+      "snapshot_bytes": 1672,
+      "source_id": "glm52-v8-failed-zero-cost-canary",
+      "source_type": "prior_immutable_record"
+    },
+    {
+      "cost_usd": "0.00812595",
+      "path": "../../reports/intelligence-glm52-canaries-20260716/route-attempts-through-wafer-summary.json",
+      "sha256": "08d5b4a4f28239595e8e893b4714875ddb08244a575499569052e9048a80393d",
+      "snapshot_bytes": 4956,
+      "source_id": "glm52-v9-route-canary-attempt-summary",
+      "source_type": "prior_immutable_record"
+    },
+    {
+      "cost_usd": "0.01986928",
+      "path": "../../reports/intelligence-v10-canaries-20260716/v10-glm52-fp4-allowlist-canary.json",
+      "sha256": "59dd27c3cd3ce34e8eb011ff58d64c8a289285156662571a9f50788a3dd80ceb",
+      "snapshot_bytes": 3529,
+      "source_id": "glm52-v10-failed-optional-router-metadata-canary",
+      "source_type": "prior_immutable_record"
+    },
+    {
+      "cost_usd": "0.01658584",
+      "path": "../../reports/intelligence-v11-canaries-20260716/v11-glm52-fp4-allowlist-canary.json",
+      "sha256": "d79c9971b1d91a4e8ebbecc81daa2e313bb489b03c8bad636ac408626c8cba54",
+      "snapshot_bytes": 3581,
+      "source_id": "glm52-v11-passed-compiler-route-canary",
+      "source_type": "prior_immutable_record"
+    },
+    {
+      "cost_usd": "33.14190525",
+      "path": "../../reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/compiler-audit.json",
+      "sha256": "495bdad21e780c1d0777b1a2ab2ad735407ed0fe8ee3e60e42707d946eeadd88",
+      "snapshot_bytes": 1628,
+      "source_id": "v7-dev42-sealed-compiler-audit",
+      "source_type": "prior_immutable_record"
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "1.4414472",
+      "events": 95,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/intelligence.db.compiler-usage.jsonl",
+      "sha256_prefix": "381fa747d9ee3e1e2f3a1ff15470ababd84873213a5e269562f01b95b7a409a7",
+      "snapshot_bytes": 32112,
+      "source_id": "v4-hardening-aborted-compiler",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.03930135",
+      "events": 3,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/v4-grounded-salvage-canary-usage.jsonl",
+      "sha256_prefix": "ee22a51a358a395c788e77ace35c8a7ec2b67e602d127a384022e161a48ed348",
+      "snapshot_bytes": 1018,
+      "source_id": "v4-hardening-grounded-salvage-canary",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.14172075",
+      "events": 10,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/v4-recovery-canary-usage.jsonl",
+      "sha256_prefix": "92e007d2056bbb0d76ecc7434d727001e6293c6d6475255dcc1fa6a8f5c74d84",
+      "snapshot_bytes": 3381,
+      "source_id": "v4-hardening-recovery-canary",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.04917975",
+      "events": 3,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/v4-summary-rebind-canary-usage.jsonl",
+      "sha256_prefix": "dcc8b6f0972dcd2af82da1dd27276ae7c3b77a46db7340675a009a42d0ede39a",
+      "snapshot_bytes": 1019,
+      "source_id": "v4-hardening-summary-rebind-canary",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.04501725",
+      "events": 3,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-hardening/v4-validation-diagnostic-usage.jsonl",
+      "sha256_prefix": "28684de7b1dae985422f00895b7aacadf6d4d98ac8689312575159a03d0f1463",
+      "snapshot_bytes": 1017,
+      "source_id": "v4-hardening-validation-diagnostic",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "7.53452325",
+      "events": 587,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v4-validation/intelligence.db.compiler-usage.jsonl",
+      "sha256_prefix": "d6231338da464b9b474af3e9f9af11ffb7bbd3e89f00765232be8e221366e2b0",
+      "snapshot_bytes": 198151,
+      "source_id": "v4-validation-aborted-compiler",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "15.67057725",
+      "events": 1276,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v5-content-filter/intelligence.db.compiler-usage.jsonl",
+      "sha256_prefix": "a6a74ef9b9bcb181a3114e22cab2c7da0a7007598eb27a04e10a7ee16209b0d2",
+      "snapshot_bytes": 430671,
+      "source_id": "v5-content-filter-aborted-compiler",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "7.2689655",
+      "events": 579,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v5-evidence/intelligence.db.compiler-usage.jsonl",
+      "sha256_prefix": "69039b8495586ac042401e1b19ce196900c8ac8685abd6e65b6203271969f84e",
+      "snapshot_bytes": 195395,
+      "source_id": "v5-evidence-aborted-compiler",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "6.0353715",
+      "events": 477,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v5-storage/intelligence.db.compiler-usage.jsonl",
+      "sha256_prefix": "ab24d3190308dcb406dfaa727cc61c8cfbc3801366e12c1a917beaf993aba437",
+      "snapshot_bytes": 161025,
+      "source_id": "v5-storage-aborted-compiler",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "4.677111",
+      "events": 369,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-gpt54mini-20260715-aborted-v5-token-limit/intelligence.db.compiler-usage.jsonl",
+      "sha256_prefix": "a46ebffe6aab96c75f6ec228e0cd8f80471512d2fc49dbb5b2f5d26f1a325d07",
+      "snapshot_bytes": 124577,
+      "source_id": "v5-token-limit-aborted-compiler",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "4.8471285",
+      "events": 294,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev6-v7-gpt54mini-20260716/intelligence.db.compiler-usage.jsonl",
+      "sha256_prefix": "0d57b3a93dc63ba023fa8c0682989b460350cdebc31c83a1fdf32a105ad6c8e0",
+      "snapshot_bytes": 99271,
+      "source_id": "v7-dev6-gate-compiler",
+      "source_type": "active_compiler_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.09431620693",
+      "events": 24,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev6-v7-gpt54mini-20260716/evaluate-openrouter-usage.jsonl",
+      "sha256_prefix": "b3660d9b63671430f9351a58cc731e2bbdff08fe50652f73a4b1f926acac2970",
+      "snapshot_bytes": 8857,
+      "source_id": "v7-dev6-gate-evaluator",
+      "source_type": "active_evaluator_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.52975236451",
+      "events": 176,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/evaluation/openrouter-usage.jsonl",
+      "sha256_prefix": "e373f484aff40b7f501851aca1b16b916c404e0dfa06627971ce70526e6c0abc",
+      "snapshot_bytes": 64988,
+      "source_id": "v7-dev42-paired-evaluator",
+      "source_type": "active_evaluator_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.46747280219",
+      "events": 174,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-v8-replay-v7gpt54mini-20260716/evaluation/openrouter-usage.jsonl",
+      "sha256_prefix": "dffe67793975281f5de726f02ea3374a068bcfcf55e2b7e2c9c942ef2df8848c",
+      "snapshot_bytes": 64492,
+      "source_id": "v8-dev42-replay-paired-evaluator",
+      "source_type": "active_evaluator_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.734585144",
+      "events": 183,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/paired-evaluation/v7-reference/openrouter-usage.jsonl",
+      "sha256_prefix": "d22c6da6217d7c341a0114dea633e5ac3ee36b5962ab27745302ce9f379cc018",
+      "snapshot_bytes": 71763,
+      "source_id": "v11-pair-v7-control-evaluator",
+      "source_type": "active_evaluator_usage_ledger",
+      "unknown_cost_attempts": 0
+    },
+    {
+      "appended_during_audit": false,
+      "cost_usd": "0.61808457",
+      "events": 181,
+      "identity_policy": "declared_closed_world",
+      "invalid_completion_identities": 0,
+      "path": "../../reports/longmemeval-intelligence-dev42-v11-replay-v7gpt54mini-20260716/paired-evaluation/v11/openrouter-usage.jsonl",
+      "sha256_prefix": "b21aba85b59c29fa94eefba541e5e1017592fd72d78d26f967992c1ae7873830",
+      "snapshot_bytes": 71073,
+      "source_id": "v11-pair-v11-replay-evaluator",
+      "source_type": "active_evaluator_usage_ledger",
+      "unknown_cost_attempts": 0
+    }
+  ],
+  "spend_breakdown_usd": {
+    "active_usage_ledgers": "50.19455438763",
+    "prior_immutable_records": "58.11555438428"
+  },
+  "unknown_cost_attempts": 0
+}

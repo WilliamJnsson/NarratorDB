@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T19:39:32Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "paired model-specific evaluation of unchanged frozen V13 and V14 predictions with GPT-5.4 Mini answering",
+  "inherits_frozen_arms_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v13_v14_paid_pair_precommit_20260717.json",
+    "sha256": "16019db3eb7bef0fadb1027af6f9e6fc3698e428a06f7b848f676d6cfb665cb5"
+  },
+  "model_specific_rationale": {
+    "glm_provider_variance_observed": true,
+    "prediction_payloads_changed": false,
+    "benchmark_prompts_or_judge_rules_changed": false,
+    "reporting_rule": "publish this as a GPT-5.4-Mini-specific development score, not as interchangeable with GLM or competitor model scores"
+  },
+  "route_canary": {
+    "usage_log_path": "reports/gpt54mini-azure-route-canary-r3-20260717.jsonl",
+    "usage_log_sha256": "74ec4e8aa572e169341b58fc41475f6bbea722aa18bcbc5f7dc0e97a057401c6",
+    "gpt_5_4_mini_azure_nonempty": true,
+    "deepseek_v4_flash_nonempty": true,
+    "unknown_cost_attempts": 0,
+    "malformed_responses": 0
+  },
+  "evaluation_order": [
+    "v13-control",
+    "v14-treatment"
+  ],
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "openai/gpt-5.4-mini",
+    "answerer_provider_only": "Azure",
+    "answerer_output_token_parameter": "max_completion_tokens",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_allow": [
+      "DeepInfra",
+      "StreamLake",
+      "GMICloud",
+      "Baidu",
+      "AtlasCloud"
+    ],
+    "provider_policy": "public-benchmark",
+    "reasoning_parameter_injected": false,
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "rejudge": true,
+    "proxy_path": "narratordb/benchmarks/openrouter_proxy.py",
+    "proxy_sha256": "affa65f0e00829abc7fbe4da8f54808294485b41b9e01409c96930006be75726",
+    "wrapper_path": "scripts/run_paired_evaluation_variant.sh",
+    "wrapper_sha256": "6955d2270d54a6279ee0e642d32c4ac03e6ce41c2b8c778bc1a43ea62f0d91ab"
+  },
+  "compatibility_adapter": {
+    "behavior": "for the exact GPT model only, rename the official harness max_tokens field to max_completion_tokens while preserving its integer value",
+    "prompt_changed": false,
+    "token_limit_changed": false,
+    "unmatched_models_unchanged": true
+  },
+  "budget": {
+    "pair_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "success_threshold": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0
+  },
+  "fairness": {
+    "prediction_payloads_unchanged_from_v14_freeze": true,
+    "complete_arms_only": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "score_fields_present_in_precommit": false
+  }
+}

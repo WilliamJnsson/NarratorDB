@@ -1,0 +1,39 @@
+{
+  "name": "narratordb",
+  "version": "2.1.7+codex.20260717151725",
+  "description": "Private, local-first long-term memory for Codex",
+  "author": {
+    "name": "NarratorDB contributors",
+    "url": "https://github.com/WilliamJnsson/NarratorDB"
+  },
+  "homepage": "https://github.com/WilliamJnsson/NarratorDB",
+  "repository": "https://github.com/WilliamJnsson/NarratorDB",
+  "license": "MIT",
+  "keywords": [
+    "memory",
+    "local-first",
+    "privacy",
+    "mcp",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "NarratorDB",
+    "shortDescription": "Private long-term memory for Codex",
+    "longDescription": "Remember decisions, preferences, and project context across Codex sessions in a private local database. No account or model API key is required.",
+    "developerName": "NarratorDB contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/WilliamJnsson/NarratorDB",
+    "defaultPrompt": [
+      "Resume this project from NarratorDB memory.",
+      "Remember this decision for future sessions.",
+      "Check the health of my NarratorDB memory."
+    ],
+    "brandColor": "#6750A4"
+  },
+  "mcpServers": "./.mcp.json"
+}

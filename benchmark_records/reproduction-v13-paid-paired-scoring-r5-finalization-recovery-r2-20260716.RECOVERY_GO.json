@@ -1,0 +1,25 @@
+{
+  "created_at_utc": "2026-07-16T16:48:56Z",
+  "credential_recorded": false,
+  "go": true,
+  "model_content_recorded": false,
+  "no_score_read": true,
+  "recovery_precommit_sha256": "7c186797b14b297bd4035dff81e1b49bbc830cb776896bae90a3275751e116d9",
+  "reviews": [
+    {
+      "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.review-1.json",
+      "reviewer_id": "/root/final_transport_fix",
+      "sha256": "e594cd59dc2f2922cce01481eb33102dfe18e826eafd7a531f04e2f6d9367b77"
+    },
+    {
+      "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.review-2.json",
+      "reviewer_id": "/root/aggregation_regression",
+      "sha256": "25f7096a47640ad8a4d0340214c3b6e47f856cc284a5cbb4215348ec341b2428"
+    }
+  ],
+  "schema_version": "narratordb.v13-paid-r5-recovery-go.v1",
+  "score_blind": true,
+  "source_attempt_tree_fingerprint_sha256": "db0f54b46b3c24c6fac212e59a472365451dd88638f2b8274bf94538b804f804",
+  "stage_a_envelope_sha256": "daedd300de0ef2d86a41df8996326cb8cabd4b45c3be1e8d2ef5b4bc27d9463f",
+  "terminal_failure_record_sha256": "5b2f8963ec0e8fa7fbbfb8df99692e49407d535ea80761952afc5c303c44e869"
+}

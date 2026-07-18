@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "protocol_id": "narratordb-v8-existing-derived-dev42-replay-20260716",
+  "frozen_at_utc": "2026-07-15T22:02:22Z",
+  "status": "protocol frozen; execution-specific hashes and values must be bound before replay",
+  "classification": "development replay of frozen V7 compiler artifacts under V8 local retrieval/render code; not an independent benchmark score",
+  "purpose": "isolate generic local retrieval and rendering changes from hosted compiler output",
+  "content_review_policy": {
+    "before_protocol_freeze": [
+      "do not inspect V7 predictions",
+      "do not inspect benchmark questions or answers",
+      "do not inspect or use the V7 score"
+    ],
+    "automated_tools_may_process_content": true,
+    "human_tuning_from_replay_failures": "allowed only on the already-consumed dev42 development split and must remain generic"
+  },
+  "required_execution_bindings": [
+    "V7 source archive path and SHA-256",
+    "V8 source archive path and SHA-256",
+    "clean harness commit and source-tree SHA-256",
+    "dataset path and SHA-256",
+    "ordered dev42 question-ID manifest path and SHA-256",
+    "V7 database SHA-256 after the producer is stopped and WAL checkpointed",
+    "replay database SHA-256 before first V8 open and after local migration",
+    "exact V7 compiler fingerprint from terminal current-source jobs",
+    "V7 compiler model, provider, reasoning, prompt version, schema version, and route policy",
+    "exact V7 harness run ID",
+    "fresh V8 output project name and previously nonexistent output paths",
+    "server and harness commands including top-k, cutoffs, workers, render budget, and coalescing",
+    "counts of complete and partial V7 compiler jobs with content-free partial reasons",
+    "prediction manifest SHA-256 frozen before any optional answerer/judge phase"
+  ],
+  "namespace_rules": {
+    "project_name": "must be new; it isolates output files only",
+    "run_id": "must equal the V7 producer run ID",
+    "user_id": "must remain longmemeval_<question_id>_<V7_run_id>",
+    "ingestion_checkpoints": "copy only complete _ingestion_*.json files into the fresh V8 prediction directory",
+    "prediction_files": "must not be copied or pre-created",
+    "risk": "a new run ID selects empty database scopes and invalidates the replay"
+  },
+  "runtime_guards": {
+    "backend_flag": "--existing-derived-replay-fingerprint",
+    "compiler_constructed": false,
+    "compiler_cache_constructed": false,
+    "hosted_credentials_available_to_backend": false,
+    "mutations": "add, finalize, and delete rejected; no update or backfill route exists",
+    "search_precondition": "every registered current source in the requested scope has a complete or partial job under the explicitly declared fingerprint",
+    "empty_scope": "rejected",
+    "fingerprint_mismatch": "rejected",
+    "pending_running_failed_blocked_exhausted_or_missing_job": "rejected",
+    "partial_job": "accepted as terminal and disclosed; raw-source fallback remains available",
+    "diagnostics": "content-free readiness is exposed at /replay/diagnostics?user_id=... and in direct search query_debug"
+  },
+  "harness_rules": {
+    "phase": "predict-only ingest-checkpoint resume plus fresh search",
+    "dataset": "local hash-pinned dev42 materialization; no download",
+    "answerer_and_judge_calls": false,
+    "real_model_credentials": false,
+    "external_network": "deny or route to a closed proxy while exempting localhost",
+    "top_k_and_cutoffs": "must match the bound V7 configuration",
+    "prediction_directory": "fresh and isolated from V7 and all prior V8 attempts"
+  },
+  "audit_and_label_rules": [
+    "verify all 42 copied ingestion checkpoints before server start",
+    "verify zero normal prediction JSON files before harness start",
+    "verify all 42 scopes are replay-ready before harness start",
+    "verify the replay database message, session, compiler-job, claim, entity, relation, and usage counts did not change across prediction",
+    "verify no compiler cache or compiler usage sidecar was created by replay",
+    "audit exactly 42 fresh prediction files and freeze their manifest before optional evaluation",
+    "report complete and partial producer-job counts",
+    "label any later score V8 local retrieval/render over reused V7 compiler artifacts on consumed dev42",
+    "do not present the replay as a fresh end-to-end V8 compiler run, an untouched result, or a third-party reproduction"
+  ]
+}

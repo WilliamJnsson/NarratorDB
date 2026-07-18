@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-16T21:18:48Z",
+  "benchmark": "LongMemEval-S dev42",
+  "purpose": "independent full-42 replication of frozen V15 under the GPT-5.6 Luna Pro xhigh fixed-provider condition",
+  "inherits_protocol_from": {
+    "path": "benchmark_records/precommits/longmemeval_dev42_v15_gpt56lunapro_xhigh_openai_baidu_paid_r1_precommit_20260717.json",
+    "sha256": "a004a06a42ed9f36b15eba65c95139c14a88ae9dc140f01e944dadc96790896d"
+  },
+  "prior_run_evidence_bindings": {
+    "audit_sha256": "d57ab6c5d855c1ff03f2c8956bf36558c0e895321517ad14ab10c95638024795",
+    "result_sha256": "84eb6bb586408b66df2b701afbc0b5df715d792a2eb2b5e2ce6e4839fcaac21a"
+  },
+  "frozen_input": {
+    "prediction_directory": "reports/longmemeval-intelligence-dev42-v15-replay-v7gpt54mini-repeat2-20260717/official-harness/predicted_narratordb-intelligence-dev42-v15-replay-v7gpt54mini-repeat2",
+    "prediction_manifest_sha256": "2b405ddebfba6eeff41e0e10302c3b22519ad5456de834387fadda8837cd095f",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "expected_questions": 42
+  },
+  "official_evaluator": {
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "run_id": "v7m42a1",
+    "mode": "answerer",
+    "answerer_model": "openai/gpt-5.6-luna-pro",
+    "answerer_provider_only": "OpenAI",
+    "answerer_temperature_omitted": true,
+    "answerer_reasoning_effort": "xhigh",
+    "judge_model": "deepseek/deepseek-v4-flash-20260423",
+    "judge_provider_only": "Baidu",
+    "judge_reasoning_parameter_injected": false,
+    "provider_policy": "public-benchmark",
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 2,
+    "rpm": 30,
+    "seed": 42,
+    "rejudge": true,
+    "proxy_sha256": "7ce24f80cb48843c8956e24eba62c215fabac3d97e673dd355ab7051cbc64948",
+    "wrapper_sha256": "5feeb1eee34818b880c4bf141a716e0356cebd4694944360582387a134506f7e"
+  },
+  "budget": {
+    "arm_hard_cap_usd": 5.0,
+    "provider_account_cap_usd": 250.0,
+    "user_governance_cap_eur": 300.0
+  },
+  "replication_acceptance": {
+    "cutoff": 50,
+    "minimum_passes": 40,
+    "minimum_accuracy_percent": 95.0,
+    "require_complete_audit": true,
+    "require_official_score_complete": true,
+    "require_frozen_source_stable": true
+  },
+  "fairness": {
+    "full_question_scope": true,
+    "selective_question_reruns": false,
+    "benchmark_answer_hardcoding": false,
+    "prompt_or_judge_rule_changes": false,
+    "replication_score_fields_present_in_precommit": false
+  }
+}

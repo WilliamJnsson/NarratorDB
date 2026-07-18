@@ -1,0 +1,137 @@
+{
+  "schema_version": "narratordb.compiler-route-canary-precommit.v2",
+  "created_at_utc": "2026-07-16T01:26:15Z",
+  "status": "precommitted-before-first-v10-canary-request",
+  "classification": "transport and compiler-integrity development canary using three synthetic sessions; no benchmark question content or score",
+  "purpose": "Validate the frozen V10 compiler, grounding, route attestation, accounting, and query-free recall on one fixed ordered set of previously selected compatible ZDR FP4 endpoints.",
+  "frozen_source": {
+    "archive": "reports/intelligence-v10-source-20260716T011746Z/narratordb-v10-source.tar.gz",
+    "archive_sha256": "204d6702e7cc067a66b1139eb63d27a0cfbf1bd4333717714722d1371c1ba9ff",
+    "source_metadata": "reports/intelligence-v10-source-20260716T011746Z/source-metadata.json",
+    "source_metadata_sha256": "e1fd433cd2c033b1dbfee090f45ea9d7ff0f6b6812a56bf145a5b1ce09400b59",
+    "archive_entries": 84,
+    "member_list_sha256": "d90f675b655727a763854d61e5309f216923c57e70741ab927b5e616ab28a9cf",
+    "compiler_fingerprint": "z-ai/glm-5.2:ad59d87a688311d908bc",
+    "full_extracted_release_suite_passed": true,
+    "credential_scan_passed": true
+  },
+  "preserved_failed_freeze": {
+    "archive": "reports/intelligence-v10-source-20260716T011522Z/narratordb-v10-source.tar.gz",
+    "archive_sha256": "d4642091f4f6642cd28cb775f77ea9cab5170d7a0c3e02cdce9caeb9251f7f73",
+    "failure_record_sha256": "ea76c8675e6ebf2bcab47039f2f45224211597cae53300150f97a1fa2aa269b7",
+    "disposition": "never execute"
+  },
+  "route_evidence": {
+    "snapshot": "benchmark_records/profiles/glm52_zdr_fp4_endpoint_snapshot_20260716.json",
+    "snapshot_sha256": "d5a1982fc35ccd6bc24f4ac9f970896b99cb1500df2e2b477c645fc75caf1033",
+    "observed_at_utc": "2026-07-15T23:46:13Z",
+    "model_id": "z-ai/glm-5.2",
+    "ordered_provider_allowlist": [
+      "parasail/fp4",
+      "wafer/fp4",
+      "deepinfra/fp4"
+    ],
+    "selection_rule": "Use the fixed snapshot order among the three active FP4 ZDR endpoints that advertise every strict compiler parameter. Do not reorder or select a provider after observing this canary.",
+    "preserved_prior_route_summary": "reports/intelligence-glm52-canaries-20260716/route-attempts-through-wafer-summary.json",
+    "preserved_prior_route_summary_sha256": "08d5b4a4f28239595e8e893b4714875ddb08244a575499569052e9048a80393d"
+  },
+  "canary": {
+    "model": "z-ai/glm-5.2",
+    "provider_allowlist": [
+      "parasail/fp4",
+      "wafer/fp4",
+      "deepinfra/fp4"
+    ],
+    "allow_contained_fallbacks": true,
+    "reasoning_effort": "high",
+    "max_output_tokens": 8192,
+    "output_token_parameter": "max_tokens",
+    "seed": 0,
+    "semantic_max_attempts": 1,
+    "semantic_attempt_limit_source": "frozen canary code",
+    "transport_max_attempts": 1,
+    "min_request_interval_seconds": 35.0,
+    "capture_router_metadata": true,
+    "zero_data_retention": true,
+    "data_collection": "deny",
+    "require_parameters": true,
+    "max_cost_usd": 0.25,
+    "request_reservation_usd": 0.05,
+    "safety_reserve_usd": 0.01,
+    "fresh_database_cache_and_usage_ledger": true,
+    "synthetic_sessions": 3,
+    "full_synthetic_denominator_required": true,
+    "all_synthetic_checks_required": true,
+    "exact_requested_model_required": true,
+    "observed_provider_must_be_in_fixed_allowlist": true,
+    "query_time_model_calls_required": 0
+  },
+  "execution": {
+    "fresh_extraction_directory": "/tmp/narratordb-v10-run-204d6702",
+    "working_directory": "/tmp/narratordb-v10-run-204d6702",
+    "report": "/Users/william/Desktop/narratorDB/reports/intelligence-v10-canaries-20260716/v10-glm52-fp4-allowlist-canary.json",
+    "argv": [
+      "python",
+      "-m",
+      "narratordb.benchmarks.intelligence_canary",
+      "--model",
+      "z-ai/glm-5.2",
+      "--provider-allow",
+      "parasail/fp4,wafer/fp4,deepinfra/fp4",
+      "--reasoning",
+      "high",
+      "--max-output-tokens",
+      "8192",
+      "--output-token-parameter",
+      "max_tokens",
+      "--max-cost-usd",
+      "0.25",
+      "--transport-max-attempts",
+      "1",
+      "--min-request-interval-seconds",
+      "35",
+      "--capture-router-metadata",
+      "--report",
+      "/Users/william/Desktop/narratorDB/reports/intelligence-v10-canaries-20260716/v10-glm52-fp4-allowlist-canary.json"
+    ],
+    "runtime_environment": {
+      "OPENROUTER_API_KEY": "required but never serialized",
+      "PATH_prefix": "/Users/william/Desktop/narratorDB/.venv/bin"
+    }
+  },
+  "success_rule": {
+    "process_exit_code": 0,
+    "report_status": "passed",
+    "complete_jobs": 3,
+    "failed_jobs": 0,
+    "all_report_checks": true,
+    "unknown_cost_attempts": 0,
+    "invalid_route_identities": 0,
+    "no_selective_denominator": true
+  },
+  "failure_rule": "Preserve the complete content-safe report and stop. Do not resume, selectively retry a session, reorder providers, rotate to another route, or run benchmark questions.",
+  "execution_policy": {
+    "full_fresh_canary_only": true,
+    "no_resume": true,
+    "no_selective_retry": true,
+    "no_provider_reordering": true,
+    "all_failed_attempts_are_preserved": true,
+    "no_prompt_schema_retrieval_or_route_change_after_freeze": true,
+    "development_scores_cannot_support_the_final_95_percent_claim": true
+  },
+  "budget_governance": {
+    "campaign_declaration": "benchmark_records/budgets/narratordb_95_campaign_20260716.json",
+    "campaign_declaration_sha256": "871b1a6322a5d7604363e843b5d9d93f8e79fd12a9d8b0798da368c61b6eb190",
+    "campaign_audit_sha256": "8964db0f915cca3fe11ee5397514adfc5777008b94f24f2747f11969adc44964",
+    "campaign_observed_spend_usd": 106.92098393791,
+    "campaign_declared_headroom_usd": 143.07901606209,
+    "provider_telemetry": "benchmark_records/budgets/openrouter-key-telemetry-pre-v10-canary-20260716.json",
+    "provider_telemetry_sha256": "eafe7438ae46a9f38c07508e8890b9490035ff47d1b748913d1c8ab5a426b4ae",
+    "provider_account_cap_usd": 250.0,
+    "provider_account_remaining_usd": 130.026598786,
+    "admission_headroom_usd": 130.026598786,
+    "overall_experiment_ceiling_eur": 300.0,
+    "all_attempts_count_toward_campaign_spend": true
+  },
+  "credential_policy": "Runtime environment only. No credential is included in the archive, precommit, command arguments, report, or usage metadata."
+}

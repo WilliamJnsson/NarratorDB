@@ -1,0 +1,170 @@
+{
+  "execution_observation": {
+    "exact_authorized_stage_b_launched": true,
+    "exit_status": 1,
+    "launcher_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/run_offline_recovery.sh",
+    "observed_stderr_bytes": 0,
+    "observed_stdout_bytes": 0,
+    "published_recovery_precommit_sha256": "7c186797b14b297bd4035dff81e1b49bbc830cb776896bae90a3275751e116d9",
+    "stage": "stage-b",
+    "stage_a_reexecuted": false,
+    "stage_b_worker_and_sandbox_started": true,
+    "wall_seconds": "16.3988"
+  },
+  "failure": {
+    "classification": "deterministic-validation-policy-mismatch",
+    "deterministic": true,
+    "generated_v7_audit_semantics": {
+      "attempt_five_failures": 0,
+      "complete": true,
+      "failed_attempt_counts": {
+        "1": 1
+      },
+      "official_harness_score_complete": true,
+      "timed_out_attempt_counts": {},
+      "usage_publication_ready": true,
+      "validation_lists_empty": true
+    },
+    "loader_rejection_label": "terminal harness failures",
+    "root_cause": "the generated V7 audit correctly preserved one recovered first-attempt failure, but the sealed loader required both retry maps to be empty and classified any recovered retry as a terminal harness failure",
+    "sealed_loader_policy": {
+      "attempt_five_failures_required": 0,
+      "failed_attempt_counts_required": {},
+      "timed_out_attempt_counts_required": {}
+    },
+    "stderr_payload_recorded": false,
+    "terminal_harness_failure_present": false
+  },
+  "output_evidence": {
+    "directory_mode": "0555",
+    "directory_nlink": 4,
+    "directory_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716",
+    "directory_size_bytes": 128,
+    "file_count": 2,
+    "files": [
+      {
+        "mode": "0444",
+        "nlink": 1,
+        "path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/historical-finalization-verification-envelope.json",
+        "sha256": "daedd300de0ef2d86a41df8996326cb8cabd4b45c3be1e8d2ef5b4bc27d9463f",
+        "size_bytes": 1667
+      },
+      {
+        "mode": "0444",
+        "nlink": 1,
+        "path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/recovery-terminal-status.json",
+        "sha256": "8cc3f2a46a06010775f7986cad021302af83f3c9ed5308622d9e936a62d1ec16",
+        "size_bytes": 940
+      }
+    ]
+  },
+  "private_stage_b_progress": {
+    "aggregate_go_validated_before_private_computation": true,
+    "evaluation_audit_generator_invocations": {
+      "v13-first": 0,
+      "v7-control": 2
+    },
+    "failure_point": "V7 sealed audit loader validation after the second private byte-identical semantic computation",
+    "release_completion_computed": false,
+    "result_document_computed": false,
+    "score_bearing_private_scratch_destroyed": true,
+    "score_bearing_values_read_by_operator_or_terminalizer": false,
+    "score_bearing_values_recorded_in_terminal_evidence": false,
+    "v13_computation_started": false,
+    "v7_generation_passes": [
+      "private-generation",
+      "private-byte-recomputation"
+    ],
+    "v7_payload_byte_identity_checked": true
+  },
+  "publication_state": {
+    "private_scratch_absent": true,
+    "recovered_result_published": false,
+    "release_absent": true,
+    "release_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/release",
+    "score_bearing_audit_published": false,
+    "score_bearing_content_read_by_operator_or_terminalizer": false,
+    "stage_a_envelope_published": true,
+    "terminal_status_published": true
+  },
+  "r2_precommit": {
+    "all_sealed_member_nlinks_one": true,
+    "bundle_root": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716",
+    "closed_world_member_count": 11,
+    "launcher_sha256": "df93c4e4efe49b49d69de75048d2d9de23aef239d68ef7b087fb6b502e38ee74",
+    "physical_file_count_including_seal": 12,
+    "prior_r1_terminal_record_sha256": "74da98f221adc936c1ee39736ec9030bb6f4d9be2a34e823d2d7b1b94c24e0fe",
+    "protocol_sha256": "96a51c2e56c454c1897f596d4b67289420b96f6c87991170d5fd07e33f6f3292",
+    "seal_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/SHA256SUMS",
+    "seal_manifest_sha256": "7c186797b14b297bd4035dff81e1b49bbc830cb776896bae90a3275751e116d9",
+    "seal_manifest_size_bytes": 984,
+    "seal_manifest_verification": "11-of-11-ok-from-bundle-root",
+    "sealed_member_modes": {
+      "all_other_members": "0444",
+      "run_offline_recovery.sh": "0555"
+    },
+    "worker_sha256": "22e0ea15a1d20b1c68bd72402ac6361fc06a61826ef53b1944c9f650501d6bb2"
+  },
+  "recorded_at_utc": "2026-07-16T17:05:05Z",
+  "recovery_policy": {
+    "r2_is_terminal": true,
+    "r2_overwrite_delete_resume_or_retry_allowed": false,
+    "r3_namespace": {
+      "bundle_root": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r3-20260716",
+      "go_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r3-20260716.RECOVERY_GO.json",
+      "output_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r3-20260716",
+      "review_1_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r3-20260716.review-1.json",
+      "review_2_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r3-20260716.review-2.json",
+      "seal_manifest_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r3-20260716/SHA256SUMS"
+    },
+    "r3_requires_distinct_bundle_output_review_go_and_seal_paths": true,
+    "r3_requires_fresh_independent_preseal_review": true,
+    "r3_requires_separately_sealed_policy_fix": true
+  },
+  "schema_version": "narratordb.v13-paid-r5-finalization-recovery-r2-terminal.v1",
+  "source_attempt_preservation": {
+    "r5_attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1",
+    "r5_attempt_tree_fingerprint_sha256": "db0f54b46b3c24c6fac212e59a472365451dd88638f2b8274bf94538b804f804",
+    "r5_terminal_failure_record_sha256": "5b2f8963ec0e8fa7fbbfb8df99692e49407d535ea80761952afc5c303c44e869"
+  },
+  "stage_a_and_go_evidence": {
+    "aggregate_go": {
+      "mode": "0444",
+      "nlink": 1,
+      "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.RECOVERY_GO.json",
+      "sha256": "bb10fc7b90e797fa7de9f1c3c039e8d6bb50ff1f17e7d81bda06a8b0e8fea4ff",
+      "size_bytes": 1209
+    },
+    "review_1": {
+      "mode": "0444",
+      "nlink": 1,
+      "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.review-1.json",
+      "sha256": "e594cd59dc2f2922cce01481eb33102dfe18e826eafd7a531f04e2f6d9367b77",
+      "size_bytes": 819
+    },
+    "review_2": {
+      "mode": "0444",
+      "nlink": 1,
+      "path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716.review-2.json",
+      "sha256": "25f7096a47640ad8a4d0340214c3b6e47f856cc284a5cbb4215348ec341b2428",
+      "size_bytes": 828
+    },
+    "stage_a_envelope": {
+      "mode": "0444",
+      "nlink": 1,
+      "path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/historical-finalization-verification-envelope.json",
+      "sha256": "daedd300de0ef2d86a41df8996326cb8cabd4b45c3be1e8d2ef5b4bc27d9463f",
+      "size_bytes": 1667
+    }
+  },
+  "status": "terminal-deterministic-v7-retry-loader-policy-mismatch-no-release-no-retry",
+  "zero_activity": {
+    "additional_spend_usd": "0",
+    "credential_calls": 0,
+    "fx_calls": 0,
+    "judge_calls": 0,
+    "model_calls": 0,
+    "network_calls": 0,
+    "provider_calls": 0
+  }
+}

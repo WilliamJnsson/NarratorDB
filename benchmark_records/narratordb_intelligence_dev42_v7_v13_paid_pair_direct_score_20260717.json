@@ -1,0 +1,100 @@
+{
+  "benchmark_scope": "consumed-development",
+  "credential_recorded": false,
+  "direct_score_read_at_utc": "2026-07-16T18:12:27Z",
+  "embargo_end_authority": "user-explicitly-authorized-direct-offline-score-read",
+  "incremental_model_calls": 0,
+  "incremental_network_calls": 0,
+  "incremental_spend_usd": 0,
+  "later_formal_publication_audit_required": true,
+  "model_content_recorded": false,
+  "paired_result": {
+    "top_20_correct_delta_v13_minus_v7": 0,
+    "top_20_percentage_point_delta_v13_minus_v7": 0.0,
+    "top_50_correct_delta_v13_minus_v7": 1,
+    "top_50_percentage_point_delta_v13_minus_v7": 2.380953,
+    "v13_reached_95_percent_top_50": false
+  },
+  "reproduction": {
+    "audit_hash_rule": "sha256(json.dumps(report, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode('utf-8'))",
+    "evaluation_auditor_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-20260716/evaluation_audit_runtime.py",
+    "evaluation_auditor_sha256": "011708f614bee9cfc15209986bc68969f3c70191a06f540d3a86a2d7f74aeefc",
+    "execution_authorization_requirements_path": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-20260716/execution-authorization-requirements.json",
+    "execution_authorization_requirements_sha256": "7f2a9d083c8d2b3a158ac6959ca48d5debae4b51f13b8d59c1cc7381e05b1c67",
+    "isolated_python": "/Users/william/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/bin/python3.12 -I -S -B",
+    "scorer_arguments": [
+      "--evaluated-directory <working-copy-manifest.evaluated_directory>",
+      "--frozen-directory <working-copy-manifest.frozen_directory>",
+      "--usage-log <variant.ledger_path>",
+      "--evaluator-log <variant.run_root>/evaluation/evaluate.log",
+      "--expected-questions 42",
+      "--cutoffs 20,50",
+      "--question-id-file <working-copy-manifest.question_id_file>",
+      "--require-complete",
+      "--require-official-score-complete"
+    ]
+  },
+  "result_status": "provisional-direct-offline-reproduction",
+  "schema_version": "narratordb.paid-paired-direct-score.v1",
+  "source_attempt": {
+    "attempt_root": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1",
+    "generation_and_judging_completed_before_score_read": true,
+    "tree_fingerprint_sha256": "db0f54b46b3c24c6fac212e59a472365451dd88638f2b8274bf94538b804f804"
+  },
+  "v13_first": {
+    "arm_gate_canonical_audit_hash_match": true,
+    "arm_gate_internal_evaluation_audit_sha256": "e12114b07834d45b797fdc9d248d199bf57db044453754881008e178e0c4e185",
+    "arm_gate_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/v13-first/evaluation/arm-gate.json",
+    "arm_gate_sha256": "2d67915e4140bb67dbd71971740866e7ac3149c836402edb4f5f078295450efb",
+    "complete": true,
+    "evaluated_questions": 42,
+    "failed_attempt_counts": {},
+    "frozen_questions": 42,
+    "official_harness_score_complete": true,
+    "project": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+    "rendered_audit_stdout_sha256": "ca100fd0aee2928bb2c8e22da6a6a9ceac7c18bc69480787f050f6df9f80f9e2",
+    "top_20": {
+      "accuracy": 0.857143,
+      "correct": 36,
+      "percentage": 85.7143,
+      "total": 42
+    },
+    "top_50": {
+      "accuracy": 0.904762,
+      "correct": 38,
+      "percentage": 90.4762,
+      "total": 42
+    },
+    "usage_publication_ready": true,
+    "validation_issue_count": 0
+  },
+  "v7_control": {
+    "arm_gate_canonical_audit_hash_match": true,
+    "arm_gate_internal_evaluation_audit_sha256": "fdad9c092447d7ac5ed229ee8fb927ee1ec8a359819a6c517524d22bd92badc3",
+    "arm_gate_path": "reports/longmemeval-intelligence-dev42-v13-paid-paired-scoring-r5-20260716/attempt1/v7-control/evaluation/arm-gate.json",
+    "arm_gate_sha256": "01feab14898c658e30c63ab1ea78a6c3fb0ca04bd6860c59a0a31e1d44a581e0",
+    "complete": true,
+    "evaluated_questions": 42,
+    "failed_attempt_counts": {
+      "1": 1
+    },
+    "frozen_questions": 42,
+    "official_harness_score_complete": true,
+    "project": "narratordb-intelligence-dev42-v7-gpt54mini",
+    "rendered_audit_stdout_sha256": "dde6181a3b089b190bbf1d5400941e56d0fcb4c5b65ee59963bda06b5f2de33c",
+    "top_20": {
+      "accuracy": 0.857143,
+      "correct": 36,
+      "percentage": 85.7143,
+      "total": 42
+    },
+    "top_50": {
+      "accuracy": 0.880952,
+      "correct": 37,
+      "percentage": 88.0952,
+      "total": 42
+    },
+    "usage_publication_ready": true,
+    "validation_issue_count": 0
+  }
+}

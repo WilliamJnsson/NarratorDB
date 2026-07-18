@@ -1,0 +1,135 @@
+{
+  "schema": "narratordb.openrouter-zdr-endpoint-snapshot.v1",
+  "observed_at_utc": "2026-07-15T23:46:13Z",
+  "source": "https://openrouter.ai/api/v1/endpoints/zdr",
+  "model_id": "z-ai/glm-5.2",
+  "selection": {
+    "rule": "active FP4 endpoints supporting every strict compiler wire parameter",
+    "required_parameters": [
+      "reasoning",
+      "max_tokens",
+      "seed",
+      "response_format",
+      "structured_outputs"
+    ],
+    "endpoints": [
+      {
+        "provider_name": "Parasail",
+        "tag": "parasail/fp4",
+        "status": 0,
+        "quantization": "fp4",
+        "max_completion_tokens": 262144,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "seed",
+          "stop",
+          "top_k",
+          "logit_bias",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs",
+          "reasoning_effort"
+        ]
+      },
+      {
+        "provider_name": "DeepInfra",
+        "tag": "deepinfra/fp4",
+        "status": 0,
+        "quantization": "fp4",
+        "max_completion_tokens": 32768,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "top_k",
+          "seed",
+          "min_p",
+          "response_format",
+          "logit_bias",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ]
+      },
+      {
+        "provider_name": "Wafer",
+        "tag": "wafer/fp4",
+        "status": 0,
+        "quantization": "fp4",
+        "max_completion_tokens": 131072,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "temperature",
+          "top_p",
+          "top_k",
+          "min_p",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "stop",
+          "seed",
+          "max_tokens",
+          "logit_bias",
+          "structured_outputs",
+          "response_format",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs",
+          "reasoning_effort"
+        ]
+      },
+      {
+        "provider_name": "Wafer",
+        "tag": "wafer/fast",
+        "status": 0,
+        "quantization": "fp4",
+        "max_completion_tokens": 131072,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "temperature",
+          "top_p",
+          "top_k",
+          "min_p",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "stop",
+          "seed",
+          "max_tokens",
+          "logit_bias",
+          "tools",
+          "tool_choice",
+          "response_format",
+          "structured_outputs",
+          "reasoning_effort"
+        ]
+      }
+    ]
+  },
+  "intended_allowlist": [
+    "parasail/fp4",
+    "wafer/fp4",
+    "deepinfra/fp4"
+  ],
+  "allowlist_rationale": "fixed ordering among the three compatible FP4 providers already attempted in the preserved route canaries; no post-canary provider selection"
+}

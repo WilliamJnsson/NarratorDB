@@ -1,0 +1,13 @@
+{
+  "accessed_at_utc": "2026-07-17T05:04:15Z",
+  "cached_input_usd_per_million_tokens": "0.075",
+  "completion_reasoning_accounting": "reasoning_tokens are a subset of completion_tokens and are not charged a second time",
+  "cost_formula": "((prompt_tokens - cached_tokens) * 0.75 + cached_tokens * 0.075 + completion_tokens * 4.50) / 1000000",
+  "input_usd_per_million_tokens": "0.75",
+  "model_alias": "gpt-5.4-mini",
+  "model_snapshot": "gpt-5.4-mini-2026-03-17",
+  "output_usd_per_million_tokens": "4.50",
+  "pricing_currency": "USD",
+  "schema_version": "narratordb.openai-model-pricing-evidence.v1",
+  "source": "https://developers.openai.com/api/docs/models/gpt-5.4-mini"
+}

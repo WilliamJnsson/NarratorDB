@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-07-14",
+  "status": "development",
+  "run_id": "narratordb-full500-v4flash-routing-canary-20260714",
+  "system": "NarratorDB",
+  "classification": "Provider-routing canary; excluded from every final score",
+  "benchmark": {
+    "name": "LongMemEval_S",
+    "harness": "mem0ai/memory-benchmarks",
+    "harness_commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "dataset_sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+    "mode": "evaluate-only",
+    "intended_questions": 500,
+    "questions_completed": 9,
+    "frozen_retrieval_run_id": "5af42210",
+    "cutoffs": [10, 20, 50, 200],
+    "seed": 42
+  },
+  "models": {
+    "answerer": "deepseek/deepseek-v4-flash-20260423",
+    "judge": "deepseek/deepseek-v4-flash-20260423",
+    "reasoning_effort": "high",
+    "temperature": 0,
+    "initial_provider": "StreamLake",
+    "resumed_provider_allowlist": ["DeepInfra", "StreamLake", "GMICloud", "Baidu"]
+  },
+  "usage": {
+    "successful_http_200_responses": 76,
+    "valid_completion_responses": 74,
+    "malformed_http_200_responses_retried_by_harness": 2,
+    "upstream_http_429_responses": 48,
+    "provider_response_counts": {
+      "StreamLake": 62,
+      "GMICloud": 12,
+      "missing_metadata": 2
+    },
+    "prompt_tokens": 298262,
+    "completion_tokens": 14238,
+    "reasoning_tokens": 12449,
+    "response_cost_usd": 0.0245736414
+  },
+  "outcome": {
+    "exhausted_five_attempt_retries": 0,
+    "empty_final_answer_or_judge_outputs": 0,
+    "reason_stopped": "The canary established that the low-cost allowlist recovered without exhausted retries. It was stopped so the clean final run could start from all 500 untouched frozen predictions with the official ten-worker concurrency."
+  },
+  "publication": {
+    "score_published": false,
+    "included_in_final_denominator": false,
+    "included_in_final_cost": false
+  },
+  "artifact_directory": "reports/longmemeval-full500-v4flash-routing-canary-20260714"
+}

@@ -1,0 +1,67 @@
+{
+  "candidate_status": "UNSEALED_CANDIDATE_DO_NOT_EXECUTE",
+  "commands": [
+    {
+      "command": "benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/run_offline_recovery.sh preflight-smoke",
+      "expected_exit_code": 0,
+      "id": "full-launcher-preflight-smoke",
+      "requires_credential": false,
+      "requires_network": false,
+      "requires_sealed_candidate": false,
+      "stderr_bytes": 0,
+      "stdout_bytes": 0,
+      "writes_recovery_output": false
+    },
+    {
+      "command": "NARRATORDB_R5_RECOVERY_R2_PRECOMMIT_SHA256='0000000000000000000000000000000000000000000000000000000000000000' benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/run_offline_recovery.sh stage-a",
+      "expected_exit_code": 71,
+      "id": "zero-seal-stage-a-launcher-canary",
+      "requires_credential": false,
+      "requires_network": false,
+      "requires_sealed_candidate": false,
+      "stderr_bytes": 0,
+      "stdout_bytes": 0,
+      "writes_recovery_output": false
+    },
+    {
+      "command": "cd benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716 && /usr/bin/shasum -a 256 -c SHA256SUMS",
+      "id": "verify-recovery-seal",
+      "requires_sealed_candidate": true
+    },
+    {
+      "command": "/usr/bin/shasum -a 256 -c benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/BOUND_INPUTS_SHA256SUMS",
+      "id": "verify-recovery-bound-inputs",
+      "requires_sealed_candidate": true
+    },
+    {
+      "command": "NARRATORDB_R5_RECOVERY_R2_PRECOMMIT_SHA256='<EXTERNALLY_PUBLISHED_RECOVERY_SEAL>' benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/run_offline_recovery.sh stage-a",
+      "id": "offline-historical-finalization-stage-a",
+      "requires_credential": false,
+      "requires_network": false,
+      "requires_sealed_candidate": true,
+      "stderr_bytes": 0,
+      "stdout_bytes": 0
+    },
+    {
+      "command": "after Stage A, Goodall and Mendel create their exact immutable no-score-read reviews at the predeclared paths; only then create aggregate immutable RECOVERY_GO binding both review hashes, recovery seal, Stage-A envelope hash, terminal hash, and source fingerprint",
+      "id": "two-independent-go-reviews",
+      "requires_stage_a": true
+    },
+    {
+      "command": "NARRATORDB_R5_RECOVERY_R2_PRECOMMIT_SHA256='<EXTERNALLY_PUBLISHED_RECOVERY_SEAL>' benchmark_records/reproduction-v13-paid-paired-scoring-r5-finalization-recovery-r2-20260716/run_offline_recovery.sh stage-b",
+      "id": "offline-recovered-result-stage-b",
+      "requires_credential": false,
+      "requires_network": false,
+      "requires_sealed_candidate": true,
+      "requires_two_review_go": true,
+      "stderr_bytes": 0,
+      "stdout_bytes": 0
+    }
+  ],
+  "failure_policy": "R1 is terminal and is never retried. Any R2 precommit nonzero destroys unread private scratch, preserves pre-existing and published evidence, writes a generic immutable terminal status when possible, closes R2, and forbids R2 retry; another attempt requires a separately reviewed and sealed R3. One exclusive atomic release-directory rename is the irrevocable commit.",
+  "preseal_file_count": 11,
+  "r1_retry_allowed": false,
+  "schema_version": "narratordb.v13-paid-r5-offline-recovery-command-manifest.v2",
+  "sealed_physical_file_count": 12,
+  "stage_a_executed": false
+}

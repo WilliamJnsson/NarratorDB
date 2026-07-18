@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "narratordb": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@5cda4adbc5c72bec06fa5a63a81bae42369007ec",
+        "narratordb-mcp",
+        "--init-mode",
+        "private",
+        "--client",
+        "codex-plugin"
+      ],
+      "env": {
+        "NARRATORDB_LOCAL_ONLY": "1",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "DO_NOT_TRACK": "1",
+        "NARRATORDB_TELEMETRY": "0"
+      }
+    }
+  }
+}

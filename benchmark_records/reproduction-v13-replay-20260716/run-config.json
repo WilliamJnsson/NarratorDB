@@ -1,0 +1,161 @@
+{
+  "schema_version": "narratordb.v13-existing-derived-replay-run.v1",
+  "created_at_utc": "2026-07-16T04:40:00Z",
+  "status": "precommitted before V13 replay database creation or prediction",
+  "benchmark": "LongMemEval-S consumed development42 existing-derived replay",
+  "run_id": "v7m42a1",
+  "project_name": "narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+  "mode": "intelligence-existing-derived-read-only-replay",
+  "classification": "V13 local retrieval/render over reused V7 compiler artifacts on consumed dev42; not a fresh end-to-end, heldout, publishable 95%, or third-party score",
+  "purpose": "Measure generic V13 snapshot-deterministic local retrieval and rendering over fixed V7 derived artifacts without paying for or resampling compiler output.",
+  "compiler": {
+    "model": "openai/gpt-5.4-mini",
+    "provider": "Azure",
+    "reasoning": "minimal",
+    "execution": "reused frozen V7 derived artifacts; no compiler call in replay",
+    "fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400"
+  },
+  "answerer": {
+    "model": "no-call",
+    "provider": "closed-network-sentinel",
+    "reasoning": "not-applicable",
+    "execution": "not called during predict-only replay"
+  },
+  "judge": {
+    "model": "no-call",
+    "provider": "closed-network-sentinel",
+    "reasoning": "not-applicable",
+    "execution": "not called during predict-only replay"
+  },
+  "source": {
+    "archive": "reports/intelligence-v13-source-20260716T043211Z/narratordb-v13-source.tar.gz",
+    "archive_sha256": "115fee74ca4c2561397cec337b31fedd21a5b48b04333a9ec923cc66d6922486",
+    "metadata": "reports/intelligence-v13-source-20260716T043211Z/source-metadata.json",
+    "metadata_sha256": "c9368173c9fe728b00325dd61c4a9b63326c0112809f5f881a3cef000c6b49d8",
+    "source_sha256s": "reports/intelligence-v13-source-20260716T043211Z/SHA256SUMS",
+    "source_sha256s_sha256": "127a03eddc8982cde33faf8ee260047c2ae33640e9b52b1e48aa7fdbb02bdbe9",
+    "source_members_sha256": "d90f675b655727a763854d61e5309f216923c57e70741ab927b5e616ab28a9cf",
+    "source_content_sha256s_sha256": "8bdda80edbfb2d6ff876563712efaf8634a43b7905d30e31302319e5bb976d39",
+    "extracted_release_suite_log_sha256": "76e6e966ba5ef1f990d8d58347e14639124a78c2e7f6843e4ca78187c85e5e7b",
+    "archive_entries": 84,
+    "archive_member_list_sha256": "d90f675b655727a763854d61e5309f216923c57e70741ab927b5e616ab28a9cf",
+    "full_extracted_release_suite_passed": true,
+    "unit_and_integration_tests_passed": 256,
+    "local_existing_derived_replay_requires_compiler_canary": false
+  },
+  "predecessor_v12": {
+    "source_archive_sha256": "23eb843761bcb50aa4e36c0c517ebd2b26d9244cc63f368101a512e84977564e",
+    "first_prediction_freeze_manifest_sha256": "9180689c5516880c0b7aea797bb6183027a2f2e5fbfbb3c6085cd5926d9ccb41",
+    "repeat_failure_metadata_sha256": "2381460a8bc3c21f66c7384813adc90095237a6c33c821e7e2cbd9a732b6aca0",
+    "repeat_comparison_sha256": "9d1626d199929e8a7688125e392b6252c922b2a524ac48bff1a78e78eea4e608",
+    "repeat_result": "top20 42/42, top50 42/42, full 39/42",
+    "classification": "valid zero-model determinism failure; not promoted and not scored"
+  },
+  "producer": {
+    "version": "V7",
+    "source_archive": "reports/intelligence-v7-source-20260716T201147Z/narratordb-v7-source.tar.gz",
+    "source_archive_sha256": "181df314f0b68ac1bbd3eb3b6363dd2a6b195f7c9beb5fd0d8deec043034c85d",
+    "database": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/intelligence.db",
+    "database_sha256": "b7c56832ef37ab98b4778403cf329e9338194dd581e6bdcdb7fee43b08960c6c",
+    "input_manifest_sha256": "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+    "prediction_manifest_sha256": "e0f54d6879f46d76a51c2b785b67b5ae45c790a591263bab4d73a0b7211b8cac",
+    "compiler_model": "openai/gpt-5.4-mini",
+    "compiler_provider": "Azure",
+    "compiler_reasoning": "minimal",
+    "compiler_prompt_version": "narratordb.memory-compiler.v7",
+    "compiler_fingerprint": "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+    "complete_jobs": 1976,
+    "partial_jobs": 3,
+    "partial_reason": "provider content filter with raw-source fallback",
+    "execution": "reuse frozen terminal V7 derived artifacts; no compiler call in replay"
+  },
+  "scope": {
+    "dataset": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+    "dataset_sha256": "2a68c4ced20d23f0e11480eda6fa3279331e022e284f0fb17dd90e1a617d8710",
+    "question_ids": "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+    "question_ids_sha256": "60c150dc1e7421b15ca4bc56f9bad63ea2265b4d52386ae63fd83568c3e0e3ff",
+    "question_membership_sha256": "bf32b519cfe22e0b029171de48a455ca24c86f92b7b655a78b2f6b9ae7e2d65f",
+    "questions": 42,
+    "selection": "every question in the frozen consumed development split; no score-dependent exclusion"
+  },
+  "harness": {
+    "repository": "vendor/memory-benchmarks",
+    "commit": "4b61c5d31b9c668a12b4f5e78064248a02c82d2b",
+    "expected_archive_sha256": "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+    "module": "benchmarks.longmemeval.run",
+    "all_questions": true,
+    "predict_only": true,
+    "backend": "oss",
+    "mode": "answerer",
+    "top_k": 200,
+    "top_k_cutoffs": [
+      20,
+      50
+    ],
+    "max_workers": 10,
+    "rpm": 60,
+    "seed": 42,
+    "answerer_model": "no-call",
+    "judge_model": "no-call",
+    "predict_only_placeholder": {
+      "environment_name": "OPENAI_API_KEY",
+      "value_class": "fixed non-sensitive no-call sentinel"
+    }
+  },
+  "retrieval": {
+    "top_k": 200,
+    "cutoffs": [
+      20,
+      50
+    ],
+    "context_token_budget": 6000,
+    "merge_adjacent": true,
+    "merge_gap": 1,
+    "merge_max_chars": 1200,
+    "coalesce_timestamp_sessions": true,
+    "claim_render_format": 3,
+    "memory_key_format": 2,
+    "aggregation_evidence_pack_format": 2,
+    "query_time_hosted_model": false
+  },
+  "runtime_guards": {
+    "backend_port": 8893,
+    "closed_external_proxy_port": 9,
+    "replay_control": "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+    "replay_control_sha256": "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d",
+    "compiler_constructed": false,
+    "compiler_cache_constructed": false,
+    "model_environment_variables_unset_for_backend": true,
+    "mutations_rejected": true,
+    "empty_or_nonterminal_scope_rejected": true,
+    "external_network_closed_during_predict_only": true,
+    "compiler_usage_sidecar_must_remain_absent": true,
+    "compiler_cache_sidecar_must_remain_absent": true,
+    "paired_repeat_root_must_remain_absent_until_first_freeze_and_repeat_precommit": true
+  },
+  "fresh_outputs": {
+    "root": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716",
+    "database": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/intelligence.db",
+    "runtime_source": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/runtime-source",
+    "harness_source": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/harness-source",
+    "prediction_directory": "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini"
+  },
+  "fairness": {
+    "dev42_is_consumed_and_prior_scores_are_known": true,
+    "human_tuning_from_v6_through_v12_failures_occurred": true,
+    "questions_dropped": 0,
+    "selective_retries": false,
+    "v7_prediction_files_to_copy": 0,
+    "ingestion_checkpoints_to_copy": 42,
+    "prediction_manifest_frozen_before_answerer_or_judge": true,
+    "permitted_claim": "consumed-development diagnostic only",
+    "forbidden_claims": [
+      "fresh V13 end-to-end compiler score",
+      "unseen or untouched holdout score",
+      "independent third-party reproduction",
+      "publishable 95 percent result"
+    ]
+  },
+  "determinism_claim_scope": "Identical persisted database snapshot, source archive, harness, dataset, split, configuration, and replay helper. Cross-ingestion equality is not claimed because persisted created_at values can differ.",
+  "model_access_policy": "No hosted-model access value is available to the replay backend. The predict-only harness receives only a fixed non-sensitive constructor sentinel. No hosted model call is permitted in this phase."
+}

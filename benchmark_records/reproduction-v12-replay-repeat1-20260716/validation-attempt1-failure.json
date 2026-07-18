@@ -1,0 +1,15 @@
+{
+  "schema_version": "narratordb.failed-offline-validation.v1",
+  "attempted_at_utc": "2026-07-16T03:39:21Z",
+  "status": "failed validation command before repeat1 run-root creation",
+  "failure_type": "ModuleNotFoundError",
+  "failure_code": "comparator_test_invoked_outside_tool_directory",
+  "failure_location": "offline comparator self-test import",
+  "disposition": "preserved; no replay database, prediction, benchmark question, network call, model call, or cost was created",
+  "repair": "run the same hash-pinned unittest module with the comparator tool directory as the working directory",
+  "repeat_run_root_absent_after_failure": true,
+  "preflight_remained_valid": true,
+  "network_calls": 0,
+  "model_calls": 0,
+  "cost_usd": 0.0
+}

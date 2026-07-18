@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "artifact_type": "benchmark_scope_precommit",
+  "precommit_id": "beam-1m-narratordb-unrun-20260716",
+  "created_at": "2026-07-16T06:51:27+09:00",
+  "repository_state": {
+    "head": "4fe10683ed4e4ecb85482c7a7a71dc08a84d4a83",
+    "working_tree_dirty": true,
+    "note": "This freezes dataset scope, not the still-changing NarratorDB implementation. The exact implementation commit must be frozen in a later protocol amendment before any scored run."
+  },
+  "state": {
+    "phase": "dataset_scope_frozen_protocol_unresolved",
+    "run_authorized": false,
+    "reason": "Reader, judge, provider, retry, adapter, implementation, and scalar success rules are not frozen yet."
+  },
+  "claim_semantics": {
+    "allowed_label": "BEAM-1M dataset scope precommitted before a NarratorDB BEAM-1M development or evaluation run; locally unrun by NarratorDB based on the repository audit; public-answer and not globally hidden.",
+    "eligible_as": [
+      "a precommitted NarratorDB-unrun comparison scope",
+      "a direct public-benchmark comparison with systems evaluated on the same BEAM-1M tier after protocol alignment"
+    ],
+    "not_eligible_as": [
+      "the sole final held-out claim",
+      "a globally hidden or secret test",
+      "proof that no BEAM-1M answer-bearing artifact ever existed anywhere in the local environment",
+      "an official BEAM score until the exact official-compatible answerer and evaluator protocol is frozen and completed"
+    ]
+  },
+  "official_sources": {
+    "paper": {
+      "identifier": "arXiv:2510.27246",
+      "url": "https://arxiv.org/abs/2510.27246"
+    },
+    "repository": {
+      "url": "https://github.com/mohammadtavakoli78/BEAM",
+      "commit": "3e12035532eb85768f1a7cd779832b650c4b2ef9",
+      "license_spdx": "MIT"
+    },
+    "dataset": {
+      "url": "https://huggingface.co/datasets/Mohammadta/BEAM",
+      "revision": "3205395e897e7318c7b094ef4e6047b9b82dbb03",
+      "license_spdx": "CC-BY-SA-4.0",
+      "public": true,
+      "gated": false,
+      "metadata_url": "https://huggingface.co/api/datasets/Mohammadta/BEAM/tree/3205395e897e7318c7b094ef4e6047b9b82dbb03?recursive=true&expand=true"
+    }
+  },
+  "dataset_scope": {
+    "tier": "1M",
+    "selection": "all conversations in the official 1M tier",
+    "conversations": 35,
+    "sampling": "none",
+    "source_file": {
+      "path": "data/1M-00000-of-00001.parquet",
+      "size_bytes": 66156374,
+      "sha256": "41b5acbbb55a586b1305514ef9d9fb03365d9b3331b598a1c2dd7603d93ef533",
+      "sha256_provenance": "Official Hugging Face tree metadata lfs.oid; Git LFS object IDs are the SHA-256 of file content.",
+      "git_blob_oid_sha1": "8767e8c383bee6ceb9c3b6f389924bf20f6cdb63",
+      "xet_hash": "53a69b60a78251e58569e5d03d1a03b502bd2731159ce12a76d603d87dafa418"
+    },
+    "immutability_rule": "The tier, full 35-conversation denominator, dataset revision, source path, and source SHA-256 cannot be changed by a later amendment."
+  },
+  "access_attestation": {
+    "scope": "Actions in this precommit work session plus repository-visible files; this is not an audit of browser caches, provider systems, other machines, or human memory.",
+    "official_1m_parquet_downloaded_by_this_work": false,
+    "official_1m_dataset_row_opened_or_parsed_by_this_work": false,
+    "local_answer_or_rubric_payload_opened_by_this_work": false,
+    "deliberate_answer_inspection_or_use_for_development": false,
+    "automatic_public_web_preview_may_have_rendered_during_source_research": true,
+    "preview_content_copied_or_used": false,
+    "metadata_inspected": [
+      "official README and repository metadata",
+      "official Hugging Face dataset-card and tree metadata",
+      "local filenames, sizes, hashes, binary-text matches, and Git history without opening result payloads"
+    ]
+  },
+  "prior_local_use_audit": {
+    "audit_scope": "Current repository tree including ignored files, binary-text filename matches, and reachable Git path/content history at precommit time.",
+    "official_1m_parquet_found_in_repository": false,
+    "official_1m_parquet_exact_size_found_in_current_tree_or_reachable_git_blobs": false,
+    "narratordb_1m_run_record_found": false,
+    "known_narratordb_beam_use": {
+      "tier": "100K",
+      "scope": "one conversation and one question per ability",
+      "questions": 10,
+      "source": "BENCHMARKS.md section 'Key-free BEAM diagnostic'",
+      "claim_status": "retrieval diagnostic only; not an official BEAM pass rate"
+    },
+    "preexisting_local_vendor_artifacts": [
+      {
+        "path": "vendor/memory-benchmarks/results/platform/beam_1m_results.json",
+        "size_bytes": 3165605,
+        "sha256": "60a4878fdbd0082164dbf48a440f62384ec5e16001eaea4152732b8dfc9f75da",
+        "tracked_by_git": false,
+        "payload_opened_during_audit": false,
+        "answer_bearing_status": "unknown"
+      },
+      {
+        "path": "vendor/memory-benchmarks/results/platform/beam_1m_top50_results.json",
+        "size_bytes": 2864362,
+        "sha256": "81af8efcc6a49d9c0116e095ddb5158559a50afd119e23a1e81fcf1cae54d545",
+        "tracked_by_git": false,
+        "payload_opened_during_audit": false,
+        "answer_bearing_status": "unknown"
+      }
+    ],
+    "conclusion": "No NarratorDB BEAM-1M run or official 1M parquet was found, but pre-existing vendor result files prevent an unqualified locally-unseen claim."
+  },
+  "verified_official_evaluator_behavior": {
+    "source_commit": "3e12035532eb85768f1a7cd779832b650c4b2ef9",
+    "source_files": [
+      "src/evaluation/compute_metrics.py",
+      "src/evaluation/run_evaluation.py",
+      "src/evaluation/report_results.py"
+    ],
+    "ability_columns": 10,
+    "per_conversation_aggregation": "For each ability, report_results.py averages question scores; event_ordering uses tau_norm and the other abilities use llm_judge_score.",
+    "tier_aggregation": "For each ability, report_results.py takes the arithmetic mean of the per-conversation values across included conversation directories.",
+    "single_headline_scalar_verified": false,
+    "success_threshold_verified": false,
+    "note": "The official report script emits ten ability columns. This artifact does not invent a single scalar or a 95% success rule."
+  },
+  "unresolved_protocol": {
+    "narratordb_git_commit": null,
+    "narratordb_container_digest": null,
+    "adapter_and_ingestion_order": null,
+    "answer_reader_model_and_provider": null,
+    "judge_model_and_provider": null,
+    "model_versions_and_routing_policy": null,
+    "prompts_and_prompt_hashes": null,
+    "temperature_seed_and_determinism": null,
+    "retrieval_context_budget_and_top_k": null,
+    "retry_timeout_and_failure_denominator_policy": null,
+    "single_headline_metric_if_any": null,
+    "success_rule": null,
+    "third_party_custodian": null,
+    "maximum_run_budget": null
+  },
+  "amendment_policy": {
+    "required_before_run": true,
+    "requirements": [
+      "A later hash-stable protocol artifact must reference this artifact and its published SHA-256.",
+      "Every unresolved field must be frozen before any NarratorDB BEAM-1M development or scored run.",
+      "The later artifact may not change the frozen dataset scope.",
+      "Any failed, timed-out, or malformed item must remain in the denominator under the frozen failure policy."
+    ]
+  },
+  "third_party_validation_requirements": [
+    "Fetch only the pinned official dataset revision and verify the 1M parquet SHA-256 before evaluation.",
+    "Run all 35 conversations with no sampling or post-hoc exclusions.",
+    "Keep reference answers and rubrics outside the NarratorDB process and expose only conversation inputs and probing questions.",
+    "Record immutable input/output hashes, provider request identifiers, timestamps, retries, failures, token usage, and costs.",
+    "Release raw system outputs and evaluator outputs so another party can deterministically re-score them.",
+    "Report that hosted-model generation may not be bit-for-bit reproducible and publish the exact rerun policy before execution."
+  ]
+}

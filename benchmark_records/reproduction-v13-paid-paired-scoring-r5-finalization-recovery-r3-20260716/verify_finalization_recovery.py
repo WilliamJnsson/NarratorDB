@@ -1,0 +1,2993 @@
+#!/usr/bin/env python3
+"""Offline-only finalization recovery for the terminal sealed R5 paid pair.
+
+The worker deliberately writes nothing to stdout or stderr.  Stage A reconstructs
+only score-blind finalization evidence at its preserved review timestamp.  Stage B
+is inaccessible until two immutable independent reviews and their aggregate GO
+bind the sealed recovery candidate and the exact Stage-A verification payload.
+"""
+
+from __future__ import annotations
+
+import ctypes
+import fcntl
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path, PurePosixPath
+import signal
+import stat
+import subprocess
+import sys
+import tempfile
+from datetime import datetime, timezone
+from decimal import Decimal
+from typing import Any, Callable, Mapping, Sequence
+
+
+PROTOCOL_SCHEMA = "narratordb.v13-paid-r5-offline-finalization-recovery-protocol.v3"
+TERMINAL_STATUS_SCHEMA = "narratordb.v13-paid-r5-recovery-terminal-status.v2"
+STAGE_A_ENVELOPE_SCHEMA = "narratordb.v13-paid-r5-historical-finalization-envelope.v1"
+REVIEW_SCHEMA = "narratordb.v13-paid-r5-recovery-go-review.v1"
+GO_SCHEMA = "narratordb.v13-paid-r5-recovery-go.v1"
+RESULT_SCHEMA = "narratordb.v13-paid-r5-recovered-paired-result.v1"
+COMPLETE_SCHEMA = "narratordb.v13-paid-r5-recovery-release-complete.v1"
+EXPECTED_ENVIRONMENT_KEYS = {
+    "HOME",
+    "LANG",
+    "LC_ALL",
+    "PYTHONDONTWRITEBYTECODE",
+    "TMPDIR",
+}
+HEX = frozenset("0123456789abcdef")
+MAX_JSON_BYTES = 4 * 1024 * 1024
+MAX_INPUT_BYTES = 64 * 1024 * 1024
+NETWORK_AUDIT_PREFIXES = (
+    "socket.",
+    "urllib.",
+    "http.client.",
+)
+FORBIDDEN_SCORE_FIELDS = {
+    "accuracy",
+    "answer",
+    "answers",
+    "by_question_type",
+    "correct",
+    "delta_correct",
+    "judge",
+    "judges",
+    "metric",
+    "metrics",
+    "numerator",
+    "score",
+    "scores",
+    "score_release_authorized",
+    "verdict",
+    "verdicts",
+}
+RENAME_EXCL = 0x00000004
+AT_FDCWD = -2
+_RELEASE_COMMITTED = False
+_SUBPROCESS_INVOCATIONS: list[dict[str, Any]] = []
+FAILURE_PHASES = frozenset(
+    {
+        "launcher-or-worker-preflight",
+        "stage-a-publication",
+        "stage-a-validation",
+        "stage-b-atomic-publication",
+        "stage-b-committed-reentry",
+        "stage-b-post-computation-recheck",
+        "stage-b-pre-go-validation",
+        "stage-b-result-and-completion",
+        "stage-b-v13-audit",
+        "stage-b-v7-audit",
+    }
+)
+STAGE_B_CANARY_STEPS = (
+    "synthetic-private-evidence",
+    "exact-auditor-v7",
+    "exact-auditor-v13",
+    "attempt-five-rejected",
+    "generated-audit-parser",
+    "atomic-eight-file-rename",
+    "production-reentry-branch",
+    "stage-a-reconstruction",
+    "go-review-validation",
+    "retry-aware-evidence-recomputation",
+    "result-completion-validation",
+    "postscore-bundle",
+    "postscore-bound-inputs",
+    "postscore-attempt",
+    "exact-subprocess-invocations",
+    "private-cleanup",
+)
+_FAILURE_PHASE = "launcher-or-worker-preflight"
+
+
+class RecoveryError(RuntimeError):
+    """Fail-closed recovery error whose details are never emitted."""
+
+
+def _set_failure_phase(phase: str) -> None:
+    global _FAILURE_PHASE
+
+    if phase not in FAILURE_PHASES:
+        raise RecoveryError("invalid failure phase")
+    _FAILURE_PHASE = phase
+
+
+def _sha256(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _canonical_json(document: Mapping[str, Any]) -> bytes:
+    return (json.dumps(document, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def _unique_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise RecoveryError("duplicate JSON field")
+        result[key] = value
+    return result
+
+
+def _stable_bytes(path: Path, *, maximum: int = MAX_INPUT_BYTES) -> bytes:
+    if path.is_symlink():
+        raise RecoveryError("symlink input")
+    before = path.stat(follow_symlinks=False)
+    if not stat.S_ISREG(before.st_mode) or before.st_size > maximum:
+        raise RecoveryError("invalid input file")
+    payload = path.read_bytes()
+    after = path.stat(follow_symlinks=False)
+    if (
+        len(payload) != before.st_size
+        or (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+        != (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)
+    ):
+        raise RecoveryError("input changed while read")
+    return payload
+
+
+def _load_json(path: Path) -> tuple[dict[str, Any], bytes]:
+    payload = _stable_bytes(path, maximum=MAX_JSON_BYTES)
+    try:
+        document = json.loads(
+            payload,
+            object_pairs_hook=_unique_pairs,
+            parse_float=Decimal,
+            parse_constant=lambda _: (_ for _ in ()).throw(RecoveryError("constant")),
+        )
+    except (UnicodeDecodeError, json.JSONDecodeError, RecoveryError) as error:
+        raise RecoveryError("invalid JSON") from error
+    if not isinstance(document, dict):
+        raise RecoveryError("JSON root is not an object")
+    return document, payload
+
+
+def _canonical_serializable_document(payload: bytes, *, label: str) -> dict[str, Any]:
+    try:
+        document = json.loads(
+            payload,
+            object_pairs_hook=_unique_pairs,
+            parse_constant=lambda _: (_ for _ in ()).throw(
+                RecoveryError("constant")
+            ),
+        )
+    except (UnicodeDecodeError, json.JSONDecodeError, RecoveryError) as error:
+        raise RecoveryError(f"invalid {label}") from error
+    if not isinstance(document, dict) or _canonical_json(document) != payload:
+        raise RecoveryError(f"{label} is not canonical")
+    return document
+
+
+def _require_exact_keys(
+    document: Mapping[str, Any], expected: set[str], *, label: str
+) -> None:
+    if set(document) != expected:
+        raise RecoveryError(f"{label} fields")
+
+
+def _reject_score_fields(value: Any) -> None:
+    if isinstance(value, Mapping):
+        for key, child in value.items():
+            if str(key).casefold() in FORBIDDEN_SCORE_FIELDS:
+                raise RecoveryError("score-bearing field in score-blind document")
+            _reject_score_fields(child)
+    elif isinstance(value, list):
+        for child in value:
+            _reject_score_fields(child)
+
+
+def _zero_activity(protocol: Mapping[str, Any]) -> dict[str, Any]:
+    expected = {
+        "additional_spend_usd": "0",
+        "credential_calls": 0,
+        "fx_calls": 0,
+        "judge_calls": 0,
+        "model_calls": 0,
+        "network_calls": 0,
+        "provider_calls": 0,
+    }
+    if protocol.get("zero_new_activity") != expected:
+        raise RecoveryError("zero-activity policy changed")
+    return expected
+
+
+def _require_sha(value: Any) -> str:
+    if (
+        not isinstance(value, str)
+        or len(value) != 64
+        or any(character not in HEX for character in value)
+    ):
+        raise RecoveryError("invalid SHA-256")
+    return value
+
+
+def _require_immutable(
+    path: Path, *, maximum: int = MAX_INPUT_BYTES, exact_mode: int | None = None
+) -> bytes:
+    payload = _stable_bytes(path, maximum=maximum)
+    metadata = path.stat(follow_symlinks=False)
+    if metadata.st_mode & 0o222 or metadata.st_nlink != 1:
+        raise RecoveryError("artifact is not immutable and singly linked")
+    if exact_mode is not None and stat.S_IMODE(metadata.st_mode) != exact_mode:
+        raise RecoveryError("artifact mode is not exact")
+    return payload
+
+
+def _repository_path(
+    root: Path, relative: Any, *, must_exist: bool = True
+) -> Path:
+    if not isinstance(relative, str) or not relative or "\\" in relative:
+        raise RecoveryError("unsafe repository path")
+    pure = PurePosixPath(relative)
+    if pure.is_absolute() or ".." in pure.parts:
+        raise RecoveryError("unsafe repository path")
+    candidate = root.joinpath(*pure.parts)
+    if must_exist:
+        resolved = candidate.resolve(strict=True)
+        try:
+            resolved.relative_to(root)
+        except ValueError as error:
+            raise RecoveryError("repository path escape") from error
+        current = root
+        for part in pure.parts:
+            current = current / part
+            if current.is_symlink():
+                raise RecoveryError("repository path traverses a symlink")
+        return resolved
+    parent = candidate.parent
+    while parent != root and not parent.exists():
+        parent = parent.parent
+    if parent.exists():
+        resolved_parent = parent.resolve(strict=True)
+        try:
+            resolved_parent.relative_to(root)
+        except ValueError as error:
+            raise RecoveryError("output parent escapes repository") from error
+        if resolved_parent != parent.absolute():
+            raise RecoveryError("output parent traverses a symlink")
+    return candidate.absolute()
+
+
+def _parse_timestamp(value: Any) -> datetime:
+    if not isinstance(value, str) or not value.endswith("Z"):
+        raise RecoveryError("invalid timestamp")
+    try:
+        parsed = datetime.fromisoformat(value[:-1] + "+00:00")
+    except ValueError as error:
+        raise RecoveryError("invalid timestamp") from error
+    if parsed.tzinfo is None or parsed.microsecond:
+        raise RecoveryError("timestamp must be whole-second UTC")
+    return parsed.astimezone(timezone.utc)
+
+
+def _timestamp_text(value: datetime) -> str:
+    return value.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace(
+        "+00:00", "Z"
+    )
+
+
+def _parse_manifest(payload: bytes, *, basename_only: bool) -> dict[str, str]:
+    result: dict[str, str] = {}
+    try:
+        lines = payload.decode("utf-8").splitlines()
+    except UnicodeDecodeError as error:
+        raise RecoveryError("manifest encoding") from error
+    if not lines or payload != ("\n".join(lines) + "\n").encode("utf-8"):
+        raise RecoveryError("manifest is not canonical line text")
+    for line in lines:
+        if len(line) < 67 or line[64:66] != "  ":
+            raise RecoveryError("manifest line")
+        digest = _require_sha(line[:64])
+        relative = line[66:]
+        if not relative or relative in result:
+            raise RecoveryError("duplicate manifest path")
+        pure = PurePosixPath(relative)
+        if pure.is_absolute() or ".." in pure.parts or "\\" in relative:
+            raise RecoveryError("unsafe manifest path")
+        if basename_only and len(pure.parts) != 1:
+            raise RecoveryError("bundle manifest path must be a basename")
+        result[relative] = digest
+    return result
+
+
+def _validate_clean_environment() -> None:
+    if set(os.environ) != EXPECTED_ENVIRONMENT_KEYS:
+        raise RecoveryError("environment is not closed-world")
+    if (
+        os.environ.get("LANG") != "C"
+        or os.environ.get("LC_ALL") != "C"
+        or os.environ.get("PYTHONDONTWRITEBYTECODE") != "1"
+    ):
+        raise RecoveryError("environment values changed")
+    for name in ("HOME", "TMPDIR"):
+        path = Path(os.environ[name]).resolve(strict=True)
+        metadata = path.stat()
+        if not stat.S_ISDIR(metadata.st_mode) or stat.S_IMODE(metadata.st_mode) != 0o700:
+            raise RecoveryError("private runtime directory mode changed")
+    for value in os.listdir("/dev/fd"):
+        if not value.isdigit() or int(value) <= 2:
+            continue
+        try:
+            fcntl.fcntl(int(value), fcntl.F_GETFD)
+        except OSError:
+            continue
+        raise RecoveryError("unexpected inherited file descriptor")
+
+
+def _network_audit(event: str, _arguments: tuple[Any, ...]) -> None:
+    if event.startswith(NETWORK_AUDIT_PREFIXES):
+        raise RecoveryError("network operation denied")
+
+
+def _validate_python_command(command: Any, expected_python: Path) -> list[str]:
+    if not isinstance(command, (list, tuple)) or not all(
+        isinstance(item, str) for item in command
+    ):
+        raise RecoveryError("non-list subprocess command")
+    normalized = list(command)
+    if len(normalized) < 5:
+        raise RecoveryError("short subprocess command")
+    executable = Path(normalized[0]).resolve(strict=True)
+    if executable != expected_python or normalized[1:4] != ["-I", "-S", "-B"]:
+        raise RecoveryError("subprocess is not the exact isolated Python")
+    if "-m" in normalized[4:]:
+        raise RecoveryError("module subprocess is forbidden")
+    return normalized
+
+
+def _install_subprocess_guard(expected_python: Path) -> None:
+    original = subprocess.run
+
+    def guarded(command: Any, *args: Any, **kwargs: Any) -> subprocess.CompletedProcess[Any]:
+        normalized = _validate_python_command(command, expected_python)
+        if args or kwargs.get("shell"):
+            raise RecoveryError("non-exact subprocess invocation")
+        if (
+            set(kwargs)
+            != {"check", "cwd", "env", "stderr", "stdout", "timeout"}
+            or kwargs["check"] is not False
+            or kwargs["env"] != {"LANG": "C", "LC_ALL": "C"}
+            or kwargs["stderr"] != subprocess.PIPE
+            or kwargs["stdout"] != subprocess.PIPE
+            or kwargs["timeout"] != 60
+        ):
+            raise RecoveryError("subprocess controls changed")
+        _SUBPROCESS_INVOCATIONS.append(
+            {
+                "argv": tuple(normalized),
+                "check": False,
+                "cwd": str(Path(kwargs["cwd"]).resolve(strict=True)),
+                "env": {"LANG": "C", "LC_ALL": "C"},
+                "stderr": "PIPE",
+                "stdout": "PIPE",
+                "timeout": 60,
+            }
+        )
+        return original(normalized, *args, **kwargs)
+
+    subprocess.run = guarded  # type: ignore[assignment]
+
+
+def _validate_bundle_seal(
+    root: Path, protocol: Mapping[str, Any], published_seal: str
+) -> None:
+    published_seal = _require_sha(published_seal)
+    bundle = _repository_path(root, protocol["recovery_precommit"]["bundle_root"])
+    inventory_path = _repository_path(
+        root, protocol["recovery_precommit"]["bundle_inventory_path"]
+    )
+    inventory, _ = _load_json(inventory_path)
+    _require_exact_keys(
+        inventory,
+        {
+            "allowed_bundle_files_before_seal",
+            "allowed_file_created_at_seal",
+            "allowed_subdirectories",
+            "bundle_root",
+            "candidate_status",
+            "schema_version",
+        },
+        label="bundle inventory",
+    )
+    allowed = inventory["allowed_bundle_files_before_seal"]
+    if (
+        not isinstance(allowed, list)
+        or not allowed
+        or any(not isinstance(item, str) for item in allowed)
+        or len(set(allowed)) != len(allowed)
+        or inventory["allowed_subdirectories"] != []
+        or inventory["allowed_file_created_at_seal"] != "SHA256SUMS"
+        or len(allowed) != protocol["recovery_precommit"]["preseal_file_count"]
+        or protocol["recovery_precommit"]["sealed_physical_file_count"] != 12
+    ):
+        raise RecoveryError("invalid bundle inventory")
+    physical = list(bundle.iterdir())
+    if any(item.is_dir() or item.is_symlink() for item in physical):
+        raise RecoveryError("bundle has a directory or symlink")
+    if {item.name for item in physical} != set(allowed) | {"SHA256SUMS"}:
+        raise RecoveryError("bundle inventory changed")
+    if len(physical) != protocol["recovery_precommit"]["sealed_physical_file_count"]:
+        raise RecoveryError("sealed bundle physical file count changed")
+    manifest = _repository_path(root, protocol["recovery_precommit"]["seal_manifest_path"])
+    manifest_payload = _require_immutable(
+        manifest, maximum=MAX_JSON_BYTES, exact_mode=0o444
+    )
+    if _sha256(manifest_payload) != published_seal:
+        raise RecoveryError("published recovery seal mismatch")
+    entries = _parse_manifest(manifest_payload, basename_only=True)
+    if set(entries) != set(allowed):
+        raise RecoveryError("sealed bundle entries changed")
+    for name, expected in entries.items():
+        exact_mode = 0o555 if name == "run_offline_recovery.sh" else 0o444
+        payload = _require_immutable(
+            bundle / name, maximum=MAX_INPUT_BYTES, exact_mode=exact_mode
+        )
+        if _sha256(payload) != expected:
+            raise RecoveryError("sealed bundle member changed")
+
+
+def _r5_nested_input_payload(
+    root: Path, protocol: Mapping[str, Any], relative: str
+) -> bytes:
+    pure = PurePosixPath(relative)
+    if pure.is_absolute() or ".." in pure.parts or "\\" in relative:
+        raise RecoveryError("unsafe R5 nested path")
+    candidate = root.joinpath(*pure.parts)
+    current = root
+    for part in pure.parts[:-1]:
+        current = current / part
+        if current.is_symlink():
+            raise RecoveryError("R5 nested path has an intermediate symlink")
+    if not candidate.is_symlink():
+        return _stable_bytes(
+            _repository_path(root, relative), maximum=MAX_INPUT_BYTES
+        )
+    environment = protocol["execution_environment"]
+    if relative != environment["python_entrypoint_path"]:
+        raise RecoveryError("unexpected R5 nested symlink")
+    if os.readlink(candidate) != environment["python_entrypoint_symlink_target"]:
+        raise RecoveryError("R5 Python symlink text changed")
+    resolved = candidate.resolve(strict=True)
+    expected_python = Path(environment["python_real_path"]).resolve(strict=True)
+    metadata = resolved.stat(follow_symlinks=False)
+    if (
+        resolved != expected_python
+        or not stat.S_ISREG(metadata.st_mode)
+        or not os.access(resolved, os.X_OK)
+    ):
+        raise RecoveryError("R5 Python symlink target changed")
+    payload = _stable_bytes(resolved, maximum=MAX_INPUT_BYTES)
+    if _sha256(payload) != environment["python_real_sha256"]:
+        raise RecoveryError("R5 Python target bytes changed")
+    return payload
+
+
+def _validate_r1_terminal_chain(
+    root: Path, r1: Mapping[str, Any], *, expected_record_sha256: str
+) -> None:
+    record = _repository_path(root, r1["record_path"])
+    checksum = _repository_path(root, r1["checksum_manifest_path"])
+    record_payload = _require_immutable(
+        record, maximum=MAX_JSON_BYTES, exact_mode=0o444
+    )
+    checksum_payload = _require_immutable(
+        checksum, maximum=MAX_JSON_BYTES, exact_mode=0o444
+    )
+    if (
+        _sha256(record_payload) != expected_record_sha256
+        or _sha256(record_payload) != r1["record_sha256"]
+        or _sha256(checksum_payload) != r1["checksum_manifest_sha256"]
+        or _parse_manifest(checksum_payload, basename_only=True)
+        != {record.name: expected_record_sha256}
+    ):
+        raise RecoveryError("R1 terminal record/checksum chain changed")
+    document, loaded_payload = _load_json(record)
+    failure = document.get("failure", {})
+    policy = document.get("recovery_policy", {})
+    publication = document.get("publication_state", {})
+    zero_activity = document.get("zero_activity", {})
+    if (
+        loaded_payload != record_payload
+        or _canonical_json(document) != record_payload
+        or document.get("schema_version")
+        != "narratordb.v13-paid-r5-finalization-recovery-r1-terminal.v1"
+        or document.get("status")
+        != "terminal-launcher-preflight-failure-no-worker-no-output"
+        or failure.get("exit_status") != 67
+        or failure.get("failed_launcher_line") != 39
+        or failure.get("missing_path") != "/usr/bin/realpath"
+        or policy.get("r1_is_terminal") is not True
+        or policy.get("r1_overwrite_delete_resume_or_retry_allowed") is not False
+        or publication.get("recovery_output_root_created") is not False
+        or publication.get("stage_a_envelope_created") is not False
+        or publication.get("score_bearing_content_read_or_published") is not False
+        or zero_activity.get("sandbox_process_started") is not False
+        or zero_activity.get("worker_process_started") is not False
+    ):
+        raise RecoveryError("R1 terminal semantics changed")
+
+    manifest = _repository_path(root, r1["r1_seal_manifest_path"])
+    manifest_payload = _require_immutable(
+        manifest, maximum=MAX_JSON_BYTES, exact_mode=0o444
+    )
+    if _sha256(manifest_payload) != r1["r1_seal_manifest_sha256"]:
+        raise RecoveryError("R1 seal changed")
+    entries = _parse_manifest(manifest_payload, basename_only=True)
+    bundle = _repository_path(root, r1["r1_bundle_root"])
+    if (
+        len(entries) != 10
+        or manifest.parent != bundle
+        or {path.name for path in bundle.iterdir()} != set(entries) | {"SHA256SUMS"}
+        or len(list(bundle.iterdir())) != 11
+    ):
+        raise RecoveryError("R1 sealed bundle inventory changed")
+    for name, expected in entries.items():
+        exact_mode = 0o555 if name == "run_offline_recovery.sh" else 0o444
+        payload = _require_immutable(
+            bundle / name, maximum=MAX_INPUT_BYTES, exact_mode=exact_mode
+        )
+        if _sha256(payload) != expected:
+            raise RecoveryError("R1 sealed member changed")
+
+
+def _validate_bound_input_chain(
+    root: Path, protocol: Mapping[str, Any], entries: Mapping[str, str]
+) -> None:
+    if len(entries) < 30:
+        raise RecoveryError("bound input manifest is incomplete")
+    for relative, expected in entries.items():
+        path = _repository_path(root, relative)
+        if _sha256(_stable_bytes(path, maximum=MAX_INPUT_BYTES)) != expected:
+            raise RecoveryError("bound input changed")
+    terminal = protocol["terminal_failure_record"]
+    record = _repository_path(root, terminal["record_path"])
+    checksum = _repository_path(root, terminal["checksum_manifest_path"])
+    if (
+        _sha256(
+            _require_immutable(record, maximum=MAX_JSON_BYTES, exact_mode=0o444)
+        )
+        != terminal["record_sha256"]
+        or _sha256(
+            _require_immutable(checksum, maximum=MAX_JSON_BYTES, exact_mode=0o444)
+        )
+        != terminal["checksum_manifest_sha256"]
+    ):
+        raise RecoveryError("terminal failure record binding changed")
+    source = protocol["r5_source"]
+    r5_manifest = _repository_path(root, source["seal_manifest_path"])
+    r5_payload = _stable_bytes(r5_manifest, maximum=MAX_JSON_BYTES)
+    if _sha256(r5_payload) != source["seal_manifest_sha256"]:
+        raise RecoveryError("R5 seal changed")
+    r5_entries = _parse_manifest(r5_payload, basename_only=True)
+    r5_bundle = r5_manifest.parent
+    if {item.name for item in r5_bundle.iterdir()} != set(r5_entries) | {"SHA256SUMS"}:
+        raise RecoveryError("R5 closed-world bundle changed")
+    for name, expected in r5_entries.items():
+        member = r5_bundle / name
+        if member.is_symlink() or not member.is_file():
+            raise RecoveryError("R5 bundle member type changed")
+        if _sha256(_stable_bytes(member, maximum=MAX_INPUT_BYTES)) != expected:
+            raise RecoveryError("R5 bundle member changed")
+    r5_bound = r5_bundle / "BOUND_INPUTS_SHA256SUMS"
+    nested = _parse_manifest(
+        _stable_bytes(r5_bound, maximum=MAX_JSON_BYTES), basename_only=False
+    )
+    if len(nested) != 66:
+        raise RecoveryError("R5 nested input count changed")
+    for relative, expected in nested.items():
+        payload = _r5_nested_input_payload(root, protocol, relative)
+        if _sha256(payload) != expected:
+            raise RecoveryError("R5 nested bound input changed")
+    prior = protocol["prior_recovery_terminal"]
+    prior_record = _repository_path(root, prior["record_path"])
+    prior_checksum = _repository_path(root, prior["checksum_manifest_path"])
+    if (
+        _sha256(
+            _require_immutable(
+                prior_record, maximum=MAX_JSON_BYTES, exact_mode=0o444
+            )
+        )
+        != prior["record_sha256"]
+        or _sha256(
+            _require_immutable(
+                prior_checksum, maximum=MAX_JSON_BYTES, exact_mode=0o444
+            )
+        )
+        != prior["checksum_manifest_sha256"]
+    ):
+        raise RecoveryError("R2 terminal record binding changed")
+    prior_checksum_entries = _parse_manifest(
+        _require_immutable(
+            prior_checksum, maximum=MAX_JSON_BYTES, exact_mode=0o444
+        ),
+        basename_only=True,
+    )
+    if prior_checksum_entries != {prior_record.name: prior["record_sha256"]}:
+        raise RecoveryError("R2 terminal checksum semantics changed")
+    prior_document, prior_payload = _load_json(prior_record)
+    prior_failure = prior_document.get("failure", {})
+    prior_execution = prior_document.get("execution_observation", {})
+    prior_output = prior_document.get("output_evidence", {})
+    prior_private = prior_document.get("private_stage_b_progress", {})
+    prior_publication = prior_document.get("publication_state", {})
+    prior_policy = prior_document.get("recovery_policy", {})
+    prior_precommit = prior_document.get("r2_precommit", {})
+    prior_stage_a_go = prior_document.get("stage_a_and_go_evidence", {})
+    prior_zero_activity = prior_document.get("zero_activity", {})
+    retry_semantics = prior_failure.get("generated_v7_audit_semantics", {})
+    if (
+        _canonical_json(prior_document) != prior_payload
+        or prior_document.get("schema_version")
+        != "narratordb.v13-paid-r5-finalization-recovery-r2-terminal.v1"
+        or prior_document.get("status")
+        != "terminal-deterministic-v7-retry-loader-policy-mismatch-no-release-no-retry"
+        or prior_execution.get("exit_status") != 1
+        or prior_execution.get("wall_seconds") != "16.3988"
+        or prior_execution.get("stage") != "stage-b"
+        or prior_execution.get("stage_a_reexecuted") is not False
+        or prior_execution.get("stage_b_worker_and_sandbox_started") is not True
+        or prior_execution.get("observed_stdout_bytes") != 0
+        or prior_execution.get("observed_stderr_bytes") != 0
+        or prior_execution.get("published_recovery_precommit_sha256")
+        != prior["r2_seal_manifest_sha256"]
+        or prior_failure.get("classification")
+        != "deterministic-validation-policy-mismatch"
+        or prior_failure.get("terminal_harness_failure_present") is not False
+        or retry_semantics.get("complete") is not True
+        or retry_semantics.get("official_harness_score_complete") is not True
+        or retry_semantics.get("validation_lists_empty") is not True
+        or retry_semantics.get("usage_publication_ready") is not True
+        or retry_semantics.get("attempt_five_failures") != 0
+        or retry_semantics.get("failed_attempt_counts") != {"1": 1}
+        or retry_semantics.get("timed_out_attempt_counts") != {}
+        or prior_private.get("evaluation_audit_generator_invocations")
+        != {"v13-first": 0, "v7-control": 2}
+        or prior_private.get("v13_computation_started") is not False
+        or prior_private.get("result_document_computed") is not False
+        or prior_private.get("release_completion_computed") is not False
+        or prior_private.get("score_bearing_private_scratch_destroyed") is not True
+        or prior_private.get("score_bearing_values_read_by_operator_or_terminalizer")
+        is not False
+        or prior_policy.get("r2_is_terminal") is not True
+        or prior_policy.get("r2_overwrite_delete_resume_or_retry_allowed") is not False
+        or prior_publication.get("release_absent") is not True
+        or prior_publication.get("private_scratch_absent") is not True
+        or prior_publication.get("recovered_result_published") is not False
+        or prior_publication.get("score_bearing_audit_published") is not False
+        or prior_publication.get("score_bearing_content_read_by_operator_or_terminalizer")
+        is not False
+        or prior_precommit.get("prior_r1_terminal_record_sha256")
+        != prior["r1_terminal_record_sha256"]
+        or prior_precommit.get("seal_manifest_sha256")
+        != prior["r2_seal_manifest_sha256"]
+        or prior_document.get("source_attempt_preservation", {}).get(
+            "r5_attempt_tree_fingerprint_sha256"
+        )
+        != protocol["attempt_preservation"]["tree_fingerprint_sha256"]
+        or _zero_activity(protocol) != prior_zero_activity
+    ):
+        raise RecoveryError("R2 terminal semantics changed")
+
+    r2_manifest = _repository_path(root, prior["r2_seal_manifest_path"])
+    r2_payload = _require_immutable(
+        r2_manifest, maximum=MAX_JSON_BYTES, exact_mode=0o444
+    )
+    if _sha256(r2_payload) != prior["r2_seal_manifest_sha256"]:
+        raise RecoveryError("R2 seal changed")
+    r2_entries = _parse_manifest(r2_payload, basename_only=True)
+    r2_bundle = _repository_path(root, prior["r2_bundle_root"])
+    if (
+        len(r2_entries) != 11
+        or r2_manifest.parent != r2_bundle
+        or {item.name for item in r2_bundle.iterdir()}
+        != set(r2_entries) | {"SHA256SUMS"}
+    ):
+        raise RecoveryError("R2 closed-world bundle changed")
+    for name, expected in r2_entries.items():
+        member = r2_bundle / name
+        exact_mode = 0o555 if name == "run_offline_recovery.sh" else 0o444
+        if (
+            _sha256(
+                _require_immutable(
+                    member, maximum=MAX_INPUT_BYTES, exact_mode=exact_mode
+                )
+            )
+            != expected
+        ):
+            raise RecoveryError("R2 sealed member changed")
+    r2_protocol_path = r2_bundle / "recovery-protocol-r2.json"
+    r2_protocol, r2_protocol_payload = _load_json(r2_protocol_path)
+    if (
+        _canonical_json(r2_protocol) != r2_protocol_payload
+        or _sha256(r2_protocol_payload) != r2_entries["recovery-protocol-r2.json"]
+    ):
+        raise RecoveryError("R2 sealed protocol changed")
+    _validate_r1_terminal_chain(
+        root,
+        r2_protocol["prior_recovery_terminal"],
+        expected_record_sha256=prior["r1_terminal_record_sha256"],
+    )
+
+    r2_output = _repository_path(root, prior["r2_output_root"])
+    stage_a_path = _repository_path(root, prior["r2_stage_a_envelope_path"])
+    terminal_status_path = _repository_path(root, prior["r2_terminal_status_path"])
+    if (
+        r2_output.is_symlink()
+        or not r2_output.is_dir()
+        or stat.S_IMODE(r2_output.stat(follow_symlinks=False).st_mode) != 0o555
+        or {path.name for path in r2_output.iterdir()}
+        != {stage_a_path.name, terminal_status_path.name}
+        or _sha256(
+            _require_immutable(
+                stage_a_path, maximum=MAX_JSON_BYTES, exact_mode=0o444
+            )
+        )
+        != prior["r2_stage_a_envelope_sha256"]
+        or _sha256(
+            _require_immutable(
+                terminal_status_path, maximum=MAX_JSON_BYTES, exact_mode=0o444
+            )
+        )
+        != prior["r2_terminal_status_sha256"]
+    ):
+        raise RecoveryError("R2 terminal output evidence changed")
+    release = r2_output / "release"
+    if release.exists() or release.is_symlink():
+        raise RecoveryError("R2 release appeared after terminalization")
+    terminal_status, terminal_status_payload = _load_json(terminal_status_path)
+    if (
+        _canonical_json(terminal_status) != terminal_status_payload
+        or terminal_status.get("schema_version")
+        != "narratordb.v13-paid-r5-recovery-terminal-status.v1"
+        or terminal_status.get("recovery_attempt") != "r2"
+        or terminal_status.get("stage") != "stage-b"
+        or terminal_status.get("status")
+        != "terminal-failure-preserve-preexisting-and-published-evidence-destroy-private-scratch-no-retry"
+        or terminal_status.get("published_recovery_precommit_sha256")
+        != prior["r2_seal_manifest_sha256"]
+        or terminal_status.get("prior_recovery_terminal_record_sha256")
+        != prior["r1_terminal_record_sha256"]
+        or terminal_status.get("zero_new_activity") != _zero_activity(protocol)
+    ):
+        raise RecoveryError("R2 generic terminal status semantics changed")
+
+    review_paths = prior["r2_review_paths"]
+    review_shas = prior["r2_review_sha256"]
+    if (
+        not isinstance(review_paths, list)
+        or not isinstance(review_shas, list)
+        or len(review_paths) != 2
+        or len(review_shas) != 2
+    ):
+        raise RecoveryError("R2 terminal review bindings changed")
+    for relative, expected in zip(review_paths, review_shas, strict=True):
+        review = _repository_path(root, relative)
+        if (
+            _sha256(
+                _require_immutable(
+                    review, maximum=MAX_JSON_BYTES, exact_mode=0o444
+                )
+            )
+            != expected
+        ):
+            raise RecoveryError("R2 terminal review changed")
+    aggregate_go = _repository_path(root, prior["r2_aggregate_go_path"])
+    if (
+        _sha256(
+            _require_immutable(
+                aggregate_go, maximum=MAX_JSON_BYTES, exact_mode=0o444
+            )
+        )
+        != prior["r2_aggregate_go_sha256"]
+    ):
+        raise RecoveryError("R2 terminal aggregate GO changed")
+    evidence = prior_stage_a_go
+    if (
+        evidence.get("stage_a_envelope", {}).get("sha256")
+        != prior["r2_stage_a_envelope_sha256"]
+        or evidence.get("review_1", {}).get("sha256") != review_shas[0]
+        or evidence.get("review_2", {}).get("sha256") != review_shas[1]
+        or evidence.get("aggregate_go", {}).get("sha256")
+        != prior["r2_aggregate_go_sha256"]
+        or prior_output.get("file_count") != 2
+    ):
+        raise RecoveryError("R2 terminal evidence cross-binding changed")
+    expected_r3_namespace = {
+        "bundle_root": protocol["recovery_precommit"]["bundle_root"],
+        "go_path": protocol["go_policy"]["aggregate_path"],
+        "output_root": protocol["output"]["output_root"],
+        "review_1_path": protocol["go_policy"]["review_paths"][0],
+        "review_2_path": protocol["go_policy"]["review_paths"][1],
+        "seal_manifest_path": protocol["recovery_precommit"]["seal_manifest_path"],
+    }
+    if prior_policy.get("r3_namespace") != expected_r3_namespace:
+        raise RecoveryError("R3 namespace differs from R2 terminal authorization")
+
+
+def _validate_bound_inputs(root: Path, protocol: Mapping[str, Any]) -> None:
+    manifest = _repository_path(root, protocol["input_manifest_path"])
+    entries = _parse_manifest(
+        _require_immutable(manifest, maximum=MAX_JSON_BYTES, exact_mode=0o444),
+        basename_only=False,
+    )
+    environment = protocol["execution_environment"]
+    executable_manifest = _repository_path(
+        root, environment["launcher_executable_manifest_path"]
+    )
+    if (
+        _sha256(
+            _require_immutable(
+                executable_manifest, maximum=MAX_JSON_BYTES, exact_mode=0o444
+            )
+        )
+        != environment["launcher_executable_manifest_sha256"]
+    ):
+        raise RecoveryError("launcher executable manifest binding changed")
+    _validate_bound_input_chain(root, protocol, entries)
+
+
+def _mac_type(mode: int) -> str:
+    if stat.S_ISDIR(mode):
+        return "Directory"
+    if stat.S_ISREG(mode):
+        return "Regular File"
+    if stat.S_ISLNK(mode):
+        return "Symbolic Link"
+    if stat.S_ISFIFO(mode):
+        return "Fifo"
+    if stat.S_ISSOCK(mode):
+        return "Socket"
+    if stat.S_ISCHR(mode):
+        return "Character Device"
+    if stat.S_ISBLK(mode):
+        return "Block Device"
+    raise RecoveryError("unsupported inventory entry type")
+
+
+def _attempt_inventory(root: Path, protocol: Mapping[str, Any]) -> dict[str, Any]:
+    policy = protocol["attempt_preservation"]
+    attempt = _repository_path(root, policy["root"])
+    entries: list[Path] = []
+    pending = [attempt]
+    while pending:
+        current = pending.pop()
+        entries.append(current)
+        metadata = current.lstat()
+        if stat.S_ISDIR(metadata.st_mode) and not current.is_symlink():
+            with os.scandir(current) as iterator:
+                pending.extend(Path(item.path) for item in iterator)
+    entries.sort(key=lambda item: os.fsencode(item.relative_to(root).as_posix()))
+    digest = hashlib.sha256()
+    files = directories = symlinks = hardlinked = 0
+    for entry in entries:
+        metadata = entry.lstat()
+        relative = entry.relative_to(root).as_posix()
+        entry_type = _mac_type(metadata.st_mode)
+        digest.update(
+            f"{relative}|{entry_type}|{metadata.st_size}|{stat.filemode(metadata.st_mode)}|{metadata.st_nlink}\n".encode(
+                "utf-8"
+            )
+        )
+        if stat.S_ISREG(metadata.st_mode) and not entry.is_symlink():
+            files += 1
+            if metadata.st_nlink != 1:
+                hardlinked += 1
+            payload = _stable_bytes(entry, maximum=MAX_INPUT_BYTES)
+            digest.update(f"{_sha256(payload)}  {relative}\n".encode("utf-8"))
+        elif stat.S_ISDIR(metadata.st_mode):
+            directories += 1
+        elif stat.S_ISLNK(metadata.st_mode):
+            symlinks += 1
+    result = {
+        "directories": directories,
+        "files": files,
+        "hardlinked_regular_files": hardlinked,
+        "symlinks": symlinks,
+        "tree_fingerprint_sha256": digest.hexdigest(),
+    }
+    expected = {
+        "directories": policy["directories"],
+        "files": policy["files"],
+        "hardlinked_regular_files": policy["hardlinked_regular_files"],
+        "symlinks": policy["symlinks"],
+        "tree_fingerprint_sha256": policy["tree_fingerprint_sha256"],
+    }
+    if result != expected:
+        raise RecoveryError("terminal R5 attempt changed")
+    return result
+
+
+def _assert_original_publication_absent(root: Path) -> None:
+    record_path = root / "benchmark_records/reproduction-v13-paid-paired-scoring-r5-3453-failed-finalization-20260716.json"
+    record, _ = _load_json(record_path)
+    for relative in record["publication_state"]["absent_paths"]:
+        candidate = _repository_path(root, relative, must_exist=False)
+        if candidate.exists() or candidate.is_symlink():
+            raise RecoveryError("terminal R5 publication state changed")
+
+
+def _load_protocol(root: Path, requested: Path) -> tuple[dict[str, Any], Path]:
+    path = requested if requested.is_absolute() else root / requested
+    path = path.resolve(strict=True)
+    try:
+        path.relative_to(root)
+    except ValueError as error:
+        raise RecoveryError("protocol escapes repository") from error
+    protocol, payload = _load_json(path)
+    if protocol.get("schema_version") != PROTOCOL_SCHEMA:
+        raise RecoveryError("unsupported recovery protocol")
+    if _canonical_json(protocol) != payload:
+        raise RecoveryError("recovery protocol is not canonical JSON")
+    return protocol, path
+
+
+def _load_sealed_verifier(
+    root: Path, protocol: Mapping[str, Any]
+) -> tuple[Any, Path, Path]:
+    source = protocol["r5_source"]
+    verifier_path = _repository_path(root, source["verifier_path"])
+    requirements_path = _repository_path(root, source["requirements_path"])
+    if (
+        _sha256(_stable_bytes(verifier_path)) != source["verifier_sha256"]
+        or _sha256(_stable_bytes(requirements_path)) != source["requirements_sha256"]
+    ):
+        raise RecoveryError("sealed R5 verifier binding changed")
+    spec = importlib.util.spec_from_file_location(
+        "narratordb_r5_finalization_recovery_exact_verifier", verifier_path
+    )
+    if spec is None or spec.loader is None:
+        raise RecoveryError("cannot import sealed verifier")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    for name in (
+        "_canonical_json",
+        "_finalization_document",
+        "_finalization_audit_document",
+        "_finalization_config",
+        "_load_evaluation_audit",
+        "_recompute_evaluation_audit",
+        "_repository_path",
+        "_requirements",
+        "_scored_tree_evidence",
+        "_question_scope_path",
+        "_variant_map",
+        "_verify_copy_manifest",
+        "verify_finalization",
+    ):
+        if not callable(getattr(module, name, None)):
+            raise RecoveryError("sealed verifier API changed")
+    return module, verifier_path, requirements_path
+
+
+def _historical_recomputation(
+    root: Path,
+    protocol: Mapping[str, Any],
+    module: Any,
+    requirements_path: Path,
+) -> tuple[bytes, bytes, bytes, dict[str, Any]]:
+    source_seal = protocol["r5_source"]["seal_manifest_sha256"]
+    historical = protocol["historical_finalization"]
+    created = _parse_timestamp(historical["authorization_created_at_utc"])
+    reviewed = _parse_timestamp(historical["verification_now_utc"])
+    expires = _parse_timestamp(historical["authorization_expires_at_utc"])
+    if not created <= reviewed <= expires:
+        raise RecoveryError("historical verification time is invalid")
+    authorization_path = _repository_path(root, historical["authorization_path"])
+    audit_path = _repository_path(root, historical["independent_audit_path"])
+    authorization = module._finalization_document(
+        root,
+        requirements_path,
+        published_precommit_sha256=source_seal,
+        created_at=created,
+    )
+    authorization_payload = module._canonical_json(authorization)
+    if (
+        authorization_payload != _stable_bytes(authorization_path, maximum=MAX_JSON_BYTES)
+        or _sha256(authorization_payload) != historical["authorization_sha256"]
+    ):
+        raise RecoveryError("historical finalization reconstruction changed")
+    audit = module._finalization_audit_document(
+        root,
+        requirements_path,
+        authorization_path,
+        published_precommit_sha256=source_seal,
+        reviewed_at=reviewed,
+    )
+    audit_payload = module._canonical_json(audit)
+    if (
+        audit_payload != _stable_bytes(audit_path, maximum=MAX_JSON_BYTES)
+        or _sha256(audit_payload) != historical["independent_audit_sha256"]
+    ):
+        raise RecoveryError("historical audit reconstruction changed")
+    verification = module.verify_finalization(
+        root,
+        requirements_path,
+        published_precommit_sha256=source_seal,
+        now=reviewed,
+    )
+    _require_exact_keys(
+        verification,
+        {
+            "authorization_sha256",
+            "campaign_observed_usd",
+            "credential_recorded",
+            "independent_audit_sha256",
+            "model_content_recorded",
+            "ok",
+            "projected_eur_ceil_cent",
+            "provider_usage_usd",
+            "revision_precommit_sha256",
+            "score_release_authorized",
+        },
+        label="historical verification",
+    )
+    if (
+        verification["ok"] is not True
+        or verification["score_release_authorized"] is not True
+        or verification["credential_recorded"] is not False
+        or verification["model_content_recorded"] is not False
+        or verification["authorization_sha256"] != historical["authorization_sha256"]
+        or verification["independent_audit_sha256"]
+        != historical["independent_audit_sha256"]
+    ):
+        raise RecoveryError("historical verification did not authorize recovery")
+    return (
+        authorization_payload,
+        audit_payload,
+        _canonical_json(verification),
+        verification,
+    )
+
+
+def _assert_output_root(
+    root: Path, protocol: Mapping[str, Any], *, writable: bool = True
+) -> Path:
+    output = _repository_path(root, protocol["output"]["output_root"])
+    metadata = output.stat(follow_symlinks=False)
+    if (
+        output.is_symlink()
+        or not stat.S_ISDIR(metadata.st_mode)
+        or stat.S_IMODE(metadata.st_mode)
+        not in ({0o700} if writable else {0o700, 0o555})
+        or metadata.st_uid != os.getuid()
+    ):
+        raise RecoveryError("recovery output root is not private")
+    return output
+
+
+def _fsync_directory(path: Path) -> None:
+    descriptor = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _write_new_bytes(path: Path, payload: bytes, *, output_root: Path) -> None:
+    if path.parent != output_root or path.exists() or path.is_symlink():
+        raise RecoveryError("refusing recovery output overwrite")
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags, 0o600)
+    try:
+        view = memoryview(payload)
+        while view:
+            written = os.write(descriptor, view)
+            if written <= 0:
+                raise RecoveryError("short recovery output write")
+            view = view[written:]
+        os.fsync(descriptor)
+        os.fchmod(descriptor, 0o444)
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    _fsync_directory(output_root)
+
+
+def _write_private_file(path: Path, payload: bytes) -> None:
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags, 0o600)
+    try:
+        view = memoryview(payload)
+        while view:
+            written = os.write(descriptor, view)
+            if written <= 0:
+                raise RecoveryError("short private write")
+            view = view[written:]
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    if stat.S_IMODE(path.stat().st_mode) != 0o600:
+        raise RecoveryError("private file mode changed")
+
+
+def _terminalize(
+    root: Path,
+    protocol: Mapping[str, Any] | None,
+    *,
+    stage: str,
+    published_seal: str,
+) -> None:
+    if protocol is None:
+        return
+    try:
+        output_relative = protocol["output"]["output_root"]
+        output = _repository_path(root, output_relative, must_exist=False)
+        if not output.exists():
+            output.mkdir(mode=0o700, parents=True, exist_ok=False)
+        if output.is_symlink() or not output.is_dir():
+            return
+        os.chmod(output, 0o700)
+        status_path = _repository_path(
+            root, protocol["output"]["failed_status_path"], must_exist=False
+        )
+        if not status_path.exists() and not status_path.is_symlink():
+            document = {
+                "credential_recorded": False,
+                "failure_phase": _FAILURE_PHASE,
+                "model_content_recorded": False,
+                "published_recovery_precommit_sha256": (
+                    published_seal if len(published_seal) == 64 else None
+                ),
+                "prior_recovery_terminal_record_sha256": protocol[
+                    "prior_recovery_terminal"
+                ]["record_sha256"],
+                "recovery_attempt": "r3",
+                "schema_version": TERMINAL_STATUS_SCHEMA,
+                "source_attempt_tree_fingerprint_sha256": protocol[
+                    "attempt_preservation"
+                ]["tree_fingerprint_sha256"],
+                "stage": stage,
+                "status": "terminal-failure-preserve-preexisting-and-published-evidence-destroy-private-scratch-no-retry",
+                "terminal_failure_record_sha256": protocol["terminal_failure_record"][
+                    "record_sha256"
+                ],
+                "zero_new_activity": _zero_activity(protocol),
+            }
+            _reject_score_fields(document)
+            _write_new_bytes(status_path, _canonical_json(document), output_root=output)
+        os.chmod(output, 0o555)
+        _fsync_directory(output.parent)
+    except Exception:
+        return
+
+
+def _stage_a_path(root: Path, protocol: Mapping[str, Any]) -> Path:
+    return _repository_path(
+        root, protocol["output"]["stage_a"]["envelope_path"], must_exist=False
+    )
+
+
+def _stage_a_envelope(
+    protocol: Mapping[str, Any],
+    *,
+    executed_at: datetime,
+    authorization_payload: bytes,
+    audit_payload: bytes,
+    verification_payload: bytes,
+) -> dict[str, Any]:
+    expires = _parse_timestamp(
+        protocol["historical_finalization"]["authorization_expires_at_utc"]
+    )
+    document = {
+        "benchmark_scope": "consumed-development",
+        "credential_recorded": False,
+        "cross_attempt_combination": False,
+        "executed_at_utc": _timestamp_text(executed_at),
+        "external_result_or_score_input": False,
+        "historical_authorization_reconstruction_sha256": _sha256(
+            authorization_payload
+        ),
+        "historical_independent_audit_reconstruction_sha256": _sha256(audit_payload),
+        "historical_raw_verification_payload_sha256": _sha256(verification_payload),
+        "historical_replay_at_utc": protocol["historical_finalization"][
+            "verification_now_utc"
+        ],
+        "model_content_recorded": False,
+        "present_time_freshness_assessed": True,
+        "present_time_freshness_claimed": False,
+        "present_time_freshness_valid": executed_at <= expires,
+        "prior_recovery_terminal_record_sha256": protocol[
+            "prior_recovery_terminal"
+        ]["record_sha256"],
+        "r5_status": "terminal-finalization-failure",
+        "recovery_status": "historical-finalization-recomputed-score-blind",
+        "schema_version": STAGE_A_ENVELOPE_SCHEMA,
+        "score_bearing_fields_published": False,
+        "sole_source_attempt_root": protocol["sole_source_policy"][
+            "sole_source_attempt_root"
+        ],
+        "source_attempt_tree_fingerprint_sha256": protocol["attempt_preservation"][
+            "tree_fingerprint_sha256"
+        ],
+        "source_r5_precommit_sha256": protocol["r5_source"][
+            "seal_manifest_sha256"
+        ],
+        "zero_new_activity": _zero_activity(protocol),
+    }
+    _reject_score_fields(document)
+    return document
+
+
+def _run_stage_a(
+    root: Path,
+    protocol: Mapping[str, Any],
+    module: Any,
+    requirements_path: Path,
+    *,
+    recovery_seal: str,
+    now: datetime,
+) -> None:
+    _set_failure_phase("stage-a-validation")
+    output = _assert_output_root(root, protocol)
+    if any(output.iterdir()):
+        raise RecoveryError("Stage-A output root is not fresh")
+    before = _attempt_inventory(root, protocol)
+    _assert_original_publication_absent(root)
+    authorization, audit, verification, _ = _historical_recomputation(
+        root, protocol, module, requirements_path
+    )
+    _validate_bundle_seal(root, protocol, recovery_seal)
+    _validate_bound_inputs(root, protocol)
+    after = _attempt_inventory(root, protocol)
+    if after != before:
+        raise RecoveryError("R5 attempt changed during Stage A")
+    envelope = _stage_a_envelope(
+        protocol,
+        executed_at=now,
+        authorization_payload=authorization,
+        audit_payload=audit,
+        verification_payload=verification,
+    )
+    _set_failure_phase("stage-a-publication")
+    _write_new_bytes(
+        _stage_a_path(root, protocol), _canonical_json(envelope), output_root=output
+    )
+
+
+def _load_stage_a(
+    root: Path,
+    protocol: Mapping[str, Any],
+    module: Any,
+    requirements_path: Path,
+) -> tuple[bytes, dict[str, Any], Path, bytes, dict[str, Any]]:
+    expected_authorization, expected_audit, expected_verification, verification = (
+        _historical_recomputation(root, protocol, module, requirements_path)
+    )
+    path = _stage_a_path(root, protocol)
+    envelope, payload = _load_json(path)
+    _require_immutable(path, maximum=MAX_JSON_BYTES, exact_mode=0o444)
+    _require_exact_keys(
+        envelope,
+        {
+            "benchmark_scope",
+            "credential_recorded",
+            "cross_attempt_combination",
+            "executed_at_utc",
+            "external_result_or_score_input",
+            "historical_authorization_reconstruction_sha256",
+            "historical_independent_audit_reconstruction_sha256",
+            "historical_raw_verification_payload_sha256",
+            "historical_replay_at_utc",
+            "model_content_recorded",
+            "present_time_freshness_assessed",
+            "present_time_freshness_claimed",
+            "present_time_freshness_valid",
+            "prior_recovery_terminal_record_sha256",
+            "r5_status",
+            "recovery_status",
+            "schema_version",
+            "score_bearing_fields_published",
+            "sole_source_attempt_root",
+            "source_attempt_tree_fingerprint_sha256",
+            "source_r5_precommit_sha256",
+            "zero_new_activity",
+        },
+        label="Stage-A envelope",
+    )
+    _reject_score_fields(envelope)
+    fixed = dict(envelope)
+    executed_at = _parse_timestamp(fixed.pop("executed_at_utc"))
+    expected = _stage_a_envelope(
+        protocol,
+        executed_at=executed_at,
+        authorization_payload=expected_authorization,
+        audit_payload=expected_audit,
+        verification_payload=expected_verification,
+    )
+    if envelope != expected or _canonical_json(envelope) != payload:
+        raise RecoveryError("Stage-A envelope changed")
+    return payload, envelope, path, expected_verification, verification
+
+
+def _validate_review(
+    document: Mapping[str, Any],
+    *,
+    path: Path,
+    recovery_seal: str,
+    stage_a_sha: str,
+    stage_a_created: datetime,
+    stage_a_mtime_ns: int,
+    terminal_sha: str,
+    expected_reviewer: Mapping[str, str],
+    source_fingerprint: str,
+    now: datetime,
+    freshness_seconds: int,
+) -> tuple[str, datetime]:
+    _, raw_payload = _load_json(path)
+    if _canonical_json(document) != raw_payload:
+        raise RecoveryError("GO review is not canonical JSON")
+    _require_exact_keys(
+        document,
+        {
+            "created_at_utc",
+            "credential_recorded",
+            "decision",
+            "model_content_recorded",
+            "no_score_read",
+            "recovery_precommit_sha256",
+            "review_authority",
+            "reviewer_codename",
+            "reviewer_id",
+            "schema_version",
+            "score_blind",
+            "source_attempt_tree_fingerprint_sha256",
+            "stage_a_envelope_sha256",
+            "terminal_failure_record_sha256",
+        },
+        label="GO review",
+    )
+    created = _parse_timestamp(document["created_at_utc"])
+    _reject_score_fields(document)
+    metadata = path.stat(follow_symlinks=False)
+    if (
+        document["schema_version"] != REVIEW_SCHEMA
+        or document["decision"] != "GO"
+        or document["score_blind"] is not True
+        or document["no_score_read"] is not True
+        or document["credential_recorded"] is not False
+        or document["model_content_recorded"] is not False
+        or document["recovery_precommit_sha256"] != recovery_seal
+        or document["stage_a_envelope_sha256"] != stage_a_sha
+        or document["terminal_failure_record_sha256"] != terminal_sha
+        or document["source_attempt_tree_fingerprint_sha256"] != source_fingerprint
+        or document["reviewer_id"] != expected_reviewer["reviewer_id"]
+        or document["reviewer_codename"] != expected_reviewer["codename"]
+        or document["review_authority"] != expected_reviewer["authority"]
+        or created <= stage_a_created
+        or created > now
+        or (now - created).total_seconds() > freshness_seconds
+        or metadata.st_mtime_ns <= stage_a_mtime_ns
+    ):
+        raise RecoveryError("independent GO review failed")
+    _require_immutable(path, maximum=MAX_JSON_BYTES, exact_mode=0o444)
+    return document["reviewer_id"], created
+
+
+def _validate_go(
+    root: Path,
+    protocol: Mapping[str, Any],
+    *,
+    recovery_seal: str,
+    stage_a_payload: bytes,
+    stage_a_document: Mapping[str, Any],
+    stage_a_path: Path,
+    now: datetime,
+) -> tuple[str, dict[str, Any], list[bytes], bytes]:
+    policy = protocol["go_policy"]
+    freshness = policy["freshness_seconds"]
+    if not isinstance(freshness, int) or freshness <= 0:
+        raise RecoveryError("invalid GO freshness")
+    terminal_sha = protocol["terminal_failure_record"]["record_sha256"]
+    stage_a_sha = _sha256(stage_a_payload)
+    stage_a_created = _parse_timestamp(stage_a_document["executed_at_utc"])
+    stage_a_mtime_ns = stage_a_path.stat(follow_symlinks=False).st_mtime_ns
+    source_fingerprint = protocol["attempt_preservation"]["tree_fingerprint_sha256"]
+    review_records: list[dict[str, str]] = []
+    review_payloads: list[bytes] = []
+    reviewer_ids: list[str] = []
+    review_times: list[datetime] = []
+    review_mtimes: list[int] = []
+    reviewers = policy["reviewers"]
+    if (
+        not isinstance(reviewers, list)
+        or len(reviewers) != 2
+        or [item.get("path") for item in reviewers] != policy["review_paths"]
+    ):
+        raise RecoveryError("predeclared reviewers changed")
+    for expected_reviewer in reviewers:
+        relative = expected_reviewer["path"]
+        path = _repository_path(root, relative)
+        document, payload = _load_json(path)
+        reviewer, created = _validate_review(
+            document,
+            path=path,
+            recovery_seal=recovery_seal,
+            stage_a_sha=stage_a_sha,
+            stage_a_created=stage_a_created,
+            stage_a_mtime_ns=stage_a_mtime_ns,
+            terminal_sha=terminal_sha,
+            expected_reviewer=expected_reviewer,
+            source_fingerprint=source_fingerprint,
+            now=now,
+            freshness_seconds=freshness,
+        )
+        reviewer_ids.append(reviewer)
+        review_times.append(created)
+        review_mtimes.append(path.stat(follow_symlinks=False).st_mtime_ns)
+        review_payloads.append(payload)
+        review_records.append(
+            {
+                "path": relative,
+                "reviewer_id": reviewer,
+                "sha256": _sha256(payload),
+            }
+        )
+    if len(reviewer_ids) != 2 or len(set(reviewer_ids)) != 2:
+        raise RecoveryError("GO reviews are not independent")
+    go_path = _repository_path(root, policy["aggregate_path"])
+    go, go_payload = _load_json(go_path)
+    if _canonical_json(go) != go_payload:
+        raise RecoveryError("aggregate GO is not canonical JSON")
+    _require_exact_keys(
+        go,
+        {
+            "created_at_utc",
+            "credential_recorded",
+            "go",
+            "model_content_recorded",
+            "no_score_read",
+            "recovery_precommit_sha256",
+            "reviews",
+            "schema_version",
+            "score_blind",
+            "source_attempt_tree_fingerprint_sha256",
+            "stage_a_envelope_sha256",
+            "terminal_failure_record_sha256",
+        },
+        label="aggregate GO",
+    )
+    created = _parse_timestamp(go["created_at_utc"])
+    _reject_score_fields(go)
+    metadata = go_path.stat(follow_symlinks=False)
+    if (
+        go["schema_version"] != GO_SCHEMA
+        or go["go"] is not True
+        or go["score_blind"] is not True
+        or go["no_score_read"] is not True
+        or go["credential_recorded"] is not False
+        or go["model_content_recorded"] is not False
+        or go["recovery_precommit_sha256"] != recovery_seal
+        or go["stage_a_envelope_sha256"] != stage_a_sha
+        or go["terminal_failure_record_sha256"] != terminal_sha
+        or go["source_attempt_tree_fingerprint_sha256"] != source_fingerprint
+        or go["reviews"] != review_records
+        or created <= stage_a_created
+        or created < max(review_times)
+        or created > now
+        or (now - created).total_seconds() > freshness
+        or metadata.st_mtime_ns < max(review_mtimes)
+        or metadata.st_mtime_ns <= stage_a_mtime_ns
+    ):
+        raise RecoveryError("aggregate GO failed")
+    _require_immutable(go_path, maximum=MAX_JSON_BYTES, exact_mode=0o444)
+    return _sha256(go_payload), go, review_payloads, go_payload
+
+
+def _evaluation_audit_command(
+    *,
+    auditor: Path,
+    evaluated: Path,
+    frozen: Path,
+    ledger: Path,
+    evaluator_log: Path,
+    question_scope: Path,
+) -> tuple[str, ...]:
+    return (
+        sys.executable,
+        "-I",
+        "-S",
+        "-B",
+        str(auditor),
+        "--evaluated-directory",
+        str(evaluated),
+        "--frozen-directory",
+        str(frozen),
+        "--usage-log",
+        str(ledger),
+        "--evaluator-log",
+        str(evaluator_log),
+        "--expected-questions",
+        "42",
+        "--cutoffs",
+        "20,50",
+        "--question-id-file",
+        str(question_scope),
+        "--require-complete",
+        "--require-official-score-complete",
+    )
+
+
+def _run_evaluation_auditor(
+    root: Path,
+    *,
+    auditor: Path,
+    evaluated: Path,
+    frozen: Path,
+    ledger: Path,
+    evaluator_log: Path,
+    question_scope: Path,
+) -> tuple[bytes, tuple[str, ...]]:
+    command = _evaluation_audit_command(
+        auditor=auditor,
+        evaluated=evaluated,
+        frozen=frozen,
+        ledger=ledger,
+        evaluator_log=evaluator_log,
+        question_scope=question_scope,
+    )
+    result = subprocess.run(
+        command,
+        cwd=root,
+        env={"LANG": "C", "LC_ALL": "C"},
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+        timeout=60,
+    )
+    if result.returncode != 0 or not result.stdout:
+        raise RecoveryError("evaluation audit generation failed")
+    return result.stdout, command
+
+
+def _evaluation_audit_payload(
+    root: Path,
+    requirements: Mapping[str, Any],
+    module: Any,
+    variant: Mapping[str, Any],
+) -> bytes:
+    _, _, working = module._verify_copy_manifest(
+        root, variant, verify_evaluated_files=False
+    )
+    evaluated, _ = module._scored_tree_evidence(root, variant, working)
+    frozen = module._repository_path(
+        root, variant["staged_prediction_directory"], label="frozen prediction directory"
+    )
+    question_scope = module._question_scope_path(root, variant, working)
+    ledger = module._repository_path(
+        root, variant["ledger_path"], label="usage ledger"
+    )
+    evaluator_log = module._repository_path(
+        root,
+        f"{variant['run_root']}/evaluation/evaluate.log",
+        label="evaluator log",
+    )
+    runtime_policy = requirements["runtime_sources"]["v11-source"]
+    runtime_root = module._repository_path(
+        root, runtime_policy["extracted_root"], label="verified V11 runtime source"
+    )
+    auditor = runtime_root / "narratordb/benchmarks/evaluation_audit.py"
+    payload, _ = _run_evaluation_auditor(
+        root,
+        auditor=auditor,
+        evaluated=evaluated,
+        frozen=frozen,
+        ledger=ledger,
+        evaluator_log=evaluator_log,
+        question_scope=question_scope,
+    )
+    return payload
+
+
+def _validate_retry_count_map(
+    value: Any, *, label: str
+) -> dict[str, int]:
+    if not isinstance(value, Mapping):
+        raise RecoveryError(f"{label} is not a retry-count map")
+    result: dict[str, int] = {}
+    for attempt, count in value.items():
+        if (
+            not isinstance(attempt, str)
+            or attempt not in {"1", "2", "3", "4"}
+            or isinstance(count, bool)
+            or not isinstance(count, int)
+            or count <= 0
+        ):
+            raise RecoveryError(f"{label} contains an invalid recovered retry")
+        result[attempt] = count
+    return result
+
+
+def _load_evaluation_audit_with_recovered_retries(
+    module: Any,
+    path: Path,
+    temporary: Path,
+    *,
+    label: str,
+    expected_internal_sha256: str | None = None,
+    sealed_loader: Any | None = None,
+) -> tuple[dict[str, Any], bytes, dict[str, dict[str, Any]]]:
+    payload = _require_immutable(path, maximum=MAX_JSON_BYTES, exact_mode=0o444)
+    document, loaded_payload = _load_json(path)
+    serializable = _canonical_serializable_document(payload, label=label)
+    if loaded_payload != payload:
+        raise RecoveryError(f"{label} changed while loading")
+    if expected_internal_sha256 is not None:
+        if _sha256(payload) != _require_sha(expected_internal_sha256):
+            raise RecoveryError(f"{label} does not match the sealed arm gate")
+
+    harness_log = document.get("harness_log")
+    validation = document.get("validation")
+    usage = document.get("usage")
+    if not isinstance(harness_log, Mapping):
+        raise RecoveryError(f"{label} harness log is missing")
+    _require_exact_keys(
+        harness_log,
+        {
+            "attempt_five_failures",
+            "failed_attempt_counts",
+            "returned_none_responses",
+            "timed_out_attempt_counts",
+        },
+        label=f"{label} harness log",
+    )
+    failed_attempts = _validate_retry_count_map(
+        harness_log["failed_attempt_counts"],
+        label=f"{label} failed-attempt counts",
+    )
+    timed_out_attempts = _validate_retry_count_map(
+        harness_log["timed_out_attempt_counts"],
+        label=f"{label} timed-out-attempt counts",
+    )
+    attempt_five_failures = harness_log["attempt_five_failures"]
+    returned_none = harness_log["returned_none_responses"]
+    if (
+        isinstance(attempt_five_failures, bool)
+        or not isinstance(attempt_five_failures, int)
+        or attempt_five_failures != 0
+        or isinstance(returned_none, bool)
+        or not isinstance(returned_none, int)
+        or returned_none != 0
+        or document.get("complete") is not True
+        or document.get("official_harness_score_complete") is not True
+        or not isinstance(validation, Mapping)
+        or any(item != [] for item in validation.values())
+        or not isinstance(usage, Mapping)
+        or usage.get("publication_ready") is not True
+    ):
+        raise RecoveryError(f"{label} contains a terminal or incomplete retry state")
+
+    sanitized = dict(serializable)
+    sanitized_harness = dict(serializable["harness_log"])
+    sanitized_harness["failed_attempt_counts"] = {}
+    sanitized_harness["timed_out_attempt_counts"] = {}
+    sanitized["harness_log"] = sanitized_harness
+    sanitized_path = temporary / f".retry-normalized-{_sha256(payload)[:24]}.json"
+    _write_private_file(sanitized_path, _canonical_json(sanitized))
+    os.chmod(sanitized_path, 0o444)
+    try:
+        loader = module._load_evaluation_audit if sealed_loader is None else sealed_loader
+        _, _, metrics = loader(
+            sanitized_path, label=f"{label} retry-normalized validation"
+        )
+    finally:
+        try:
+            os.chmod(sanitized_path, 0o600)
+            sanitized_path.unlink()
+        except OSError:
+            pass
+    document["harness_log"] = {
+        **harness_log,
+        "failed_attempt_counts": failed_attempts,
+        "timed_out_attempt_counts": timed_out_attempts,
+    }
+    return document, payload, metrics
+
+
+def _arm_gate_internal_audit_sha256(
+    root: Path, module: Any, variant: Mapping[str, Any], *, label: str
+) -> str:
+    gate = module._repository_path(
+        root,
+        f"{variant['run_root']}/evaluation/arm-gate.json",
+        label=f"{label} sealed arm gate",
+    )
+    gate_payload = _require_immutable(
+        gate, maximum=MAX_JSON_BYTES, exact_mode=0o444
+    )
+    gate_document, loaded_payload = _load_json(gate)
+    _canonical_serializable_document(gate_payload, label=f"{label} sealed arm gate")
+    if loaded_payload != gate_payload:
+        raise RecoveryError(f"{label} sealed arm gate changed while loading")
+    return _require_sha(gate_document.get("internal_evaluation_audit_sha256"))
+
+
+def _recompute_evaluation_audit_with_recovered_retries(
+    root: Path,
+    requirements: Mapping[str, Any],
+    module: Any,
+    variant: Mapping[str, Any],
+    path: Path,
+    temporary: Path,
+    *,
+    label: str,
+) -> tuple[dict[str, Any], bytes, dict[str, dict[str, Any]], dict[str, str]]:
+    expected_internal_sha256 = _arm_gate_internal_audit_sha256(
+        root, module, variant, label=label
+    )
+    original_loader = module._load_evaluation_audit
+
+    def recovered_retry_loader(
+        audit_path: Path, *, label: str
+    ) -> tuple[dict[str, Any], bytes, dict[str, dict[str, Any]]]:
+        return _load_evaluation_audit_with_recovered_retries(
+            module,
+            audit_path,
+            temporary,
+            label=label,
+            expected_internal_sha256=expected_internal_sha256,
+            sealed_loader=original_loader,
+        )
+
+    module._load_evaluation_audit = recovered_retry_loader
+    try:
+        document, payload, metrics, evidence = module._recompute_evaluation_audit(
+            root, requirements, variant, path, label=label
+        )
+    finally:
+        module._load_evaluation_audit = original_loader
+    if _sha256(payload) != expected_internal_sha256:
+        raise RecoveryError("recomputed audit does not match the sealed arm gate")
+    return document, payload, metrics, evidence
+
+
+def _private_evaluation_audit(
+    root: Path,
+    requirements: Mapping[str, Any],
+    module: Any,
+    variant: Mapping[str, Any],
+    temporary: Path,
+    *,
+    label: str,
+) -> tuple[bytes, dict[str, dict[str, Any]], dict[str, str]]:
+    payload = _evaluation_audit_payload(root, requirements, module, variant)
+    expected_internal_sha256 = _arm_gate_internal_audit_sha256(
+        root, module, variant, label=label
+    )
+    if _sha256(payload) != expected_internal_sha256:
+        raise RecoveryError("regenerated audit does not match the sealed arm gate")
+    path = temporary / f"{variant['label']}-evaluation-audit.json"
+    _write_private_file(path, payload)
+    os.chmod(path, 0o444)
+    document, recomputed_payload, metrics, evidence = (
+        _recompute_evaluation_audit_with_recovered_retries(
+            root,
+            requirements,
+            module,
+            variant,
+            path,
+            temporary,
+            label=label,
+        )
+    )
+    if recomputed_payload != payload:
+        raise RecoveryError("evaluation audit is not byte-identical")
+    return payload, metrics, evidence
+
+
+def _result_document(
+    protocol: Mapping[str, Any],
+    verification_payload: bytes,
+    verification: Mapping[str, Any],
+    *,
+    recovery_seal: str,
+    go_sha: str,
+    review_shas: Sequence[str],
+    v7_payload: bytes,
+    v13_payload: bytes,
+    v7_metrics: Mapping[str, Mapping[str, Any]],
+    v13_metrics: Mapping[str, Mapping[str, Any]],
+    v7_evidence: Mapping[str, str],
+    v13_evidence: Mapping[str, str],
+) -> dict[str, Any]:
+    return {
+        "benchmark_scope": "consumed-development",
+        "classification": protocol["release_classification"],
+        "credential_recorded": False,
+        "cross_attempt_combination": False,
+        "cutoffs": [20, 50],
+        "delta_correct": {
+            cutoff: v13_metrics[cutoff]["correct"] - v7_metrics[cutoff]["correct"]
+            for cutoff in ("top_20", "top_50")
+        },
+        "denominator": 42,
+        "evaluation_audit_sha256": {
+            "v13_first": _sha256(v13_payload),
+            "v7_control": _sha256(v7_payload),
+        },
+        "evaluation_evidence_sha256": {
+            "v13_first": dict(v13_evidence),
+            "v7_control": dict(v7_evidence),
+        },
+        "final_spend_authorization_sha256": verification["authorization_sha256"],
+        "external_result_or_score_input": False,
+        "historical_final_verification_sha256": _sha256(verification_payload),
+        "historical_replay_at_utc": protocol["historical_finalization"][
+            "verification_now_utc"
+        ],
+        "model_content_recorded": False,
+        "original_r5_status": "terminal-finalization-failure",
+        "present_time_freshness_claimed": False,
+        "prior_recovery_terminal_record_sha256": protocol[
+            "prior_recovery_terminal"
+        ]["record_sha256"],
+        "recovery_go_sha256": go_sha,
+        "recovery_precommit_sha256": recovery_seal,
+        "recovery_review_sha256": list(review_shas),
+        "recovery_status": "offline-recovered-from-sole-terminal-r5-source",
+        "revision_precommit_sha256": verification["revision_precommit_sha256"],
+        "r5_protocol_status": "terminal-finalization-failure",
+        "schema_version": RESULT_SCHEMA,
+        "score_release_authorized_by_offline_recovery": True,
+        "sole_source_attempt_root": protocol["sole_source_policy"][
+            "sole_source_attempt_root"
+        ],
+        "source_attempt_tree_fingerprint_sha256": protocol["attempt_preservation"][
+            "tree_fingerprint_sha256"
+        ],
+        "terminal_failure_record_sha256": protocol["terminal_failure_record"][
+            "record_sha256"
+        ],
+        "v13_first": dict(v13_metrics),
+        "v7_control": dict(v7_metrics),
+        "zero_new_activity": _zero_activity(protocol),
+    }
+
+
+def _release_directory_candidate(root: Path, protocol: Mapping[str, Any]) -> Path:
+    return _repository_path(
+        root,
+        protocol["output"]["stage_b"]["release_directory_path"],
+        must_exist=False,
+    )
+
+
+def _stage_b_layout(
+    root: Path, protocol: Mapping[str, Any]
+) -> tuple[Path, dict[str, Path]]:
+    paths = protocol["output"]["stage_b"]
+    release = _release_directory_candidate(root, protocol)
+    layout = {
+        "RECOVERED_PAIRED_RESULT_SHA256SUMS": _repository_path(
+            root, paths["result_checksum_path"], must_exist=False
+        ),
+        "recovered-paired-result.json": _repository_path(
+            root, paths["result_path"], must_exist=False
+        ),
+        "v7-evaluation-audit.json": _repository_path(
+            root, paths["v7_evaluation_audit_path"], must_exist=False
+        ),
+        "v13-evaluation-audit.json": _repository_path(
+            root, paths["v13_evaluation_audit_path"], must_exist=False
+        ),
+        "recovery-review-1.json": _repository_path(
+            root, paths["review_1_copy_path"], must_exist=False
+        ),
+        "recovery-review-2.json": _repository_path(
+            root, paths["review_2_copy_path"], must_exist=False
+        ),
+        "recovery-go.json": _repository_path(
+            root, paths["go_copy_path"], must_exist=False
+        ),
+        "release-complete.json": _repository_path(
+            root, paths["completion_path"], must_exist=False
+        ),
+    }
+    if any(path.parent != release or path.name != name for name, path in layout.items()):
+        raise RecoveryError("atomic release layout changed")
+    return release, layout
+
+
+def _destroy_private_staging(path: Path) -> None:
+    if not path.exists() or path.is_symlink():
+        return
+    for current, directories, files in os.walk(path, topdown=False):
+        current_path = Path(current)
+        os.chmod(current_path, 0o700)
+        for name in files:
+            candidate = current_path / name
+            if candidate.is_symlink():
+                candidate.unlink()
+            else:
+                os.chmod(candidate, 0o600)
+                candidate.unlink()
+        for name in directories:
+            candidate = current_path / name
+            if candidate.is_symlink():
+                candidate.unlink()
+            else:
+                os.chmod(candidate, 0o700)
+                candidate.rmdir()
+    path.rmdir()
+
+
+def _rename_exclusive(source: Path, destination: Path) -> None:
+    library = ctypes.CDLL(None, use_errno=True)
+    rename = getattr(library, "renameatx_np", None)
+    if rename is None:
+        raise RecoveryError("exclusive atomic rename is unavailable")
+    rename.argtypes = [
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_uint,
+    ]
+    rename.restype = ctypes.c_int
+    ctypes.set_errno(0)
+    if (
+        rename(
+            AT_FDCWD,
+            os.fsencode(source),
+            AT_FDCWD,
+            os.fsencode(destination),
+            RENAME_EXCL,
+        )
+        != 0
+    ):
+        raise RecoveryError("exclusive atomic release commit failed")
+
+
+def _publish_release(
+    output: Path,
+    *,
+    release: Path,
+    payloads: Mapping[str, bytes],
+) -> None:
+    global _RELEASE_COMMITTED
+
+    expected_order = [
+        "RECOVERED_PAIRED_RESULT_SHA256SUMS",
+        "recovered-paired-result.json",
+        "v7-evaluation-audit.json",
+        "v13-evaluation-audit.json",
+        "recovery-review-1.json",
+        "recovery-review-2.json",
+        "recovery-go.json",
+        "release-complete.json",
+    ]
+    if list(payloads) != expected_order or release.parent != output:
+        raise RecoveryError("atomic release payload inventory changed")
+    if release.exists() or release.is_symlink():
+        raise RecoveryError("atomic release destination already exists")
+    staging = Path(tempfile.mkdtemp(prefix=".release-private-", dir=output))
+    committed = False
+    try:
+        metadata = staging.stat(follow_symlinks=False)
+        if (
+            stat.S_IMODE(metadata.st_mode) != 0o700
+            or metadata.st_dev != output.stat(follow_symlinks=False).st_dev
+        ):
+            raise RecoveryError("private release staging is not same-filesystem 0700")
+        for name, payload in payloads.items():
+            _write_new_bytes(staging / name, payload, output_root=staging)
+        os.chmod(staging, 0o555)
+        _fsync_directory(staging)
+        _fsync_directory(output)
+        blocked = {signal.SIGHUP, signal.SIGINT, signal.SIGTERM}
+        previous_mask = signal.pthread_sigmask(signal.SIG_BLOCK, blocked)
+        try:
+            _rename_exclusive(staging, release)
+            committed = True
+            _RELEASE_COMMITTED = True
+        finally:
+            signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+        # The exclusive rename is the irrevocable release commit.  Durability and
+        # output-root hardening below are best-effort and can never contradict it.
+        try:
+            _fsync_directory(output)
+            os.chmod(output, 0o555)
+            _fsync_directory(output.parent)
+        except OSError:
+            pass
+    finally:
+        if not committed and staging.exists():
+            _destroy_private_staging(staging)
+
+
+def _completion_document(
+    protocol: Mapping[str, Any],
+    *,
+    result_sha: str,
+    go_sha: str,
+    review_shas: Sequence[str],
+    recovery_seal: str,
+    v7_payload: bytes,
+    v13_payload: bytes,
+) -> dict[str, Any]:
+    return {
+        "benchmark_scope": "consumed-development",
+        "credential_recorded": False,
+        "evaluation_audit_sha256": {
+            "v13_first": _sha256(v13_payload),
+            "v7_control": _sha256(v7_payload),
+        },
+        "historical_replay_at_utc": protocol["historical_finalization"][
+            "verification_now_utc"
+        ],
+        "model_content_recorded": False,
+        "original_r5_status": "terminal-finalization-failure",
+        "present_time_freshness_claimed": False,
+        "prior_recovery_terminal_record_sha256": protocol[
+            "prior_recovery_terminal"
+        ]["record_sha256"],
+        "recovered_paired_result_sha256": result_sha,
+        "recovery_go_sha256": go_sha,
+        "recovery_precommit_sha256": recovery_seal,
+        "recovery_review_sha256": list(review_shas),
+        "schema_version": COMPLETE_SCHEMA,
+        "status": "offline-recovery-release-complete",
+        "stdout_bytes": 0,
+        "source_attempt_tree_fingerprint_sha256": protocol["attempt_preservation"][
+            "tree_fingerprint_sha256"
+        ],
+        "zero_new_activity": _zero_activity(protocol),
+    }
+
+
+def _write_canary_immutable(path: Path, payload: bytes) -> None:
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    _write_private_file(path, payload)
+    os.chmod(path, 0o444)
+
+
+def _build_synthetic_auditor_evidence(
+    synthetic_root: Path, *, label: str, recovered_attempt_one: bool
+) -> tuple[dict[str, Any], dict[str, Path], list[str]]:
+    run_root = synthetic_root / label
+    evaluated = run_root / "evaluated"
+    frozen = run_root / "frozen"
+    evaluation = run_root / "evaluation"
+    for path in (evaluated, frozen, evaluation):
+        path.mkdir(mode=0o700, parents=True, exist_ok=False)
+    question_ids = [f"synthetic-{index:02d}" for index in range(1, 43)]
+    for index, question_id in enumerate(question_ids, start=1):
+        base = {
+            "question_id": question_id,
+            "question_type": "synthetic",
+            "synthetic_prediction": f"private-{index:02d}",
+        }
+        score = 1 if index % 2 == 0 else 0
+        evaluated_document = {
+            **base,
+            "cutoff_results": {
+                cutoff: {
+                    "generated_answer": "synthetic private answer",
+                    "judge_raw": "synthetic private judge",
+                    "judgment": "PASS" if score else "FAIL",
+                    "score": score,
+                }
+                for cutoff in ("top_20", "top_50")
+            },
+        }
+        _write_canary_immutable(
+            frozen / f"{question_id}.json", _canonical_json(base)
+        )
+        _write_canary_immutable(
+            evaluated / f"{question_id}.json",
+            _canonical_json(evaluated_document),
+        )
+    scope = run_root / "question-ids.json"
+    ledger = run_root / "usage.jsonl"
+    evaluator_log = evaluation / "evaluate.log"
+    attempt_status = evaluation / "attempt-status.json"
+    _write_canary_immutable(scope, _canonical_json_array(question_ids))
+    _write_canary_immutable(ledger, b"")
+    _write_canary_immutable(
+        evaluator_log,
+        (
+            b"Generation attempt 1/5 failed: synthetic recovered retry\n"
+            if recovered_attempt_one
+            else b""
+        ),
+    )
+    phase = "before-v7" if label == "v7-control" else "before-v13"
+    project = f"synthetic-{label}"
+    _write_canary_immutable(
+        attempt_status,
+        _canonical_json(
+            {
+                "evaluator_status": "0",
+                "exit_status": 0,
+                "final_status": "completed",
+                "phase": phase,
+                "project": project,
+                "schema_version": "narratordb.v13-paid-variant-attempt-status.v2",
+            }
+        ),
+    )
+    variant = {
+        "_synthetic_evaluated_path": str(evaluated),
+        "_synthetic_question_scope_path": str(scope),
+        "label": label,
+        "ledger_path": f"{label}/usage.jsonl",
+        "project_name": project,
+        "run_root": label,
+        "staged_prediction_directory": f"{label}/frozen",
+    }
+    return variant, {
+        "attempt_status": attempt_status,
+        "evaluated": evaluated,
+        "evaluator_log": evaluator_log,
+        "frozen": frozen,
+        "ledger": ledger,
+        "question_scope": scope,
+    }, question_ids
+
+
+def _canonical_json_array(values: Sequence[str]) -> bytes:
+    return (json.dumps(list(values), indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def _stage_b_canary_bundle_snapshot(
+    root: Path, protocol: Mapping[str, Any]
+) -> dict[str, str]:
+    inventory_path = _repository_path(
+        root, protocol["recovery_precommit"]["bundle_inventory_path"]
+    )
+    inventory, _ = _load_json(inventory_path)
+    allowed = inventory["allowed_bundle_files_before_seal"]
+    if not isinstance(allowed, list) or any(
+        not isinstance(name, str) for name in allowed
+    ) or len(allowed) != protocol["recovery_precommit"]["preseal_file_count"]:
+        raise RecoveryError("Stage-B canary bundle inventory is invalid")
+    bundle = _repository_path(root, protocol["recovery_precommit"]["bundle_root"])
+    names = {path.name for path in bundle.iterdir()}
+    frozen_names = frozenset(names)
+    preseal_names = set(allowed)
+    sealed_names = preseal_names | {"SHA256SUMS"}
+    if frozen_names not in {frozenset(preseal_names), frozenset(sealed_names)}:
+        raise RecoveryError("Stage-B canary bundle state is not closed-world")
+    snapshot: dict[str, str] = {}
+    if names == preseal_names:
+        for name in allowed:
+            path = bundle / name
+            metadata = path.stat(follow_symlinks=False)
+            exact_mode = 0o755 if name == "run_offline_recovery.sh" else 0o644
+            if (
+                path.is_symlink()
+                or not stat.S_ISREG(metadata.st_mode)
+                or metadata.st_nlink != 1
+                or stat.S_IMODE(metadata.st_mode) != exact_mode
+            ):
+                raise RecoveryError("Stage-B canary preseal member facts changed")
+            snapshot[name] = _sha256(
+                _stable_bytes(path, maximum=MAX_INPUT_BYTES)
+            )
+        return snapshot
+
+    manifest = bundle / "SHA256SUMS"
+    manifest_payload = _require_immutable(
+        manifest, maximum=MAX_JSON_BYTES, exact_mode=0o444
+    )
+    entries = _parse_manifest(manifest_payload, basename_only=True)
+    if set(entries) != preseal_names:
+        raise RecoveryError("Stage-B canary sealed manifest entries changed")
+    _validate_bundle_seal(root, protocol, _sha256(manifest_payload))
+    return dict(entries)
+
+
+def _stage_b_canary_bound_snapshot(
+    root: Path, protocol: Mapping[str, Any]
+) -> dict[str, str]:
+    manifest = _repository_path(root, protocol["input_manifest_path"])
+    entries = _parse_manifest(
+        _stable_bytes(manifest, maximum=MAX_JSON_BYTES), basename_only=False
+    )
+    _validate_bound_input_chain(root, protocol, entries)
+    return dict(entries)
+
+
+def _validate_synthetic_stage_b_release(
+    module: Any,
+    release: Path,
+    temporary: Path,
+    expected_payloads: Mapping[str, bytes],
+) -> None:
+    if (
+        release.is_symlink()
+        or not release.is_dir()
+        or stat.S_IMODE(release.stat(follow_symlinks=False).st_mode) != 0o555
+        or {path.name for path in release.iterdir()} != set(expected_payloads)
+        or len(expected_payloads) != 8
+    ):
+        raise RecoveryError("synthetic Stage-B release inventory changed")
+    observed: dict[str, bytes] = {}
+    for name, expected in expected_payloads.items():
+        payload = _require_immutable(
+            release / name, maximum=MAX_JSON_BYTES, exact_mode=0o444
+        )
+        if payload != expected:
+            raise RecoveryError("synthetic Stage-B release member changed")
+        observed[name] = payload
+    for name in ("v7-evaluation-audit.json", "v13-evaluation-audit.json"):
+        _load_evaluation_audit_with_recovered_retries(
+            module,
+            release / name,
+            temporary,
+            label=f"synthetic committed {name}",
+            expected_internal_sha256=_sha256(observed[name]),
+        )
+    result_sha = _sha256(observed["recovered-paired-result.json"])
+    if observed["RECOVERED_PAIRED_RESULT_SHA256SUMS"] != (
+        f"{result_sha}  recovered-paired-result.json\n".encode("ascii")
+    ):
+        raise RecoveryError("synthetic Stage-B result checksum changed")
+    _canonical_serializable_document(
+        observed["recovered-paired-result.json"], label="synthetic result"
+    )
+    _canonical_serializable_document(
+        observed["release-complete.json"], label="synthetic completion"
+    )
+
+
+def _run_stage_b_canary(
+    root: Path, protocol: Mapping[str, Any], module: Any
+) -> None:
+    global _RELEASE_COMMITTED
+
+    steps: list[str] = []
+    temporary_root = Path(os.environ["TMPDIR"]).resolve(strict=True)
+    output = temporary_root / "stage-b-canary-output"
+    private = temporary_root / "stage-b-canary-private"
+    release = output / "release"
+    if output.exists() or private.exists():
+        raise RecoveryError("synthetic Stage-B canary paths are not fresh")
+    output.mkdir(mode=0o700)
+    private.mkdir(mode=0o700)
+    bundle_before = _stage_b_canary_bundle_snapshot(root, protocol)
+    bound_before = _stage_b_canary_bound_snapshot(root, protocol)
+    attempt_before = _attempt_inventory(root, protocol)
+    try:
+        v7_payload = _synthetic_evaluation_audit_payload(recovered_retry=True)
+        v13_payload = _synthetic_evaluation_audit_payload(recovered_retry=False)
+        v7_path = private / "generated-v7-evaluation-audit.json"
+        v13_path = private / "generated-v13-evaluation-audit.json"
+        for path, payload in ((v7_path, v7_payload), (v13_path, v13_payload)):
+            _write_private_file(path, payload)
+            os.chmod(path, 0o444)
+        v7_document, _, v7_metrics = (
+            _load_evaluation_audit_with_recovered_retries(
+                module,
+                v7_path,
+                private,
+                label="synthetic generated V7 audit",
+                expected_internal_sha256=_sha256(v7_payload),
+            )
+        )
+        _, _, v13_metrics = _load_evaluation_audit_with_recovered_retries(
+            module,
+            v13_path,
+            private,
+            label="synthetic generated V13 audit",
+            expected_internal_sha256=_sha256(v13_payload),
+        )
+        if v7_document["harness_log"]["failed_attempt_counts"] != {"1": 1}:
+            raise RecoveryError("synthetic recovered retry was not preserved")
+        steps.append("synthetic-recovered-retry")
+        steps.append("generated-audit-parser")
+        _load_evaluation_audit_with_recovered_retries(
+            module,
+            v7_path,
+            private,
+            label="synthetic commit-bound V7 audit",
+            expected_internal_sha256=_sha256(v7_payload),
+        )
+        _load_evaluation_audit_with_recovered_retries(
+            module,
+            v13_path,
+            private,
+            label="synthetic commit-bound V13 audit",
+            expected_internal_sha256=_sha256(v13_payload),
+        )
+        steps.append("committed-audit-parser")
+
+        verification_payload = _canonical_json({"synthetic_verification": True})
+        verification = {
+            "authorization_sha256": "a" * 64,
+            "revision_precommit_sha256": "b" * 64,
+        }
+        recovery_seal = "c" * 64
+        review_payloads = [
+            _canonical_json({"synthetic_review": 1}),
+            _canonical_json({"synthetic_review": 2}),
+        ]
+        review_shas = [_sha256(payload) for payload in review_payloads]
+        go_payload = _canonical_json({"synthetic_go": True})
+        go_sha = _sha256(go_payload)
+        v7_evidence = {"synthetic_evidence_sha256": "d" * 64}
+        v13_evidence = {"synthetic_evidence_sha256": "e" * 64}
+        result = _result_document(
+            protocol,
+            verification_payload,
+            verification,
+            recovery_seal=recovery_seal,
+            go_sha=go_sha,
+            review_shas=review_shas,
+            v7_payload=v7_payload,
+            v13_payload=v13_payload,
+            v7_metrics=v7_metrics,
+            v13_metrics=v13_metrics,
+            v7_evidence=v7_evidence,
+            v13_evidence=v13_evidence,
+        )
+        result_payload = _canonical_json(result)
+        result_sha = _sha256(result_payload)
+        steps.append("result")
+        completion = _completion_document(
+            protocol,
+            result_sha=result_sha,
+            go_sha=go_sha,
+            review_shas=review_shas,
+            recovery_seal=recovery_seal,
+            v7_payload=v7_payload,
+            v13_payload=v13_payload,
+        )
+        completion_payload = _canonical_json(completion)
+        steps.append("completion")
+
+        if _stage_b_canary_bundle_snapshot(root, protocol) != bundle_before:
+            raise RecoveryError("synthetic post-computation bundle recheck changed")
+        steps.append("postscore-bundle")
+        if _stage_b_canary_bound_snapshot(root, protocol) != bound_before:
+            raise RecoveryError("synthetic post-computation bound-input recheck changed")
+        steps.append("postscore-bound-inputs")
+        if _attempt_inventory(root, protocol) != attempt_before:
+            raise RecoveryError("synthetic post-computation attempt recheck changed")
+        steps.append("postscore-attempt")
+
+        payloads = {
+            "RECOVERED_PAIRED_RESULT_SHA256SUMS": (
+                f"{result_sha}  recovered-paired-result.json\n".encode("ascii")
+            ),
+            "recovered-paired-result.json": result_payload,
+            "v7-evaluation-audit.json": v7_payload,
+            "v13-evaluation-audit.json": v13_payload,
+            "recovery-review-1.json": review_payloads[0],
+            "recovery-review-2.json": review_payloads[1],
+            "recovery-go.json": go_payload,
+            "release-complete.json": completion_payload,
+        }
+        _publish_release(output, release=release, payloads=payloads)
+        if not _RELEASE_COMMITTED:
+            raise RecoveryError("synthetic atomic release did not commit")
+        steps.append("atomic-eight-file-rename")
+        _validate_synthetic_stage_b_release(module, release, private, payloads)
+        steps.append("committed-reentry")
+
+        os.chmod(output, 0o700)
+        _destroy_private_staging(release)
+        output.rmdir()
+        _destroy_private_staging(private)
+        steps.append("private-cleanup")
+        if tuple(steps) != STAGE_B_CANARY_STEPS:
+            raise RecoveryError("synthetic Stage-B canary coverage changed")
+    finally:
+        _RELEASE_COMMITTED = False
+        for path in (release, output, private):
+            if path.exists() and not path.is_symlink():
+                try:
+                    _destroy_private_staging(path)
+                except OSError:
+                    pass
+
+
+def _validate_release_go_copies(
+    protocol: Mapping[str, Any],
+    layout: Mapping[str, Path],
+    *,
+    recovery_seal: str,
+    stage_a_payload: bytes,
+    stage_a_document: Mapping[str, Any],
+) -> tuple[str, list[str]]:
+    stage_a_sha = _sha256(stage_a_payload)
+    stage_a_created = _parse_timestamp(stage_a_document["executed_at_utc"])
+    terminal_sha = protocol["terminal_failure_record"]["record_sha256"]
+    fingerprint = protocol["attempt_preservation"]["tree_fingerprint_sha256"]
+    review_records: list[dict[str, str]] = []
+    review_shas: list[str] = []
+    review_times: list[datetime] = []
+    for index, expected in enumerate(protocol["go_policy"]["reviewers"], start=1):
+        path = layout[f"recovery-review-{index}.json"]
+        document, payload = _load_json(path)
+        if _canonical_json(document) != payload:
+            raise RecoveryError("committed review copy is not canonical")
+        _require_exact_keys(
+            document,
+            {
+                "created_at_utc",
+                "credential_recorded",
+                "decision",
+                "model_content_recorded",
+                "no_score_read",
+                "recovery_precommit_sha256",
+                "review_authority",
+                "reviewer_codename",
+                "reviewer_id",
+                "schema_version",
+                "score_blind",
+                "source_attempt_tree_fingerprint_sha256",
+                "stage_a_envelope_sha256",
+                "terminal_failure_record_sha256",
+            },
+            label="committed review copy",
+        )
+        _reject_score_fields(document)
+        created = _parse_timestamp(document["created_at_utc"])
+        if (
+            document["schema_version"] != REVIEW_SCHEMA
+            or document["decision"] != "GO"
+            or document["score_blind"] is not True
+            or document["no_score_read"] is not True
+            or document["credential_recorded"] is not False
+            or document["model_content_recorded"] is not False
+            or document["recovery_precommit_sha256"] != recovery_seal
+            or document["stage_a_envelope_sha256"] != stage_a_sha
+            or document["terminal_failure_record_sha256"] != terminal_sha
+            or document["source_attempt_tree_fingerprint_sha256"] != fingerprint
+            or document["reviewer_id"] != expected["reviewer_id"]
+            or document["reviewer_codename"] != expected["codename"]
+            or document["review_authority"] != expected["authority"]
+            or created <= stage_a_created
+        ):
+            raise RecoveryError("committed review copy changed")
+        digest = _sha256(payload)
+        review_times.append(created)
+        review_shas.append(digest)
+        review_records.append(
+            {
+                "path": expected["path"],
+                "reviewer_id": expected["reviewer_id"],
+                "sha256": digest,
+            }
+        )
+    go, go_payload = _load_json(layout["recovery-go.json"])
+    if _canonical_json(go) != go_payload:
+        raise RecoveryError("committed GO copy is not canonical")
+    _require_exact_keys(
+        go,
+        {
+            "created_at_utc",
+            "credential_recorded",
+            "go",
+            "model_content_recorded",
+            "no_score_read",
+            "recovery_precommit_sha256",
+            "reviews",
+            "schema_version",
+            "score_blind",
+            "source_attempt_tree_fingerprint_sha256",
+            "stage_a_envelope_sha256",
+            "terminal_failure_record_sha256",
+        },
+        label="committed GO copy",
+    )
+    _reject_score_fields(go)
+    go_created = _parse_timestamp(go["created_at_utc"])
+    if (
+        go["schema_version"] != GO_SCHEMA
+        or go["go"] is not True
+        or go["score_blind"] is not True
+        or go["no_score_read"] is not True
+        or go["credential_recorded"] is not False
+        or go["model_content_recorded"] is not False
+        or go["recovery_precommit_sha256"] != recovery_seal
+        or go["stage_a_envelope_sha256"] != stage_a_sha
+        or go["terminal_failure_record_sha256"] != terminal_sha
+        or go["source_attempt_tree_fingerprint_sha256"] != fingerprint
+        or go["reviews"] != review_records
+        or go_created < max(review_times)
+    ):
+        raise RecoveryError("committed GO copy changed")
+    return _sha256(go_payload), review_shas
+
+
+def _validate_committed_release_core(
+    root: Path,
+    protocol: Mapping[str, Any],
+    module: Any,
+    requirements_path: Path,
+    *,
+    recovery_seal: str,
+    output: Path,
+    release: Path,
+    layout: Mapping[str, Path],
+    preserved_state_validator: Callable[[str], None],
+    trace: list[str] | None = None,
+) -> None:
+    preserved_state_validator("before")
+    metadata = release.stat(follow_symlinks=False)
+    if (
+        release.is_symlink()
+        or not stat.S_ISDIR(metadata.st_mode)
+        or stat.S_IMODE(metadata.st_mode) != 0o555
+        or metadata.st_dev != output.stat(follow_symlinks=False).st_dev
+        or {path.name for path in release.iterdir()} != set(layout)
+        or {path.name for path in output.iterdir()}
+        != {_stage_a_path(root, protocol).name, release.name}
+    ):
+        raise RecoveryError("committed release namespace is not closed-world")
+    payloads = {
+        name: _require_immutable(
+            path, maximum=MAX_INPUT_BYTES, exact_mode=0o444
+        )
+        for name, path in layout.items()
+    }
+    stage_a_payload, stage_a_document, _, verification_payload, verification = (
+        _load_stage_a(root, protocol, module, requirements_path)
+    )
+    if trace is not None:
+        trace.append("stage-a-reconstruction")
+    go_sha, review_shas = _validate_release_go_copies(
+        protocol,
+        layout,
+        recovery_seal=recovery_seal,
+        stage_a_payload=stage_a_payload,
+        stage_a_document=stage_a_document,
+    )
+    if trace is not None:
+        trace.append("go-review-validation")
+    requirements, _ = module._requirements(root, requirements_path)
+    variants = module._variant_map(root, requirements)
+    scratch = Path(os.environ["TMPDIR"]).resolve(strict=True)
+    with tempfile.TemporaryDirectory(
+        prefix="narratordb-r5-reentry-", dir=scratch
+    ) as name:
+        temporary = Path(name)
+        if stat.S_IMODE(temporary.stat().st_mode) != 0o700:
+            raise RecoveryError("committed reentry scratch is not private")
+        _, v7_payload, v7_metrics, v7_evidence = (
+            _recompute_evaluation_audit_with_recovered_retries(
+                root,
+                requirements,
+                module,
+                variants["v7-control"],
+                layout["v7-evaluation-audit.json"],
+                temporary,
+                label="committed V7 recovery evaluation audit",
+            )
+        )
+        _, v13_payload, v13_metrics, v13_evidence = (
+            _recompute_evaluation_audit_with_recovered_retries(
+                root,
+                requirements,
+                module,
+                variants["v13-first"],
+                layout["v13-evaluation-audit.json"],
+                temporary,
+                label="committed V13 recovery evaluation audit",
+            )
+        )
+    if trace is not None:
+        trace.append("retry-aware-evidence-recomputation")
+    expected_result = _result_document(
+        protocol,
+        verification_payload,
+        verification,
+        recovery_seal=recovery_seal,
+        go_sha=go_sha,
+        review_shas=review_shas,
+        v7_payload=v7_payload,
+        v13_payload=v13_payload,
+        v7_metrics=v7_metrics,
+        v13_metrics=v13_metrics,
+        v7_evidence=v7_evidence,
+        v13_evidence=v13_evidence,
+    )
+    result_payload = _canonical_json(expected_result)
+    if payloads["recovered-paired-result.json"] != result_payload:
+        raise RecoveryError("committed recovered result changed")
+    result_sha = _sha256(result_payload)
+    if payloads["RECOVERED_PAIRED_RESULT_SHA256SUMS"] != (
+        f"{result_sha}  recovered-paired-result.json\n".encode("ascii")
+    ):
+        raise RecoveryError("committed result checksum changed")
+    expected_completion = _completion_document(
+        protocol,
+        result_sha=result_sha,
+        go_sha=go_sha,
+        review_shas=review_shas,
+        recovery_seal=recovery_seal,
+        v7_payload=v7_payload,
+        v13_payload=v13_payload,
+    )
+    if payloads["release-complete.json"] != _canonical_json(expected_completion):
+        raise RecoveryError("committed completion record changed")
+    if trace is not None:
+        trace.append("result-completion-validation")
+    preserved_state_validator("after")
+
+
+def _validate_committed_release(
+    root: Path,
+    protocol: Mapping[str, Any],
+    module: Any,
+    requirements_path: Path,
+    *,
+    recovery_seal: str,
+    preserved_state_validator: Callable[[str], None] | None = None,
+    trace: list[str] | None = None,
+) -> None:
+    if preserved_state_validator is None:
+
+        def preserved_state_validator(_phase: str) -> None:
+            _validate_bundle_seal(root, protocol, recovery_seal)
+            _validate_bound_inputs(root, protocol)
+            _attempt_inventory(root, protocol)
+            _assert_original_publication_absent(root)
+
+    output = _assert_output_root(root, protocol, writable=False)
+    release, layout = _stage_b_layout(root, protocol)
+    _validate_committed_release_core(
+        root,
+        protocol,
+        module,
+        requirements_path,
+        recovery_seal=recovery_seal,
+        output=output,
+        release=release,
+        layout=layout,
+        preserved_state_validator=preserved_state_validator,
+        trace=trace,
+    )
+
+
+def _reenter_committed_release(
+    root: Path,
+    protocol: Mapping[str, Any],
+    module: Any,
+    requirements_path: Path,
+    *,
+    recovery_seal: str,
+    preserved_state_validator: Callable[[str], None] | None = None,
+    trace: list[str] | None = None,
+) -> None:
+    global _RELEASE_COMMITTED
+
+    _set_failure_phase("stage-b-committed-reentry")
+    if trace is not None:
+        trace.append("production-reentry-branch")
+    _validate_committed_release(
+        root,
+        protocol,
+        module,
+        requirements_path,
+        recovery_seal=recovery_seal,
+        preserved_state_validator=preserved_state_validator,
+        trace=trace,
+    )
+    _RELEASE_COMMITTED = True
+
+
+def _remove_orphan_release_staging(output: Path) -> bool:
+    found = False
+    for path in output.iterdir():
+        if not path.name.startswith(".release-private-"):
+            continue
+        if path.is_symlink() or not path.is_dir():
+            raise RecoveryError("invalid orphan release staging")
+        _destroy_private_staging(path)
+        found = True
+    return found
+
+
+def _run_stage_b(
+    root: Path,
+    protocol: Mapping[str, Any],
+    module: Any,
+    requirements_path: Path,
+    *,
+    recovery_seal: str,
+    now: datetime,
+) -> None:
+    global _RELEASE_COMMITTED
+
+    _set_failure_phase("stage-b-pre-go-validation")
+    output = _assert_output_root(root, protocol, writable=False)
+    release_candidate = _release_directory_candidate(root, protocol)
+    if release_candidate.exists() or release_candidate.is_symlink():
+        _reenter_committed_release(
+            root,
+            protocol,
+            module,
+            requirements_path,
+            recovery_seal=recovery_seal,
+        )
+        return
+    release, release_layout = _stage_b_layout(root, protocol)
+    if stat.S_IMODE(output.stat(follow_symlinks=False).st_mode) != 0o700:
+        raise RecoveryError("uncommitted Stage-B output root is not writable")
+    if _remove_orphan_release_staging(output):
+        raise RecoveryError("precommit crash staging destroyed; recovery-r3 is terminal")
+    terminal_path = _repository_path(
+        root, protocol["output"]["failed_status_path"], must_exist=False
+    )
+    if terminal_path.exists() or terminal_path.is_symlink():
+        raise RecoveryError("recovery-r3 is already terminal")
+    stage_a_expected = _stage_a_path(root, protocol).name
+    if {path.name for path in output.iterdir()} != {stage_a_expected}:
+        raise RecoveryError("pre-Stage-B output inventory changed")
+    _validate_bundle_seal(root, protocol, recovery_seal)
+    _validate_bound_inputs(root, protocol)
+    before = _attempt_inventory(root, protocol)
+    _assert_original_publication_absent(root)
+    (
+        stage_a_payload,
+        stage_a_document,
+        stage_a_path,
+        verification_payload,
+        verification,
+    ) = _load_stage_a(
+        root, protocol, module, requirements_path
+    )
+    go_sha, _, review_payloads, go_payload = _validate_go(
+        root,
+        protocol,
+        recovery_seal=recovery_seal,
+        stage_a_payload=stage_a_payload,
+        stage_a_document=stage_a_document,
+        stage_a_path=stage_a_path,
+        now=now,
+    )
+    review_shas = [_sha256(payload) for payload in review_payloads]
+    requirements, _ = module._requirements(root, requirements_path)
+    variants = module._variant_map(root, requirements)
+    scratch = Path(os.environ["TMPDIR"]).resolve(strict=True)
+    with tempfile.TemporaryDirectory(prefix="narratordb-r5-release-", dir=scratch) as name:
+        temporary = Path(name)
+        if stat.S_IMODE(temporary.stat().st_mode) != 0o700:
+            raise RecoveryError("score-bearing temporary directory is not private")
+        _set_failure_phase("stage-b-v7-audit")
+        v7_payload, v7_metrics, v7_evidence = _private_evaluation_audit(
+            root,
+            requirements,
+            module,
+            variants["v7-control"],
+            temporary,
+            label="V7 recovery evaluation audit",
+        )
+        _set_failure_phase("stage-b-v13-audit")
+        v13_payload, v13_metrics, v13_evidence = _private_evaluation_audit(
+            root,
+            requirements,
+            module,
+            variants["v13-first"],
+            temporary,
+            label="V13 recovery evaluation audit",
+        )
+        _set_failure_phase("stage-b-result-and-completion")
+        result = _result_document(
+            protocol,
+            verification_payload,
+            verification,
+            recovery_seal=recovery_seal,
+            go_sha=go_sha,
+            review_shas=review_shas,
+            v7_payload=v7_payload,
+            v13_payload=v13_payload,
+            v7_metrics=v7_metrics,
+            v13_metrics=v13_metrics,
+            v7_evidence=v7_evidence,
+            v13_evidence=v13_evidence,
+        )
+        result_payload = _canonical_json(result)
+        result_sha = _sha256(result_payload)
+        checksum_payload = f"{result_sha}  recovered-paired-result.json\n".encode("ascii")
+        completion = _completion_document(
+            protocol,
+            result_sha=result_sha,
+            go_sha=go_sha,
+            review_shas=review_shas,
+            recovery_seal=recovery_seal,
+            v7_payload=v7_payload,
+            v13_payload=v13_payload,
+        )
+        completion_payload = _canonical_json(completion)
+        _set_failure_phase("stage-b-post-computation-recheck")
+        _validate_bundle_seal(root, protocol, recovery_seal)
+        _validate_bound_inputs(root, protocol)
+        after = _attempt_inventory(root, protocol)
+        if after != before:
+            raise RecoveryError("R5 attempt changed during Stage B")
+    payloads = {
+        "RECOVERED_PAIRED_RESULT_SHA256SUMS": checksum_payload,
+        "recovered-paired-result.json": result_payload,
+        "v7-evaluation-audit.json": v7_payload,
+        "v13-evaluation-audit.json": v13_payload,
+        "recovery-review-1.json": review_payloads[0],
+        "recovery-review-2.json": review_payloads[1],
+        "recovery-go.json": go_payload,
+        "release-complete.json": completion_payload,
+    }
+    if {name: release / name for name in payloads} != release_layout:
+        raise RecoveryError("atomic release protocol paths changed")
+    _set_failure_phase("stage-b-atomic-publication")
+    _publish_release(output, release=release, payloads=payloads)
+
+
+def _arguments(argv: Sequence[str]) -> tuple[str, Path, Path, str]:
+    if len(argv) != 7:
+        raise RecoveryError("invalid arguments")
+    stage = argv[0]
+    if stage not in {"stage-a", "stage-b"}:
+        raise RecoveryError("invalid stage")
+    expected_flags = [
+        "--repository-root",
+        "--protocol",
+        "--published-recovery-seal-sha256",
+    ]
+    if [argv[1], argv[3], argv[5]] != expected_flags:
+        raise RecoveryError("invalid arguments")
+    return stage, Path(argv[2]), Path(argv[4]), argv[6]
+
+
+def _interrupt(_signum: int, _frame: Any) -> None:
+    raise RecoveryError("interrupted recovery")
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    global _RELEASE_COMMITTED
+
+    _RELEASE_COMMITTED = False
+    _SUBPROCESS_INVOCATIONS.clear()
+    _set_failure_phase("launcher-or-worker-preflight")
+    arguments = list(sys.argv[1:] if argv is None else argv)
+    root = Path("/Users/william/Desktop/narratorDB")
+    protocol: dict[str, Any] | None = None
+    module: Any | None = None
+    requirements_path: Path | None = None
+    stage = "preflight"
+    published_seal = ""
+    old_umask = os.umask(0o077)
+    try:
+        canary = bool(arguments) and arguments[0] == "stage-b-canary"
+        if canary:
+            if (
+                len(arguments) != 5
+                or arguments[1] != "--repository-root"
+                or arguments[3] != "--protocol"
+            ):
+                raise RecoveryError("invalid Stage-B canary arguments")
+            stage = "stage-b-canary"
+            requested_root = Path(arguments[2])
+            requested_protocol = Path(arguments[4])
+        else:
+            stage, requested_root, requested_protocol, published_seal = _arguments(
+                arguments
+            )
+        root = requested_root.resolve(strict=True)
+        if root != Path("/Users/william/Desktop/narratorDB"):
+            raise RecoveryError("repository root changed")
+        _validate_clean_environment()
+        for signum in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM):
+            signal.signal(signum, _interrupt)
+        sys.addaudithook(_network_audit)
+        protocol, _ = _load_protocol(root, requested_protocol)
+        if canary:
+            candidate_paths = [
+                _repository_path(
+                    root, protocol["output"]["output_root"], must_exist=False
+                ),
+                _repository_path(
+                    root, protocol["go_policy"]["aggregate_path"], must_exist=False
+                ),
+                *[
+                    _repository_path(root, relative, must_exist=False)
+                    for relative in protocol["go_policy"]["review_paths"]
+                ],
+            ]
+            if any(path.exists() or path.is_symlink() for path in candidate_paths):
+                raise RecoveryError("Stage-B canary requires absent R3 artifacts")
+        else:
+            _validate_bundle_seal(root, protocol, published_seal)
+            _validate_bound_inputs(root, protocol)
+        python_real = _repository_path(
+            Path("/"), protocol["execution_environment"]["python_real_path"].lstrip("/")
+        )
+        if _sha256(_stable_bytes(python_real)) != protocol["execution_environment"][
+            "python_real_sha256"
+        ]:
+            raise RecoveryError("Python runtime changed")
+        _install_subprocess_guard(python_real)
+        module, _, requirements_path = _load_sealed_verifier(root, protocol)
+        if canary:
+            _run_stage_b_canary(root, protocol, module)
+            return 0
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        if stage == "stage-a":
+            _run_stage_a(
+                root,
+                protocol,
+                module,
+                requirements_path,
+                recovery_seal=published_seal,
+                now=now,
+            )
+        else:
+            _run_stage_b(
+                root,
+                protocol,
+                module,
+                requirements_path,
+                recovery_seal=published_seal,
+                now=now,
+            )
+        return 0
+    except BaseException:
+        if stage == "stage-b-canary":
+            return 1
+        if _RELEASE_COMMITTED:
+            return 0
+        if stage == "stage-b" and protocol is not None:
+            try:
+                release = _release_directory_candidate(root, protocol)
+                release_present = release.exists() or release.is_symlink()
+            except BaseException:
+                release_present = False
+            if release_present:
+                if module is None or requirements_path is None:
+                    return 1
+                try:
+                    _validate_committed_release(
+                        root,
+                        protocol,
+                        module,
+                        requirements_path,
+                        recovery_seal=published_seal,
+                    )
+                    _RELEASE_COMMITTED = True
+                    return 0
+                except BaseException:
+                    return 1
+        _terminalize(
+            root,
+            protocol,
+            stage=stage,
+            published_seal=published_seal,
+        )
+        return 1
+    finally:
+        os.umask(old_umask)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,696 @@
+[
+  {
+    "step": "create_fresh_run_directories",
+    "argv": [
+      "mkdir",
+      "-p",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/runtime-source",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/harness-source",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1"
+    ]
+  },
+  {
+    "step": "verify_dual_protocol",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "benchmark_records/profiles/v13_dual_existing_derived_replay_protocol_20260716.json",
+      "--expected-sha256",
+      "738325365c89a1e06f51a2e642da6dd9bc913d91f235a049d641f1ab1afeb1cf",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/dual-protocol-verification.json"
+    ]
+  },
+  {
+    "step": "verify_dual_protocol_sha_manifest",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "benchmark_records/profiles/v13_dual_existing_derived_replay_protocol_20260716.SHA256SUMS",
+      "--expected-sha256",
+      "12efaf3681ed3c5a7552f51bcbeb22b84258c6122fa1df504d0b03b994ddf005",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/dual-protocol-sha-manifest-verification.json"
+    ]
+  },
+  {
+    "step": "verify_first_run_bindings",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "benchmark_records/reproduction-v13-replay-repeat1-20260716/first-run-bindings.json",
+      "--expected-sha256",
+      "7ac57697424d1e2a6e80c4990bb8ac065e7f4e093dfb53c4fbbdb353a3246a38",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/first-run-bindings-verification.json"
+    ]
+  },
+  {
+    "step": "verify_first_prediction_freeze_manifest",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/PREDICTION_FREEZE_SHA256SUMS",
+      "--expected-sha256",
+      "6c3ab41516aea642d0fdd7b9f04ffae175ddb704644cbbe4710696838341d03f",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/first-prediction-freeze-verification.json"
+    ]
+  },
+  {
+    "step": "verify_first_prediction_freeze_members",
+    "argv": [
+      "sh",
+      "-c",
+      "cd reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716 && shasum -a 256 -c PREDICTION_FREEZE_SHA256SUMS"
+    ]
+  },
+  {
+    "step": "verify_first_prediction_manifest_members",
+    "argv": [
+      "sh",
+      "-c",
+      "cd reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini && shasum -a 256 -c ../../PREDICTION_SHA256SUMS"
+    ]
+  },
+  {
+    "step": "verify_first_self_comparison_manifest",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/OFFLINE_COMPARISON_SHA256SUMS",
+      "--expected-sha256",
+      "fc48bc78b90c967ece226905edaa6e97e06a0fb1be4eaf1d93c150a105b698d0",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/first-self-comparison-manifest-verification.json"
+    ]
+  },
+  {
+    "step": "verify_first_self_comparison",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/offline-comparison/v13-first-self-comparison.json",
+      "--expected-sha256",
+      "eba30d39ce5ef039b40b9abb1a7472d8c178b670b3c2c6f1699415e6df37ff47",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/first-self-comparison-verification.json"
+    ]
+  },
+  {
+    "step": "verify_offline_comparator",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/compare_predictions.py",
+      "--expected-sha256",
+      "9c9cef64d916e77e9916528cec3bc4b73881e0ee7f35fd91f7031daa233e7543",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/offline-comparator-verification.json"
+    ]
+  },
+  {
+    "step": "verify_offline_comparator_tests",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/test_compare_predictions.py",
+      "--expected-sha256",
+      "b22a5c50a0e867d12230f4877ca1dc763a9f9f4f745128e503ed01bfa011602f",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/offline-comparator-tests-verification.json"
+    ]
+  },
+  {
+    "step": "verify_offline_comparator_readme",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/README.md",
+      "--expected-sha256",
+      "edf02a8a478c7417207bea49037082e2dc7af540e9d4e2681ab888750d9c5f28",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/offline-comparator-readme-verification.json"
+    ]
+  },
+  {
+    "step": "run_offline_comparator_tests",
+    "argv": [
+      "sh",
+      "-c",
+      "PY=\"$PWD/.venv/bin/python\"; cd reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool && PYTHONDONTWRITEBYTECODE=1 \"$PY\" -m unittest -v test_compare_predictions.py"
+    ]
+  },
+  {
+    "step": "validate_first_run_bound_hashes",
+    "argv": [
+      "jq",
+      "-e",
+      ".first_run.prediction_manifest_sha256 == \"347e5db630bfc5b6a2725d137bccb2ec90130c534edda259fda70d90fa610c74\" and .first_run.prediction_freeze_manifest_sha256 == \"6c3ab41516aea642d0fdd7b9f04ffae175ddb704644cbbe4710696838341d03f\" and .first_run.self_comparison_file_sha256 == \"eba30d39ce5ef039b40b9abb1a7472d8c178b670b3c2c6f1699415e6df37ff47\" and .first_run.canonical_aggregate_sha256.top20 == \"b176d8f589931c39a11a304b68db4f29d99cb0a02512ab7cd9956c48504832a2\" and .first_run.canonical_aggregate_sha256.top50 == \"9948ecb74e4ab4b154207787cad3faa8c0f48e53e4a9fd71aed51a9422c2f8bc\" and .first_run.canonical_aggregate_sha256.full == \"84b7ddcf255c2df929de886b3885a946159acea960d78cd7f70cc4bb87b69880\"",
+      "benchmark_records/reproduction-v13-replay-repeat1-20260716/first-run-bindings.json"
+    ]
+  },
+  {
+    "step": "verify_replay_control",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "--expected-sha256",
+      "9f8e185dcc7e54c7a70cf08e1b01eb3ccbc89cd51f397caa334148b0dd07808d",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/replay-control-verification.json"
+    ]
+  },
+  {
+    "step": "verify_v7_inputs",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-manifest",
+      "--root",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716",
+      "--manifest",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/V7_INPUT_SHA256SUMS",
+      "--expected-manifest-sha256",
+      "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/v7-input-verification.json"
+    ]
+  },
+  {
+    "step": "verify_v13_source_archive",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/intelligence-v13-source-20260716T043211Z/narratordb-v13-source.tar.gz",
+      "--expected-sha256",
+      "115fee74ca4c2561397cec337b31fedd21a5b48b04333a9ec923cc66d6922486",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/v13-source-archive-verification.json"
+    ]
+  },
+  {
+    "step": "verify_v13_source_metadata",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/intelligence-v13-source-20260716T043211Z/source-metadata.json",
+      "--expected-sha256",
+      "c9368173c9fe728b00325dd61c4a9b63326c0112809f5f881a3cef000c6b49d8",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/v13-source-metadata-verification.json"
+    ]
+  },
+  {
+    "step": "verify_v13_source_sha256s",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/intelligence-v13-source-20260716T043211Z/SHA256SUMS",
+      "--expected-sha256",
+      "127a03eddc8982cde33faf8ee260047c2ae33640e9b52b1e48aa7fdbb02bdbe9",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/v13-source-sha256s-verification.json"
+    ]
+  },
+  {
+    "step": "verify_v13_source_sha256s_members",
+    "argv": [
+      "sh",
+      "-c",
+      "cd reports/intelligence-v13-source-20260716T043211Z && shasum -a 256 -c SHA256SUMS"
+    ]
+  },
+  {
+    "step": "extract_v13_source",
+    "argv": [
+      "tar",
+      "-xzf",
+      "reports/intelligence-v13-source-20260716T043211Z/narratordb-v13-source.tar.gz",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/runtime-source"
+    ]
+  },
+  {
+    "step": "freeze_harness_archive",
+    "argv": [
+      "git",
+      "-C",
+      "vendor/memory-benchmarks",
+      "archive",
+      "--format=tar",
+      "--output",
+      "../../reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/harness-source.tar",
+      "4b61c5d31b9c668a12b4f5e78064248a02c82d2b"
+    ]
+  },
+  {
+    "step": "verify_harness_archive",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-file",
+      "--path",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/harness-source.tar",
+      "--expected-sha256",
+      "9f56296b1ec460979e0a49c85916805fe6fd8eadf6111b3a50a1e458b9258fad",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/harness-source-verification.json"
+    ]
+  },
+  {
+    "step": "extract_harness",
+    "argv": [
+      "tar",
+      "-xf",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/harness-source.tar",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/harness-source"
+    ]
+  },
+  {
+    "step": "clone_v7_database",
+    "argv": [
+      "sqlite3",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/intelligence.db",
+      ".backup 'reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/intelligence.db'"
+    ]
+  },
+  {
+    "step": "verify_fresh_clone_sidecars_and_capture_hash",
+    "argv": [
+      "sh",
+      "-c",
+      "set -eu; root='reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716'; db=\"$root/intelligence.db\"; test -f \"$db\"; for sidecar in \"$db.compiler-cache.sqlite3\" \"$db.compiler-usage.jsonl\" \"$db-wal\" \"$db-shm\" \"$db-journal\"; do test ! -e \"$sidecar\"; done; test ! -e \"$root/database-before-first-open.SHA256\"; shasum -a 256 \"$db\" > \"$root/database-before-first-open.SHA256\""
+    ]
+  },
+  {
+    "step": "copy_ingestion_checkpoints",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "copy-checkpoints",
+      "--source",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v7-gpt54mini",
+      "--destination",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/checkpoint-copy-audit.json"
+    ]
+  },
+  {
+    "step": "validate_copied_checkpoints",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "validate-checkpoints",
+      "--directory",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--run-id",
+      "v7m42a1",
+      "--expected-questions",
+      "42",
+      "--expected-chunk-size",
+      "2",
+      "--require-zero-predictions",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/checkpoint-validation.json"
+    ]
+  },
+  {
+    "step": "start_migration_backend",
+    "argv": [
+      "env",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/runtime-source",
+      "-u",
+      "OPENROUTER_API_KEY",
+      "-u",
+      "OPENAI_API_KEY",
+      "-u",
+      "AZURE_OPENAI_API_KEY",
+      "-u",
+      "ANTHROPIC_API_KEY",
+      "../../../.venv/bin/python",
+      "-m",
+      "narratordb.benchmark_server",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "8894",
+      "--database",
+      "../intelligence.db",
+      "--mode",
+      "intelligence",
+      "--existing-derived-replay-fingerprint",
+      "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+      "--merge-adjacent",
+      "--merge-gap",
+      "1",
+      "--coalesce-timestamp-sessions",
+      "--context-token-budget",
+      "6000",
+      "--merge-max-chars",
+      "1200"
+    ]
+  },
+  {
+    "step": "probe_migration_readiness",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "probe-diagnostics",
+      "--base-url",
+      "http://127.0.0.1:8894",
+      "--directory",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1",
+      "--question-id-file",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--expected-questions",
+      "42",
+      "--fingerprint",
+      "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/migration-diagnostics.json"
+    ]
+  },
+  {
+    "step": "stop_migration_backend",
+    "argv": [
+      "kill",
+      "-INT",
+      "${MIGRATION_BACKEND_PID}"
+    ]
+  },
+  {
+    "step": "wait_for_migration_backend_exit",
+    "argv": [
+      "wait",
+      "${MIGRATION_BACKEND_PID}"
+    ]
+  },
+  {
+    "step": "checkpoint_migrated_database",
+    "argv": [
+      "sqlite3",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/intelligence.db",
+      "PRAGMA wal_checkpoint(TRUNCATE); PRAGMA quick_check;"
+    ]
+  },
+  {
+    "step": "capture_post_migration_counts",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "capture-db-counts",
+      "--database",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/intelligence.db",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/post-migration-counts.json"
+    ]
+  },
+  {
+    "step": "start_prediction_backend",
+    "argv": [
+      "env",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/runtime-source",
+      "-u",
+      "OPENROUTER_API_KEY",
+      "-u",
+      "OPENAI_API_KEY",
+      "-u",
+      "AZURE_OPENAI_API_KEY",
+      "-u",
+      "ANTHROPIC_API_KEY",
+      "../../../.venv/bin/python",
+      "-m",
+      "narratordb.benchmark_server",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "8894",
+      "--database",
+      "../intelligence.db",
+      "--mode",
+      "intelligence",
+      "--existing-derived-replay-fingerprint",
+      "openai/gpt-5.4-mini:4ff0c033bb294d163400",
+      "--merge-adjacent",
+      "--merge-gap",
+      "1",
+      "--coalesce-timestamp-sessions",
+      "--context-token-budget",
+      "6000",
+      "--merge-max-chars",
+      "1200"
+    ]
+  },
+  {
+    "step": "run_predict_only_replay",
+    "argv": [
+      "env",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/harness-source",
+      "-u",
+      "OPENROUTER_API_KEY",
+      "-u",
+      "AZURE_OPENAI_API_KEY",
+      "-u",
+      "ANTHROPIC_API_KEY",
+      "HTTP_PROXY=http://127.0.0.1:9",
+      "HTTPS_PROXY=http://127.0.0.1:9",
+      "ALL_PROXY=http://127.0.0.1:9",
+      "NO_PROXY=127.0.0.1,localhost",
+      "../../../vendor/memory-benchmarks/.venv/bin/python",
+      "-m",
+      "benchmarks.longmemeval.run",
+      "--project-name",
+      "narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1",
+      "--run-id",
+      "v7m42a1",
+      "--dataset-path",
+      "../../longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "--all-questions",
+      "--predict-only",
+      "--backend",
+      "oss",
+      "--mem0-host",
+      "http://127.0.0.1:8894",
+      "--mode",
+      "answerer",
+      "--top-k",
+      "200",
+      "--top-k-cutoffs",
+      "20,50",
+      "--max-workers",
+      "10",
+      "--rpm",
+      "60",
+      "--seed",
+      "42",
+      "--answerer-model",
+      "no-call",
+      "--judge-model",
+      "no-call",
+      "--provider",
+      "openai",
+      "--output-dir",
+      "../official-harness"
+    ]
+  },
+  {
+    "step": "stop_prediction_backend",
+    "argv": [
+      "kill",
+      "-INT",
+      "${PREDICTION_BACKEND_PID}"
+    ]
+  },
+  {
+    "step": "wait_for_prediction_backend_exit",
+    "argv": [
+      "wait",
+      "${PREDICTION_BACKEND_PID}"
+    ]
+  },
+  {
+    "step": "checkpoint_final_database",
+    "argv": [
+      "sqlite3",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/intelligence.db",
+      "PRAGMA wal_checkpoint(TRUNCATE); PRAGMA quick_check;"
+    ]
+  },
+  {
+    "step": "capture_post_prediction_counts",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "capture-db-counts",
+      "--database",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/intelligence.db",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/post-prediction-counts.json"
+    ]
+  },
+  {
+    "step": "compare_database_counts",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "compare-db-counts",
+      "--before",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/post-migration-counts.json",
+      "--after",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/post-prediction-counts.json",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/database-count-comparison.json"
+    ]
+  },
+  {
+    "step": "audit_predictions_from_frozen_v13",
+    "argv": [
+      "env",
+      "-C",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/runtime-source",
+      "../../../.venv/bin/python",
+      "-m",
+      "narratordb.benchmarks.prediction_audit",
+      "--prediction-dir",
+      "../official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1",
+      "--dataset",
+      "../../longmemeval-intelligence-dev42-v7-gpt54mini-20260716/longmemeval_s_dev42.json",
+      "--question-id-file",
+      "../../longmemeval-intelligence-dev42-v7-gpt54mini-20260716/dev42_question_ids.json",
+      "--cutoffs",
+      "20,50",
+      "--require-all",
+      "--output",
+      "../prediction-audit.json"
+    ]
+  },
+  {
+    "step": "freeze_prediction_manifest",
+    "argv": [
+      "sh",
+      "-c",
+      "set -eu; root='reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716'; prediction_dir=\"$root/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1\"; output=\"$root/PREDICTION_SHA256SUMS\"; temporary=\"$output.tmp\"; test ! -e \"$output\"; test ! -e \"$temporary\"; count=$(find \"$prediction_dir\" -maxdepth 1 -type f -name '*.json' | wc -l | tr -d ' '); test \"$count\" -eq 84; cd \"$prediction_dir\"; LC_ALL=C find . -maxdepth 1 -type f -name '*.json' -print | LC_ALL=C sort | while IFS= read -r file_name; do shasum -a 256 \"$file_name\"; done > \"../../PREDICTION_SHA256SUMS.tmp\"; mv \"../../PREDICTION_SHA256SUMS.tmp\" \"../../PREDICTION_SHA256SUMS\""
+    ]
+  },
+  {
+    "step": "verify_v7_inputs_unchanged_after_replay",
+    "argv": [
+      ".venv/bin/python",
+      "benchmark_records/reproduction-v8-replay-20260716/replay_control.py",
+      "verify-manifest",
+      "--root",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716",
+      "--manifest",
+      "reports/longmemeval-intelligence-dev42-v7-gpt54mini-20260716/V7_INPUT_SHA256SUMS",
+      "--expected-manifest-sha256",
+      "83f92ca97d181cc1789c7070340a1c586840dae5b0b0e2a3b7bae2728defb5e1",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/v7-input-post-replay-verification.json"
+    ]
+  },
+  {
+    "step": "verify_repeat_prediction_manifest_members",
+    "argv": [
+      "sh",
+      "-c",
+      "cd reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1 && test \"$(wc -l < ../../PREDICTION_SHA256SUMS | tr -d ' ')\" -eq 84 && shasum -a 256 -c ../../PREDICTION_SHA256SUMS"
+    ]
+  },
+  {
+    "step": "validate_repeat_database_invariants",
+    "argv": [
+      "sh",
+      "-c",
+      "set -eu; root='reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716'; migration=$(jq -er .database_sha256 \"$root/post-migration-counts.json\"); prediction=$(jq -er .database_sha256 \"$root/post-prediction-counts.json\"); actual=$(shasum -a 256 \"$root/intelligence.db\" | awk '{print $1}'); test \"$migration\" = \"$prediction\"; test \"$prediction\" = \"$actual\"; jq -e --arg sha \"$actual\" '.unchanged == true and .before_database_sha256 == $sha and .after_database_sha256 == $sha' \"$root/database-count-comparison.json\" >/dev/null"
+    ]
+  },
+  {
+    "step": "validate_repeat_compiler_sidecars_absent",
+    "argv": [
+      "sh",
+      "-c",
+      "set -eu; db='reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/intelligence.db'; for path in \"$db.compiler-cache.sqlite3\" \"$db.compiler-cache.sqlite3-wal\" \"$db.compiler-cache.sqlite3-shm\" \"$db.compiler-cache.sqlite3-journal\" \"$db.compiler-usage.jsonl\"; do test ! -e \"$path\"; done"
+    ]
+  },
+  {
+    "step": "create_repeat_offline_comparison_directory",
+    "argv": [
+      "mkdir",
+      "-p",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/offline-comparison"
+    ]
+  },
+  {
+    "step": "compare_first_v13_to_repeat1_offline",
+    "argv": [
+      ".venv/bin/python",
+      "reports/longmemeval-intelligence-dev42-v12-replay-v7gpt54mini-20260716/offline-comparison/tool/compare_predictions.py",
+      "--variant",
+      "v13-first=reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini",
+      "--variant",
+      "v13-repeat1=reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/official-harness/predicted_narratordb-intelligence-dev42-v13-replay-v7gpt54mini-repeat1",
+      "--expect-identical",
+      "v13-first:v13-repeat1:top20:42",
+      "--expect-identical",
+      "v13-first:v13-repeat1:top50:42",
+      "--expect-identical",
+      "v13-first:v13-repeat1:full:42",
+      "--output",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/offline-comparison/v13-first-vs-repeat1-comparison.json"
+    ]
+  },
+  {
+    "step": "validate_repeat1_canonical_aggregate_hashes",
+    "argv": [
+      "jq",
+      "-e",
+      ".all_expectations_passed == true and (.expectations|length) == 3 and ([.expectations[].passed]|all) and .variants[\"v13-first\"].cutoffs.top20.aggregate_sha256 == \"b176d8f589931c39a11a304b68db4f29d99cb0a02512ab7cd9956c48504832a2\" and .variants[\"v13-repeat1\"].cutoffs.top20.aggregate_sha256 == \"b176d8f589931c39a11a304b68db4f29d99cb0a02512ab7cd9956c48504832a2\" and .variants[\"v13-first\"].cutoffs.top50.aggregate_sha256 == \"9948ecb74e4ab4b154207787cad3faa8c0f48e53e4a9fd71aed51a9422c2f8bc\" and .variants[\"v13-repeat1\"].cutoffs.top50.aggregate_sha256 == \"9948ecb74e4ab4b154207787cad3faa8c0f48e53e4a9fd71aed51a9422c2f8bc\" and .variants[\"v13-first\"].cutoffs.full.aggregate_sha256 == \"84b7ddcf255c2df929de886b3885a946159acea960d78cd7f70cc4bb87b69880\" and .variants[\"v13-repeat1\"].cutoffs.full.aggregate_sha256 == \"84b7ddcf255c2df929de886b3885a946159acea960d78cd7f70cc4bb87b69880\"",
+      "reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716/offline-comparison/v13-first-vs-repeat1-comparison.json"
+    ]
+  },
+  {
+    "step": "freeze_repeat1_comparison_manifest",
+    "argv": [
+      "sh",
+      "-c",
+      "set -eu; root='reports/longmemeval-intelligence-dev42-v13-replay-v7gpt54mini-repeat1-20260716'; output=\"$root/OFFLINE_COMPARISON_SHA256SUMS\"; test ! -e \"$output\"; cd \"$root\"; shasum -a 256 offline-comparison/v13-first-vs-repeat1-comparison.json > OFFLINE_COMPARISON_SHA256SUMS"
+    ]
+  }
+]
