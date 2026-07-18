@@ -99,7 +99,7 @@ class MCPServerTests(unittest.TestCase):
             scope="project",
         )
         self.runtime.remember(
-            "The user's favorite and dream car is Porsche.",
+            "Personal preference: the user's favorite car and dream car is Porsche.",
             scope="global",
         )
 
@@ -107,7 +107,7 @@ class MCPServerTests(unittest.TestCase):
 
         self.assertIn("[Private local memory context]", server.instructions)
         self.assertIn("cobalt release", server.instructions)
-        self.assertIn("favorite and dream car is Porsche", server.instructions)
+        self.assertIn("favorite car and dream car is Porsche", server.instructions)
         self.assertIn(
             "do not call recall or announce a memory check", server.instructions
         )

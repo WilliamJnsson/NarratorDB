@@ -29,7 +29,7 @@ jobs:
           python -m ruff check narratordb tests scripts
           python -m compileall -q narratordb tests
       - name: Unit and protocol tests
-        run: python -m unittest discover -v
+        run: python scripts/ci_unittest.py
       - name: Build distributions
         run: |
           python -m build
