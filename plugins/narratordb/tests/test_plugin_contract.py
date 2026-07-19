@@ -12,7 +12,7 @@ PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 WRAPPER = PLUGIN_ROOT / "scripts" / "run-hook.sh"
 SOURCE = (
     "narratordb-memory[mcp] @ "
-    "git+https://github.com/WilliamJnsson/NarratorDB.git@5cda4adbc5c72bec06fa5a63a81bae42369007ec"
+    "git+https://github.com/WilliamJnsson/NarratorDB.git@252ae49440e843cd191a6bcd50502e81a7e16465"
 )
 
 

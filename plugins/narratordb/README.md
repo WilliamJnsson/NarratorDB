@@ -60,7 +60,7 @@ The release plugin pins both its MCP server and hook wrapper to the same full
 Git commit:
 
 ```text
-narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@5cda4adbc5c72bec06fa5a63a81bae42369007ec
+narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@252ae49440e843cd191a6bcd50502e81a7e16465
 ```
 
 The full commit lets the offline hook reuse the checkout cached by the online

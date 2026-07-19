@@ -101,7 +101,7 @@ launches one exact GitHub commit:
 
 ```bash
 uvx --from \
-  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@5cda4adbc5c72bec06fa5a63a81bae42369007ec' \
+  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@252ae49440e843cd191a6bcd50502e81a7e16465' \
   narratordb-mcp --init-mode private --client codex-plugin
 ```
 
