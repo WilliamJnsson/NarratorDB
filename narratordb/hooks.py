@@ -4,7 +4,8 @@
 Hooks never call a hosted model. They persist high-confidence current-prompt
 preferences and a bounded recent window of human requests and final assistant
 responses. Tool output, reasoning, system messages, and developer instructions
-are deliberately excluded. The MCP server supplies bounded startup context.
+are deliberately excluded. MCP instructions are static; stored data is exposed
+only by explicit recall and resume calls.
 """
 
 from __future__ import annotations

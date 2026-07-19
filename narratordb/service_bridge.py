@@ -27,6 +27,7 @@ REQUIRED_CREDENTIALS = frozenset(
 )
 _TOKEN_RE = re.compile(r"ndb_[A-Za-z0-9_-]{32,128}")
 MAX_CREDENTIAL_BYTES = 16_384
+SERVICE_CALL_TIMEOUT_SECONDS = 60.0
 
 
 def _normalize_service_values(
@@ -121,7 +122,9 @@ def read_service_credentials(path: str | os.PathLike[str]) -> dict[str, str]:
             with handle:
                 content = handle.read(MAX_CREDENTIAL_BYTES + 1)
         except (OSError, UnicodeError) as error:
-            raise ConfigurationError("service credentials file is unreadable") from error
+            raise ConfigurationError(
+                "service credentials file is unreadable"
+            ) from error
     finally:
         if descriptor >= 0:
             os.close(descriptor)
@@ -152,10 +155,13 @@ class ServiceBridgeRuntime:
     def __init__(self, credentials_file: str | os.PathLike[str]):
         self.credentials_file = str(Path(credentials_file).expanduser().resolve())
 
-    def bootstrap_context(self) -> str:
-        return ""
-
-    async def _call_async(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+    async def _call_async(
+        self,
+        name: str,
+        arguments: dict[str, Any],
+        *,
+        timeout_seconds: float = SERVICE_CALL_TIMEOUT_SECONDS,
+    ) -> dict[str, Any]:
         try:
             import httpx
             from mcp import ClientSession
@@ -168,11 +174,11 @@ class ServiceBridgeRuntime:
 
         credentials = read_service_credentials(self.credentials_file)
         headers = {
-            "Authorization": (
-                f"Bearer {credentials['NARRATORDB_SERVICE_TOKEN']}"
-            )
+            "Authorization": (f"Bearer {credentials['NARRATORDB_SERVICE_TOKEN']}")
         }
-        async with httpx.AsyncClient(headers=headers, timeout=60) as client:
+        async with httpx.AsyncClient(
+            headers=headers, timeout=timeout_seconds
+        ) as client:
             async with streamable_http_client(
                 credentials["NARRATORDB_SERVICE_URL"],
                 http_client=client,
@@ -189,9 +195,22 @@ class ServiceBridgeRuntime:
             )
         return result.structuredContent
 
-    def _call(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+    def _call(
+        self,
+        name: str,
+        arguments: dict[str, Any],
+        *,
+        timeout_seconds: float = SERVICE_CALL_TIMEOUT_SECONDS,
+    ) -> dict[str, Any]:
         def execute() -> dict[str, Any]:
-            return asyncio.run(self._call_async(name, arguments))
+            async def invoke() -> dict[str, Any]:
+                return await self._call_async(
+                    name,
+                    arguments,
+                    timeout_seconds=timeout_seconds,
+                )
+
+            return asyncio.run(invoke())
 
         try:
             asyncio.get_running_loop()
@@ -240,7 +259,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         runtime = ServiceBridgeRuntime(args.credentials_file)
         read_service_credentials(args.credentials_file)
-        server = create_server(runtime, include_bootstrap=False)
+        server = create_server(runtime)
         server.run(transport="stdio")
     except ConfigurationError as error:
         print(f"narratordb: {error}", file=os.sys.stderr)

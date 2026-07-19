@@ -1,17 +1,5 @@
 {
   "hooks": {
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/bin/sh \"${PLUGIN_ROOT}/scripts/run-hook.sh\" UserPromptSubmit",
-            "timeout": 10,
-            "statusMessage": "NarratorDB · learning quietly…"
-          }
-        ]
-      }
-    ],
     "PreCompact": [
       {
         "hooks": [

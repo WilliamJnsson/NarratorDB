@@ -7,7 +7,7 @@ set -u
 
 event="${1:-}"
 case "$event" in
-  SessionStart|UserPromptSubmit|PreCompact|Stop) ;;
+  SessionStart|PreCompact|Stop) ;;
   *) exit 0 ;;
 esac
 
@@ -43,7 +43,7 @@ import signal
 import subprocess
 import sys
 
-SOURCE = "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@5cda4adbc5c72bec06fa5a63a81bae42369007ec"
+SOURCE = "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@252ae49440e843cd191a6bcd50502e81a7e16465"
 HOOK_TIMEOUT_SECONDS = 8.0
 MAX_INPUT_BYTES = 1024 * 1024
 MAX_OUTPUT_BYTES = 64 * 1024

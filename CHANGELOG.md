@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.3.0 - 2026-07-19
+
+- Made MCP server instructions permanently static. Local and credential-file
+  bridge startup no longer reads, concatenates, or injects stored memory;
+  callers retrieve memory only through explicit `recall` and `resume` calls.
+- Marked recalled content as untrusted data with no instruction authority in
+  both human-readable and structured MCP results. Memory source is explicitly
+  non-authoritative attribution.
+- Rejected caller-controlled `system`, `developer`, and `tool` roles at the MCP
+  persistence boundary while preserving the seven public tool names.
+- Removed the local Codex plugin's `UserPromptSubmit` registration and rejected
+  that event in its launcher allowlist. Both local and service plugins now
+  capture only bounded `PreCompact` and `Stop` session windows, so ordinary
+  prompts no longer run a NarratorDB submit hook.
+- Made fresh local-plugin databases start with Sessions capture, matching those
+  two lifecycle hooks and preserving bounded conversation details without a
+  prompt-submit hook. Existing databases keep their explicit capture policy.
+
+## 2.2.1 - 2026-07-18
+
+- Fixed hosted memory startup: the credential-file MCP bridge now performs one
+  bounded, project-only resume during initialization, fails open after a
+  five-second deadline, and keeps ordinary tools on their existing 60-second
+  timeout. Hosted lifecycle capture remains limited to `PreCompact` and `Stop`;
+  no `UserPromptSubmit` hook is installed.
+
 ## 2.2.0 - 2026-07-18
 
 - Established the Community/Cloud package boundary: the MIT wheel contains no

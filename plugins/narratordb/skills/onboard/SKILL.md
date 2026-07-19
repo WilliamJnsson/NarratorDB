@@ -25,12 +25,12 @@ Perform one quiet, read-only readiness check:
    - unavailable: `NarratorDB is unavailable. Install or verify uvx, then restart Codex.`
 
 Do not call `resume`, `recall`, or `remember` during routine onboarding. The
-`SessionStart` hook handles normal context loading; explicit resume and write
-requests are separate interactions. Do not list database paths, user IDs,
-workspace IDs, health objects, or timing fields unless the user asks for
-diagnostics. Never say that the database is empty merely because
-`memory_counts.current_workspace` is zero; report current-workspace and
-all-workspace counts separately.
+MCP server performs no startup memory read and its instructions remain static;
+explicit recall, resume, and write requests are separate interactions. Do not
+list database paths, user IDs, workspace IDs, health objects, or timing fields
+unless the user asks for diagnostics. Never say that the database is empty
+merely because `memory_counts.current_workspace` is zero; report
+current-workspace and all-workspace counts separately.
 
 Private mode needs no account, API key, or external model. An existing
 Intelligence database remains Intelligence, but its recall is still local. Do

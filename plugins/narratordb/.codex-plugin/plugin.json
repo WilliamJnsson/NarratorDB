@@ -1,6 +1,6 @@
 {
   "name": "narratordb",
-  "version": "2.1.7+codex.20260717151725",
+  "version": "2.3.0+codex.20260719081128",
   "description": "Private, local-first long-term memory for Codex",
   "author": {
     "name": "NarratorDB contributors",

@@ -81,8 +81,9 @@ Community source tree.
 
 Cloud cannot be called commercially ready until it has server-side billing
 entitlements, quota enforcement, cost alarms, a tested first-request wake-up
-path, automatic session resume for supported MCP clients, migration and
-recovery drills, and documented behavior when a subscription expires.
+path, permanently static MCP startup instructions, explicit untrusted memory
+retrieval, migration and recovery drills, and documented behavior when a
+subscription expires.
 
 The HA profile cannot be deployed by default until recurring revenue reaches a
 documented threshold or a signed customer requirement pays for the additional
