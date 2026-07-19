@@ -33,7 +33,7 @@ jobs:
       - name: Build distributions
         run: |
           python -m build
-          python scripts/wheel_boundary.py dist/narratordb_memory-2.2.1-py3-none-any.whl
+          python scripts/wheel_boundary.py dist/narratordb_memory-2.3.0-py3-none-any.whl
 
   stress:
     runs-on: ubuntu-latest

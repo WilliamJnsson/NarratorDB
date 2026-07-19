@@ -531,9 +531,11 @@ def prepare_quickstart(
     """Initialize once and register a credential-file bridge for Codex."""
 
     control = ServiceControlPlane(data_dir)
-    credentials = Path(
-        credentials_file or (control.data_dir / "credentials.env")
-    ).expanduser().resolve()
+    credentials = (
+        Path(credentials_file or (control.data_dir / "credentials.env"))
+        .expanduser()
+        .resolve()
+    )
     if control.control_path.exists():
         control.require_initialized()
         if not credentials.is_file():
@@ -694,9 +696,6 @@ class ServiceRuntimeProxy:
         for runtime in runtimes:
             runtime.close()
 
-    def bootstrap_context(self) -> str:
-        return ""
-
     def configure(self, **kwargs) -> dict[str, Any]:
         runtime = self._runtime("project:admin")
         result = runtime.configure(**kwargs)
@@ -710,22 +709,16 @@ class ServiceRuntimeProxy:
         return self._runtime("memory:write").remember_session(*args, **kwargs)
 
     def recall(self, *args, **kwargs) -> dict[str, Any]:
-        return _without_paths(
-            self._runtime("memory:read").recall(*args, **kwargs)
-        )
+        return _without_paths(self._runtime("memory:read").recall(*args, **kwargs))
 
     def resume(self, *args, **kwargs) -> dict[str, Any]:
-        return _without_paths(
-            self._runtime("memory:read").resume(*args, **kwargs)
-        )
+        return _without_paths(self._runtime("memory:read").resume(*args, **kwargs))
 
     def forget(self, *args, **kwargs) -> dict[str, Any]:
         return self._runtime("memory:delete").forget(*args, **kwargs)
 
     def status(self, *args, **kwargs) -> dict[str, Any]:
-        return _without_paths(
-            self._runtime("memory:read").status(*args, **kwargs)
-        )
+        return _without_paths(self._runtime("memory:read").status(*args, **kwargs))
 
 
 def create_service_server(
@@ -772,7 +765,6 @@ def create_service_server(
     )
     server = create_server(
         proxy,
-        include_bootstrap=False,
         server_options={
             "host": host,
             "port": int(port),

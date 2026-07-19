@@ -1039,7 +1039,7 @@ class NarratorDBModeTests(unittest.TestCase):
             self.assertEqual(json.loads(status.stdout)["mode"], "private")
 
     def test_public_version_matches_major_release(self) -> None:
-        self.assertEqual(__version__, "2.2.1")
+        self.assertEqual(__version__, "2.3.0")
 
 
 if __name__ == "__main__":

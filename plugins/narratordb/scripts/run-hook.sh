@@ -7,7 +7,7 @@ set -u
 
 event="${1:-}"
 case "$event" in
-  SessionStart|UserPromptSubmit|PreCompact|Stop) ;;
+  SessionStart|PreCompact|Stop) ;;
   *) exit 0 ;;
 esac
 

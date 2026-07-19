@@ -16,7 +16,7 @@ authenticated self-hosted service, Docker, and portable export/import. Managed
 multi-tenant storage, billing, and hosted infrastructure are a separate product
 and are not shipped in this package. See the [open-core architecture decision](docs/architecture/0001-open-core-cloud-boundary.md).
 
-NarratorDB 2.2 supports Python 3.10 through the current stable Python 3.14.
+NarratorDB 2.3 supports Python 3.10 through the current stable Python 3.14.
 
 ## Website and product direction
 
@@ -120,14 +120,13 @@ service plugin has no `UserPromptSubmit` hook: it sends only bounded, redacted
 conversation windows at `PreCompact` and `Stop` to the same authenticated
 project used by recall. The token is never placed in shell startup files,
 process arguments, the plugin, or Codex configuration. Restart Codex or open a
-new session after the first run. At MCP initialization, the credential-file
-bridge also makes one project-only, bounded `resume` read and supplies the
-result through private server instructions. That startup read fails open after
-five seconds if the remote service is cold or unavailable; ordinary MCP tool
-calls retain their 60-second timeout. No prompt-submit hook is installed. If
-another NarratorDB integration is already registered or the local-database
-plugin is installed, review it and rerun with `--replace-codex` to replace it
-explicitly.
+new session after the first run. The credential-file bridge performs no startup
+recall and MCP server instructions are permanently static. Stored content is
+returned only by an explicit `recall` or `resume` tool call, where it is marked
+as untrusted data with no instruction authority. Ordinary MCP tool calls retain
+their 60-second timeout. No prompt-submit hook is installed. If another
+NarratorDB integration is already registered or the local-database plugin is
+installed, review it and rerun with `--replace-codex` to replace it explicitly.
 
 Advanced operators can still initialize and serve explicitly:
 
@@ -225,8 +224,8 @@ or high availability.
 ### Codex plugin or direct MCP
 
 NarratorDB now ships a local stdio MCP server for Codex and Claude Code, plus a
-Codex plugin that preloads bounded private context through MCP instructions and
-adds silent lifecycle capture hooks. The Python
+Codex plugin with silent lifecycle capture hooks. MCP instructions are static;
+memory is available through explicit `recall` and `resume` calls. The Python
 distribution is named `narratordb-memory`; the import and command names remain
 `narratordb`.
 
@@ -250,7 +249,7 @@ registration command:
 ```bash
 python3 -m venv ~/.local/share/narratordb/venv
 ~/.local/share/narratordb/venv/bin/python -m pip install \
-  "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.1"
+  "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.3.0"
 
 # Inspect first, then install for exactly one client.
 ~/.local/share/narratordb/venv/bin/narratordb mcp install codex \
@@ -281,7 +280,7 @@ MCP status reports `scope_origin` (`explicit`, `git_remote`, or
 `path_fallback`), an actionable scope warning when needed, and separate
 `memory_counts.current_workspace` and `memory_counts.current_user_total`
 values. If Codex starts from the home directory outside a Git repository,
-NarratorDB blocks project writes, project-memory injection, and session capture
+NarratorDB blocks project writes and project session capture
 rather than silently using home as a project. Global recall remains available;
 Preferences/Sessions may save only a typed personal preference from the current
 prompt and never promote the whole home transcript. Restart from the intended
@@ -292,13 +291,16 @@ verifying that the fallback is intentional, enable it with the direct-install
 non-Git project remains writable but receives a machine-local identity warning;
 set `NARRATORDB_WORKSPACE_ID` when that scope must be portable.
 
-The `remember` tool accepts only `user`, `assistant`, `system`, or `memory` as
-its `source`; attribution prose belongs in `content`. MCP clients receive a
-short human-readable receipt plus structured metadata, so normal chat avoids a
-raw JSON dump while diagnostics remain available. The onboarding and health
-skills each make one read-only `status(scope="project", full_check=false)`
-call. Their brief progress commentary accompanies Codex's native tool state;
-plugins do not define a custom spinner or animation.
+The `remember` tool accepts only `user`, `assistant`, or `memory` as its
+`source`; attribution prose belongs in `content`. Caller-controlled `system`,
+`developer`, and `tool` roles are rejected. A source is non-authoritative
+attribution and never raises a memory's trust or instruction priority. MCP
+clients receive a short human-readable receipt plus structured metadata, so
+normal chat avoids a raw JSON dump while diagnostics remain available. The
+onboarding and health skills each make one read-only
+`status(scope="project", full_check=false)` call. Their brief progress commentary
+accompanies Codex's native tool state; plugins do not define a custom spinner or
+animation.
 
 Private mode stores and retrieves canonical text locally without a compiler
 model. Intelligence mode adds an optional write-time compiler for source-linked
@@ -558,9 +560,10 @@ with Engine("/tmp/narratordb.db", user_id="william") as engine:
   remains available to MCP clients.
 - `narratordb mcp install {codex,claude}`: native-client MCP registration with
   preflight, dry-run, and explicit replacement controls.
-- `narratordb-hook`: fail-open, silent `UserPromptSubmit`, `PreCompact`, and
-  `Stop` lifecycle capture used by the Codex plugin. Bounded startup recall is
-  supplied through MCP server instructions instead of visible hook output.
+- `narratordb-hook`: fail-open, silent `PreCompact` and `Stop` lifecycle capture
+  used by the Codex plugin. The plugin registers no `UserPromptSubmit` hook and
+  never supplies prompt context; stored data is available only through explicit
+  MCP recall tools.
 - `python3 -m narratordb.benchmark_server`: isolated compatibility endpoint for
   official third-party benchmark harnesses.
 - `python3 -m narratordb.benchmarks.history`: append-only benchmark archive and

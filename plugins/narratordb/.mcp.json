@@ -8,6 +8,8 @@
         "narratordb-mcp",
         "--init-mode",
         "private",
+        "--init-capture-policy",
+        "sessions",
         "--client",
         "codex-plugin"
       ],

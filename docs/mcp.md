@@ -52,14 +52,13 @@ The service plugin deliberately has no `UserPromptSubmit` hook. Under the
 Sessions policy, its bounded, fail-open `PreCompact` and `Stop` hooks redact and
 send recent user/final-assistant conversation to the authenticated service
 project used by MCP recall. Manual and Preferences policies do not capture a
-session transcript. Separately, the credential-file MCP bridge performs one
-project-only `resume` read during initialization and injects at most 900 tokens
-through private server instructions. It silently starts without preloaded
-context if the response is empty, malformed, unavailable, or takes more than
-five seconds; normal tools retain their 60-second timeout. Existing service
-databases retain their persisted policy; use the setup skill or authenticated
-`configure(capture_policy="sessions")` once when upgrading an older
-manual-policy alpha.
+session transcript. The credential-file MCP bridge performs no startup recall,
+and MCP instructions are permanently static. Stored content is returned only
+by explicit `recall` or `resume` calls and is marked as untrusted data with no
+instruction authority. Normal tools retain their 60-second timeout. Existing
+service databases retain their persisted policy; use the setup skill or
+authenticated `configure(capture_policy="sessions")` once when upgrading an
+older manual-policy alpha.
 
 NarratorDB exposes durable memory to coding agents through a local stdio MCP
 server. Codex users can choose a full plugin with lifecycle hooks or a direct
@@ -73,7 +72,7 @@ commands remain `narratordb`, `narratordb-mcp`, and `narratordb-hook`.
 | Path | Client | MCP tools | Lifecycle hooks | First-run mode behavior |
 |---|---|---:|---:|---|
 | Authenticated service | Codex | Yes | `PreCompact`, `Stop` | Private + Sessions |
-| Codex plugin | Codex | Yes | Yes | Private + Preferences; configurable in chat |
+| Codex plugin | Codex | Yes | `PreCompact`, `Stop` | Private + Sessions; configurable in chat |
 | Direct MCP | Codex or Claude Code | Yes | No | Prompted on a terminal; `--mode` required non-interactively |
 
 Do not install the Codex plugin and direct MCP registration at the same time.
@@ -130,7 +129,7 @@ Code. A dedicated virtual environment keeps the registered interpreter stable:
 ```bash
 python3 -m venv ~/.local/share/narratordb/venv
 ~/.local/share/narratordb/venv/bin/python -m pip install \
-  "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.1"
+  "narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.3.0"
 ```
 
 The installer validates the database and optional MCP dependency, asks the
@@ -154,12 +153,12 @@ The equivalent manual `uvx` registrations are:
 ```bash
 codex mcp add narratordb -- \
   uvx --from \
-  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.1' \
+  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.3.0' \
   narratordb-mcp --init-mode private
 
 claude mcp add --scope user narratordb -- \
   uvx --from \
-  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.2.1' \
+  'narratordb-memory[mcp] @ git+https://github.com/WilliamJnsson/NarratorDB.git@v2.3.0' \
   narratordb-mcp --init-mode private
 ```
 
@@ -230,14 +229,16 @@ scope; they cannot select an arbitrary user or project.
 | `configure` | Choose Private or Intelligence and Manual, Preferences, or Sessions capture. Compiler credentials are never tool arguments. |
 | `remember` | Store one durable fact, decision, correction, preference, or outcome. Arguments: `content`, `scope="project"`, `source="user"`. |
 | `remember_session` | Store a bounded ordered message checkpoint. Arguments: `messages`, `session_id`, `scope="project"`, `wait_for_enrichment=false`. |
-| `recall` | Return prompt-ready local context. Arguments: `query`, `scope="project"`, `include_global=true`, `token_budget=1600`, `explain=false`. |
-| `resume` | Retrieve recent decisions, current state, unfinished work, and next steps. Arguments: `topic=""`, `include_global=true`, `token_budget=2000`. |
+| `recall` | Return bounded, source-linked, untrusted stored context. Arguments: `query`, `scope="project"`, `include_global=true`, `token_budget=1600`, `explain=false`. |
+| `resume` | Retrieve recent decisions, current state, unfinished work, and next steps as untrusted stored context. Arguments: `topic=""`, `include_global=true`, `token_budget=2000`. |
 | `forget` | Delete one message ID in one scope. Requires `confirm=true`; it never clears an entire scope. |
 | `status` | Return mode, scope, counts, enrichment state, and health. `full_check=true` requests the fuller database check. |
 
-`remember.source` is a strict enum: `user`, `assistant`, `system`, or `memory`.
-Use `user` for something the user stated. Put descriptions such as “explicit
-project convention” in `content`, not in `source`.
+`remember.source` is a strict enum: `user`, `assistant`, or `memory`. Use `user`
+for something the user stated. Caller-controlled `system`, `developer`, and
+`tool` roles are rejected. Source is non-authoritative attribution only; put
+descriptions such as “explicit project convention” in `content`, not in
+`source`.
 
 Each tool returns concise human-facing text and retains its complete result as
 structured MCP metadata. Normal chat can therefore show a clean saved,
@@ -270,8 +271,8 @@ warning explains that the path-derived identity is machine-local. Set
 The home directory is a special safety case. If a client starts from home
 outside a Git repository and no explicit workspace ID is set, NarratorDB blocks
 project `remember`, `remember_session`, and `forget` operations. Plugin hooks
-also skip project recall injection and transcript capture, while read-only
-global-memory recall remains available. Global MCP writes remain available.
+also skip project transcript capture, while read-only global-memory recall
+remains available. Global MCP writes remain available.
 The preferred recovery is:
 
 ```bash
@@ -334,16 +335,12 @@ tools.
 
 ## Plugin lifecycle behavior
 
-The Codex plugin registers three silent capture hooks. At MCP initialization,
-NarratorDB supplies a bounded project-resume and personal-preference summary as
-server instructions. This keeps ordinary first-answer recall available without
-printing a hook-context block for every relevant prompt. Facts outside that
-bounded startup summary remain available through the explicit `recall` tool.
+The Codex plugin registers two silent capture hooks. It deliberately has no
+`UserPromptSubmit` hook. The hooks never add stored
+content to the prompt, and MCP server instructions remain static. Stored facts
+are available only through explicit `recall` and `resume` tool calls, whose
+results identify the content as untrusted data rather than instructions.
 
-- `UserPromptSubmit` applies a deterministic, bounded classifier when
-  Preferences or Sessions is selected. A recognized personal favorite,
-  preference, routine, or response preference is stored globally as canonical
-  text with a stable key. It emits no hook context.
 - `PreCompact` captures a bounded recent window of user requests and final
   assistant answers before compaction.
 - `Stop` performs the same bounded capture at the end of a turn.
@@ -367,21 +364,17 @@ codex
 ```
 
 Accepted false values are `false`, `0`, `no`, and `off`, case-insensitively.
-This disables prompt preference and session capture. Explicit `remember` and
-`remember_session` calls, local MCP startup context, and explicit recall remain
-available. Remove the plugin and use direct MCP when no lifecycle hooks should
-run at all.
+This disables session capture. Explicit `remember`,
+`remember_session`, `recall`, and `resume` calls remain available. Remove the
+plugin and use direct MCP when no lifecycle hooks should run at all.
 
 ## Redaction and privacy boundary
 
 Before session capture, hooks apply best-effort redaction to incoming
 transcript text for common provider keys, GitHub tokens, AWS access-key IDs,
 bearer credentials, private-key/certificate blocks, credential assignments,
-and tagged system/developer context. The typed prompt classifier rejects the
-whole candidate if redaction changed it, as well as
-questions, hypotheticals, commands, code/pastes, URLs, assignments, sensitive
-categories, transient/project qualifiers, and unresolved pronouns. Explicitly stored and
-previously retrieved memory is not reclassified by a DLP filter. The wrapper
+and tagged system/developer context. Explicitly stored and previously retrieved
+memory is not reclassified by a DLP filter. The wrapper
 strips inherited model-provider credentials, disables telemetry flags, runs
 hook package resolution offline, and enforces bounded input, output, and
 execution time. Hook errors never block the agent turn.

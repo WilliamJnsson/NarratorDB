@@ -31,6 +31,8 @@ class PluginContractTests(unittest.TestCase):
                 "narratordb-mcp",
                 "--init-mode",
                 "private",
+                "--init-capture-policy",
+                "sessions",
                 "--client",
                 "codex-plugin",
             ],
@@ -42,8 +44,9 @@ class PluginContractTests(unittest.TestCase):
         payload = json.loads((PLUGIN_ROOT / "hooks" / "hooks.json").read_text())
         self.assertEqual(
             set(payload["hooks"]),
-            {"UserPromptSubmit", "PreCompact", "Stop"},
+            {"PreCompact", "Stop"},
         )
+        self.assertNotIn("UserPromptSubmit", payload["hooks"])
         for event, registrations in payload["hooks"].items():
             hook = registrations[0]["hooks"][0]
             self.assertIn("scripts/run-hook.sh", hook["command"])
@@ -58,12 +61,12 @@ class PluginContractTests(unittest.TestCase):
             fake_uvx = temp / "uvx"
             fake_uvx.write_text(
                 "#!/bin/sh\n"
-                "printf '%s\\n' \"$@\" > \"$TMPDIR/args\"\n"
-                "printf '%s' \"${OPENAI_API_KEY-unset}\" > \"$TMPDIR/secret\"\n"
-                "printf '%s' \"${UV_OFFLINE-unset}\" > \"$TMPDIR/offline\"\n"
-                "printf '%s' \"${NARRATORDB_AUTO_CAPTURE-unset}\" > \"$TMPDIR/auto_capture\"\n"
-                "printf '%s' \"${NARRATORDB_ALLOW_PATH_FALLBACK_WRITES-unset}\" > \"$TMPDIR/fallback_writes\"\n"
-                "cat > \"$TMPDIR/input\"\n"
+                'printf \'%s\\n\' "$@" > "$TMPDIR/args"\n'
+                'printf \'%s\' "${OPENAI_API_KEY-unset}" > "$TMPDIR/secret"\n'
+                'printf \'%s\' "${UV_OFFLINE-unset}" > "$TMPDIR/offline"\n'
+                'printf \'%s\' "${NARRATORDB_AUTO_CAPTURE-unset}" > "$TMPDIR/auto_capture"\n'
+                'printf \'%s\' "${NARRATORDB_ALLOW_PATH_FALLBACK_WRITES-unset}" > "$TMPDIR/fallback_writes"\n'
+                'cat > "$TMPDIR/input"\n'
                 "printf 'local context'\n"
             )
             fake_uvx.chmod(0o755)
@@ -107,7 +110,7 @@ class PluginContractTests(unittest.TestCase):
             fake_uvx = bin_dir / "uvx"
             fake_uvx.write_text(
                 "#!/bin/sh\n"
-                "printf '%s' \"${UV_OFFLINE-unset}\" > \"$TMPDIR/offline\"\n"
+                'printf \'%s\' "${UV_OFFLINE-unset}" > "$TMPDIR/offline"\n'
                 "cat >/dev/null\n"
                 "printf 'gui context'\n"
             )
@@ -118,7 +121,7 @@ class PluginContractTests(unittest.TestCase):
                 "TMPDIR": str(temp),
             }
             completed = subprocess.run(
-                ["/bin/sh", str(WRAPPER), "UserPromptSubmit"],
+                ["/bin/sh", str(WRAPPER), "Stop"],
                 input="hook payload",
                 text=True,
                 capture_output=True,
@@ -130,16 +133,26 @@ class PluginContractTests(unittest.TestCase):
             self.assertEqual(completed.stdout, "gui context")
             self.assertEqual((temp / "offline").read_text(), "1")
 
-    def test_wrapper_rejects_unknown_event_and_fails_open(self) -> None:
+    def test_wrapper_rejects_submit_and_unknown_event_and_fails_open(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             temp = Path(temp_dir)
             fake_uvx = temp / "uvx"
-            fake_uvx.write_text("#!/bin/sh\nexit 9\n")
+            fake_uvx.write_text(
+                "#!/bin/sh\nprintf 'invoked' > \"$TMPDIR/invoked\"\nexit 9\n"
+            )
             fake_uvx.chmod(0o755)
             env = os.environ.copy()
             env["PATH"] = f"{temp}{os.pathsep}{env.get('PATH', '')}"
             env["TMPDIR"] = str(temp)
 
+            submit = subprocess.run(
+                ["sh", str(WRAPPER), "UserPromptSubmit"],
+                text=True,
+                capture_output=True,
+                env=env,
+                timeout=2,
+                check=False,
+            )
             invalid = subprocess.run(
                 ["sh", str(WRAPPER), "UnknownEvent"],
                 text=True,
@@ -148,6 +161,12 @@ class PluginContractTests(unittest.TestCase):
                 timeout=2,
                 check=False,
             )
+            self.assertEqual(submit.returncode, 0)
+            self.assertEqual(submit.stdout, "")
+            self.assertEqual(invalid.returncode, 0)
+            self.assertEqual(invalid.stdout, "")
+            self.assertFalse((temp / "invoked").exists())
+
             failed = subprocess.run(
                 ["sh", str(WRAPPER), "Stop"],
                 text=True,
@@ -156,9 +175,9 @@ class PluginContractTests(unittest.TestCase):
                 timeout=2,
                 check=False,
             )
-            self.assertEqual(invalid.returncode, 0)
             self.assertEqual(failed.returncode, 0)
             self.assertEqual(failed.stdout, "")
+            self.assertEqual((temp / "invoked").read_text(), "invoked")
 
     def test_wrapper_has_fixed_resource_bounds(self) -> None:
         contents = WRAPPER.read_text()
@@ -172,9 +191,10 @@ class PluginContractTests(unittest.TestCase):
         self.assertIn("Call `remember` exactly once", contents)
         self.assertIn("`source`: `user`", contents)
         self.assertIn(
-            "Its only valid values are `user`, `assistant`,\n`system`, and `memory`",
+            "Its only valid values are `user`, `assistant`, and\n`memory`",
             contents,
         )
+        self.assertIn("Never pass `system`, `developer`, `tool`", contents)
         self.assertIn("Do not print or restate raw JSON", contents)
         self.assertIn("Remembered for this project:", contents)
 

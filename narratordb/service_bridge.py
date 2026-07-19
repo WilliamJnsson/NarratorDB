@@ -10,7 +10,6 @@ import os
 from pathlib import Path
 import re
 import stat
-from threading import Lock
 from typing import Any, Sequence
 from urllib.parse import urlparse
 import uuid
@@ -29,23 +28,6 @@ REQUIRED_CREDENTIALS = frozenset(
 _TOKEN_RE = re.compile(r"ndb_[A-Za-z0-9_-]{32,128}")
 MAX_CREDENTIAL_BYTES = 16_384
 SERVICE_CALL_TIMEOUT_SECONDS = 60.0
-BOOTSTRAP_TIMEOUT_SECONDS = 5.0
-BOOTSTRAP_TOKEN_BUDGET = 900
-# The local token estimator uses 3.6 UTF-8 bytes per token. Enforce the same
-# bound independently because a remote service response is untrusted input.
-MAX_BOOTSTRAP_CONTEXT_BYTES = int(BOOTSTRAP_TOKEN_BUDGET * 3.6)
-
-
-def _bounded_bootstrap_context(value: Any) -> str:
-    if not isinstance(value, str):
-        return ""
-    normalized = value.replace("\r\n", "\n").replace("\r", "\n").strip()
-    encoded = normalized.encode("utf-8")
-    if len(encoded) <= MAX_BOOTSTRAP_CONTEXT_BYTES:
-        return normalized
-    return (
-        encoded[:MAX_BOOTSTRAP_CONTEXT_BYTES].decode("utf-8", errors="ignore").rstrip()
-    )
 
 
 def _normalize_service_values(
@@ -172,35 +154,6 @@ class ServiceBridgeRuntime:
 
     def __init__(self, credentials_file: str | os.PathLike[str]):
         self.credentials_file = str(Path(credentials_file).expanduser().resolve())
-        self._bootstrap_lock = Lock()
-        self._bootstrap_attempted = False
-        self._bootstrap_context = ""
-
-    def bootstrap_context(self) -> str:
-        """Load one bounded project resume without blocking MCP availability."""
-
-        with self._bootstrap_lock:
-            if self._bootstrap_attempted:
-                return self._bootstrap_context
-            self._bootstrap_attempted = True
-            try:
-                result = self._call(
-                    "resume",
-                    {
-                        "topic": "",
-                        "include_global": False,
-                        "token_budget": BOOTSTRAP_TOKEN_BUDGET,
-                    },
-                    timeout_seconds=BOOTSTRAP_TIMEOUT_SECONDS,
-                    hard_timeout=True,
-                )
-                context = result.get("context") if isinstance(result, dict) else None
-                self._bootstrap_context = _bounded_bootstrap_context(context)
-            except Exception:
-                # Startup recall is an optimization, not an availability gate.
-                # Keep failures silent so remote errors cannot disclose secrets.
-                self._bootstrap_context = ""
-            return self._bootstrap_context
 
     async def _call_async(
         self,
@@ -248,18 +201,14 @@ class ServiceBridgeRuntime:
         arguments: dict[str, Any],
         *,
         timeout_seconds: float = SERVICE_CALL_TIMEOUT_SECONDS,
-        hard_timeout: bool = False,
     ) -> dict[str, Any]:
         def execute() -> dict[str, Any]:
             async def invoke() -> dict[str, Any]:
-                call = self._call_async(
+                return await self._call_async(
                     name,
                     arguments,
                     timeout_seconds=timeout_seconds,
                 )
-                if hard_timeout:
-                    return await asyncio.wait_for(call, timeout=timeout_seconds)
-                return await call
 
             return asyncio.run(invoke())
 
@@ -310,7 +259,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         runtime = ServiceBridgeRuntime(args.credentials_file)
         read_service_credentials(args.credentials_file)
-        server = create_server(runtime, include_bootstrap=True)
+        server = create_server(runtime)
         server.run(transport="stdio")
     except ConfigurationError as error:
         print(f"narratordb: {error}", file=os.sys.stderr)

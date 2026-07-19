@@ -95,4 +95,4 @@ __all__ = [
     "default_db_path",
 ]
 
-__version__ = "2.2.1"
+__version__ = "2.3.0"

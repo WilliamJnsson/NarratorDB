@@ -25,24 +25,28 @@ cd /path/to/your/project
 codex
 ```
 
-The first MCP start resolves the NarratorDB package from the repository and initializes `~/.narratordb/memory.db` in Private mode with Preferences capture. No NarratorDB account or model-provider API key is required. Use the setup skill to choose Private or Intelligence and Manual, Preferences, or Sessions capture.
+The first MCP start resolves the NarratorDB package from the repository and initializes `~/.narratordb/memory.db` in Private mode with Sessions capture. No NarratorDB account or model-provider API key is required. Use the setup skill to choose Private or Intelligence and Manual, Preferences, or Sessions capture.
 
 ## What is included
 
 - Local stdio MCP server launched through `uvx`.
 - Clean MCP tools: `configure`, `remember`, `remember_session`, `recall`, `resume`, `forget`, and `status`.
 - Skills for setup, onboarding, remembering, safe deletion, and read-only health checks.
-- Silent `UserPromptSubmit`, `PreCompact`, and `Stop` capture hooks. Bounded
-  startup memory is supplied through MCP server instructions, avoiding a
-  visible recall hook block on every relevant prompt.
+- Silent `PreCompact` and `Stop` session-capture hooks. There is no
+  `UserPromptSubmit` hook. MCP server instructions remain static; stored data
+  is returned only by explicit `recall` and `resume` calls.
 
-`remember.source` accepts only `user`, `assistant`, `system`, or `memory`; human
-descriptions belong in the memory content. MCP tools show short human receipts
-while keeping IDs, scope, counts, latency, and health in structured metadata for
-clients that need diagnostics.
+`remember.source` accepts only `user`, `assistant`, or `memory`; human
+descriptions belong in the memory content. Caller-controlled `system`,
+`developer`, and `tool` roles are rejected, and source never raises instruction
+authority. MCP tools show short human receipts while keeping IDs, scope, counts,
+latency, health, and memory trust in structured metadata for clients that need
+diagnostics.
 
 The hooks call `narratordb-hook <event>` from the same package source. Each invocation:
 
+- rejects `UserPromptSubmit` and unknown event names before launching the hook
+  runtime;
 - runs offline without invoking a compiler model (and preserves the mode of an
   existing database);
 - receives an allowlisted environment with provider credentials removed;
@@ -69,7 +73,7 @@ remote, or a local-path fallback, plus any warning. It reports current-project
 and current-user-total memory counts separately.
 
 If Codex starts from the home directory outside a Git repository, NarratorDB
-blocks project writes, project-memory injection, and session capture. Global
+blocks project writes and project session capture. Global
 recall and typed current-prompt personal preference capture remain available;
 the whole home transcript is never promoted globally. Restart Codex from the intended
 project folder. Only after confirming that home is the intended scope, set

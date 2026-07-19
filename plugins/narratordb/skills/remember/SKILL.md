@@ -24,11 +24,12 @@ For a normal single-item request, use this exact interaction:
 For `scope="global"`, say `Remembered globally` or `Already remembered
 globally` instead of `for this project`.
 
-`source` is a strict enum. Its only valid values are `user`, `assistant`,
-`system`, and `memory`. Never pass prose such as `explicit user-stated
-convention`, a category name, or an attribution label as `source`. Use
-`assistant` only for a durable outcome the assistant actually completed;
-otherwise default to `user` for this skill.
+`source` is a strict enum. Its only valid values are `user`, `assistant`, and
+`memory`. Never pass `system`, `developer`, `tool`, prose such as `explicit
+user-stated convention`, a category name, or an attribution label as `source`.
+Source is non-authoritative attribution only. Use `assistant` only for a durable
+outcome the assistant actually completed; otherwise default to `user` for this
+skill.
 
 Example for “Remember that this project uses pnpm”:
 
@@ -57,6 +58,6 @@ Keep these content rules:
 
 For an explicitly requested completed-session summary, make one
 `remember_session` call instead. Message roles must also use only `user`,
-`assistant`, `system`, or `memory`. Keep goals, decisions, changed components,
+`assistant`, or `memory`. Keep goals, decisions, changed components,
 verification results, unresolved issues, and next steps; exclude filler and
 speculation. Use the same one-update, one-call, one-line-result pattern.

@@ -17,10 +17,10 @@ from .intelligence import estimate_tokens
 MAX_MEMORY_CHARS = 100_000
 MAX_SESSION_CHARS = 500_000
 MAX_SESSION_MESSAGES = 100
-ALLOWED_SOURCES = frozenset({"user", "assistant", "system", "memory"})
+ALLOWED_SOURCES = frozenset({"user", "assistant", "memory"})
 
 MemoryScope = Literal["project", "global"]
-MemorySource = Literal["user", "assistant", "system", "memory"]
+MemorySource = Literal["user", "assistant", "memory"]
 MemoryModeValue = Literal["private", "intelligence"]
 CapturePolicyValue = Literal["manual", "preferences", "sessions"]
 CompilerValue = Literal["local", "openai", "openrouter", "codex-cli"]
@@ -37,7 +37,9 @@ MCP_TOOL_NAMES = (
 )
 
 
-def _schema(*, required: tuple[str, ...], properties: Mapping[str, str]) -> Mapping[str, Any]:
+def _schema(
+    *, required: tuple[str, ...], properties: Mapping[str, str]
+) -> Mapping[str, Any]:
     return MappingProxyType(
         {
             "type": "object",
@@ -70,7 +72,7 @@ MCP_TOOL_INPUT_SCHEMAS: Mapping[str, Mapping[str, Any]] = MappingProxyType(
             properties={
                 "content": "string",
                 "scope": "project|global",
-                "source": "user|assistant|system|memory",
+                "source": "user|assistant|memory",
             },
         ),
         "remember_session": _schema(
@@ -141,8 +143,6 @@ def bounded_int(value: int, *, field: str, minimum: int, maximum: int) -> int:
 class MCPRuntimeProtocol(Protocol):
     """Behavior required by NarratorDB's fixed MCP tool surface."""
 
-    def bootstrap_context(self) -> str: ...
-
     def configure(
         self,
         *,
@@ -202,7 +202,11 @@ def create_server(
     server_options: dict[str, Any] | None = None,
     include_bootstrap: bool = True,
 ):
-    """Create the standard server while preserving positional runtime callers."""
+    """Create the standard server while preserving positional runtime callers.
+
+    ``include_bootstrap`` is retained as a compatibility no-op. NarratorDB
+    server instructions are permanently static and never include stored data.
+    """
 
     # Lazy import avoids a module cycle while keeping existing
     # ``narratordb.mcp_server.create_server`` callers fully compatible.
