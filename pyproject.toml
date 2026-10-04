@@ -33,7 +33,7 @@ semantic = [
   "sentence-transformers>=2.7,<6",
 ]
 mcp = ["mcp>=1.0,<2"]
-benchmarks = ["datasets>=4,<5"]
+benchmarks = ["datasets>=4,<6"]
 dev = [
   "build>=1.2,<2",
   "mcp>=1.0,<2",
@@ -44,7 +44,7 @@ all = [
   "numpy>=1.24,<3",
   "sentence-transformers>=2.7,<6",
   "mcp>=1.0,<2",
-  "datasets>=4,<5",
+  "datasets>=4,<6",
 ]
 
 [project.scripts]
